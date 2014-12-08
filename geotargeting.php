@@ -13,8 +13,8 @@
  * @package           GeoTarget
  *
  * @wordpress-plugin
- * Plugin Name:       Geo Targeting
- * Plugin URI:        http://wp.timersys.com/geotargeting//geotarget-uri/
+ * Plugin Name:       GeoTargeting Pro
+ * Plugin URI:        http://wp.timersys.com/geotargeting/
  * Description:       Geo Targeting for WordPress will let you country-target your content based on users IP's and Geocountry Ip database
  * Version:           1.0.0
  * Author:            Timersys
