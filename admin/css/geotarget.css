@@ -1,0 +1,44 @@
+input.geot_license_valid{
+	background: #fff url( ../img/valid-key.png) no-repeat 95% center;
+}
+input.geot_license_{
+	background: #fff url( ../img/invalid-key.png) no-repeat 95% center;
+}
+.geot-settings .region-group{
+	display: block;
+	margin-bottom: 20px;
+	position: relative;
+}
+.geot-settings .region-group:last-child{
+	margin-bottom: 0;
+}	
+.geot-settings .region-group .chosen-container{
+	margin-top: 10px;
+}
+.geot-settings .region-group .remove-region{
+	display: none;
+	text-decoration: none;
+	padding: 0 7px;
+	font-weight: bold;
+	font-size: 16px;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+
+}
+.geot-settings .region-group:hover .remove-region {
+	display: inline-block;
+
+}
+.geot-settings .region-group:hover .remove-region:hover{
+	color: red;
+} 
+.geot-settings .add-region{
+	clear: both;
+	margin-top: 10px;
+}
+#geot_widget .chosen-container-multi .chosen-choices li.search-field input[type=text],
+#geot_editor .chosen-container-multi .chosen-choices li.search-field input[type=text]{
+	width: 100% !important;
+}
