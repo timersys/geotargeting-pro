@@ -1,14 +1,14 @@
-=== Geo Targeting Pro ===
+=== GeoTargeting Pro ===
 Contributors: timersys
-Donate link: http://wp.timersys.com/wordpress-geotargeting/
-Tags: comments, spam
+Donate link: http://wp.timersys.com/geotargeting/
+Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.0.1
-Stable tag: 1.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Geo Targeting for WordPress will let you country-target your content based on users IP's and Geocountry Ip database
+GeoTargeting for WordPress will let you country-target your content based on users IP's and Geocountry Ip database
 
 == Description ==
 
@@ -22,7 +22,7 @@ E.g:
 
 > <strong>Premium Version</strong><br>
 > 
-> Check the **new premium version** available in ([http://wp.timersys.com/wordpress-geotargeting/](http://wp.timersys.com/wordpress-geotargeting/))
+> Check the **new premium version** available in ([http://wp.timersys.com/geotargeting/](http://wp.timersys.com/geotargeting/))
 >
 > * Editor button to easily add shortcodes
 > * Create multiple country regions to use with shortcodes
@@ -33,11 +33,11 @@ E.g:
 
 = Plugin's Official Site =
 
-Popups ([http://wp.timersys.com/free-plugins/geotargeting/](http://wp.timersys.com/free-plugins/geotargeting/))
+Geotargeting ([http://wp.timersys.com/free-plugins/geotargeting/](http://wp.timersys.com/free-plugins/geotargeting/))
 
-= Github = 
+= Wordpress Popups  =
 
-Fork me in https://github.com/timersys/geotargeting/
+Best popups plugin ever ([http://wp.timersys.com/popups/](http://wp.timersys.com/popups/?utm_source=wsi-free-plugin&utm_medium=readme))
 
 = Install Multiple plugins at once with WpFavs  =
 
