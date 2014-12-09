@@ -26,7 +26,7 @@
  function geot_user_country( ){
  	global $geot;
 
- 	return $geot->get_user_country();
+ 	return $geot->functions->get_user_country();
  }
 
 /** 
