@@ -24,8 +24,17 @@ class GeoTarget_Functions {
 	 */
 	public function __construct( ) {
 
-		$this->userCountry = $this->calculateUserCountry();
+		add_action('init' , array($this,'setUserCountry' ) );
+		
 
+	}
+
+	/**
+	 * Run after init to be sure db is ready
+	 * @since  1.0.1
+	 */
+	function setUserCountry() {
+		$this->userCountry = $this->calculateUserCountry();
 	}
 
 	/**
