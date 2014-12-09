@@ -9,7 +9,7 @@
  * that starts the plugin.
  *
  * @link              http://wp.timersys.com/geotargeting/
- * @since             1.0.0
+ * @since             1.0.1
  * @package           GeoTarget
  *
  * @wordpress-plugin
