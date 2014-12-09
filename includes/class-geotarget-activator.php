@@ -47,7 +47,7 @@ class GeoTarget_Activator {
 		
 		$csv_file = dirname( __FILE__ ) . '/GeoIPCountryWhois.csv';
  
-		$load_data = "LOAD DATA INFILE '{$csv_file}' INTO TABLE `{$wpdb->prefix}Maxmind_geoIP` FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `maxmind_ipstart` , `maxmind_ipend` , `maxmind_locid_start` , `maxmind_locid_end` , `maxmind_country_code` , `maxmind_country`);";
+		$load_data = "LOAD DATA LOCAL INFILE '{$csv_file}' INTO TABLE `{$wpdb->prefix}Maxmind_geoIP` FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `maxmind_ipstart` , `maxmind_ipend` , `maxmind_locid_start` , `maxmind_locid_end` , `maxmind_country_code` , `maxmind_country`);";
 			
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $create_table );
