@@ -282,7 +282,7 @@ class GeoTarget_Admin {
 
 		$opts = get_option( 'spu_settings');
 
-		$license = $opts['geot_license_key'];
+		$license = @$opts['geot_license_key'];
 
 		if( !empty( $license ) ) {
 
