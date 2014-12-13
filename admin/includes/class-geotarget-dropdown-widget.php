@@ -58,7 +58,7 @@ class Geot_Widget extends WP_Widget {
 
      	$user_country =	$GeoTarget_func->get_user_country();
 
-     	$original_country = geot_country_by_ip('190.188.148.168');
+     	$original_country = geot_country_by_ip();
 
      	?>
      	<div class="geot_dropdown_container">
