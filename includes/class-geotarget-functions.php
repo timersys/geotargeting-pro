@@ -154,6 +154,10 @@ class GeoTarget_Functions {
 	 */
 	public function get_user_country()
 	{	
+		if( empty( $this->userCountry ) ) {
+			$this->userCountry = $this->calculateUserCountry();
+		}
+
 		return $this->userCountry;
 	}
 
@@ -166,7 +170,6 @@ class GeoTarget_Functions {
 		
 		global $wpdb;
 		
-
 		// If user set cookie use instead
 		if( ! empty( $_COOKIE['geot_country']) ) {
 
