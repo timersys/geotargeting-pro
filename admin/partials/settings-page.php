@@ -29,11 +29,11 @@
 							
 							<input type="text" placeholder="Enter region name" name="geot_settings[region][<?php echo $i;?>][name]" value="<?php echo !empty( $region['name'] )? esc_attr($region['name']): '' ; ?>"/> 
 							<a href="#" class="remove-region"title="<?php _e( 'Remove Region', $this->GeoTarget );?>">-</a>
-							<select name="geot_settings[region][<?php echo $i;?>][countries][]" multiple class="geot-chosen-select" data-placeholder="Type country name..." >
+							<select name="geot_settings[region][<?php echo $i;?>][countries][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
 								<?php
 									foreach ($countries as $c) {
 										?>
-										<option value="<?php echo $c->maxmind_country_code?>" <?php selected(true, @in_array( $c->maxmind_country_code, @$region['countries']) ); ?>> <?php echo $c->maxmind_country; ?></option>
+										<option value="<?php echo $c->iso_code?>" <?php selected(true, @in_array( $c->iso_code, @$region['countries']) ); ?>> <?php echo $c->country; ?></option>
 										<?php
 									}
 								?>
@@ -45,6 +45,48 @@
 					<p class="help"><?php _e( 'Add as many countries you need for each region', $this->GeoTarget ); ?></p>
 				</td>
 				
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="region"><?php _e( 'Create new cities region', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+				<?php
+
+				if( !empty( $opts['city_region'] ) ) {
+					foreach ( $opts['city_region'] as $city_region ) { @$j++;?>
+
+						<div class="city-region-group"  data-id="<?php echo $j;?>" >
+							<input type="text" placeholder="Enter region name" name="geot_settings[city_region][<?php echo $j;?>][name]" value="<?php echo !empty( $city_region['name'] )? esc_attr($city_region['name']): '' ; ?>"/>
+							<select name="geot_settings[city_region][<?php echo $j;?>][countries][]"  class="geot-chosen-select country_ajax" data-counter="<?php echo $j;?>" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
+								<option value=""><?php _e('Choose a Country', $this->GeoTarget );?></option>
+								<?php
+								foreach ($countries as $c) {
+									?>
+									<option value="<?php echo $c->iso_code?>" <?php selected(true, @in_array( $c->iso_code, @$city_region['countries']) ); ?>> <?php echo $c->country; ?></option>
+								<?php
+								}
+								?>
+							</select>
+							<a href="#" class="remove-city-region"title="<?php _e( 'Remove Region', $this->GeoTarget );?>">-</a>
+							<select name="geot_settings[city_region][<?php echo $j;?>][cities][]" multiple class="geot-chosen-select cities_container" id="<?php echo 'cities'.$j;?>" data-placeholder="<?php _e('First choose a country', $this->GeoTarget );?>" >
+								<?php
+								if( !empty($city_region['countries'])) {
+									$cities = geot_get_cities( $city_region['countries'][0] );
+									foreach ( $cities as $c ) {
+										?>
+										<option
+											value="<?php echo strtolower( $c->city ) ?>" <?php selected( true, @in_array( strtolower( $c->city), @$city_region['cities'] ) ); ?>> <?php echo $c->city; ?></option>
+									<?php
+									}
+								}
+								?>
+							</select>
+						</div>
+					<?php }
+				}?>
+					<a href="#" class="add-city-region button">Add City Region</a>
+					<p class="help"><?php _e( 'Add as many cities you need for each region', $this->GeoTarget ); ?></p>
+				</td>
+
 			</tr>
 			
 			<?php do_action( 'geot/settings_page/after' ); ?>

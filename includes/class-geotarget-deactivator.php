@@ -33,9 +33,14 @@ class GeoTarget_Deactivator {
 
 		global $wpdb;
 
-		$drop_table = "DROP TABLE `{$wpdb->prefix}Maxmind_geoIP`";
+		$current_version = get_option( 'geot_version' );
 
-		$wpdb->query( $drop_table );
+		// Only remove table if version 1.1 is being installed
+		if( empty($current_version) || version_compare( '1.1', $current_version ) > 0 ) {
+			$drop_table = "DROP TABLE `{$wpdb->prefix}Maxmind_geoIP`";
+
+			$wpdb->query( $drop_table );
+		}
 	}
 
 }

@@ -92,12 +92,26 @@ class GeoTarget_Filters {
 		if( false === $countries ) {
 			global $wpdb;
 
-			$countries = $wpdb->get_results( "SELECT DISTINCT maxmind_country_code, maxmind_country FROM {$wpdb->prefix}Maxmind_geoIP ORDER BY maxmind_country ");
+			$countries = $wpdb->get_results( "SELECT iso_code, country FROM {$wpdb->prefix}geot_countries ORDER BY country ");
 			
 			wp_cache_set( 'geot_countries', $countries); 
 		}
 
 		return $countries;
+
+	}
+
+	/**
+	 * Return saved city reviews
+	 *
+	 * @return array of city regions
+	 */
+	public function get_city_regions( )	{
+
+		$settings 	= apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$regions 	= $settings['city_region'];
+
+		return $regions;
 
 	}
 

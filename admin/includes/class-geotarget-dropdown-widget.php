@@ -43,8 +43,9 @@ class Geot_Widget extends WP_Widget {
      	if ( !empty( $country_codes ) ) {
 
      		$country_regions = array();
+
      		foreach ($countries as $country ) {
-     			if( in_array( $country->maxmind_country_code, $country_codes) ) {
+     			if( in_array( $country->iso_code, $country_codes) ) {
      				$country_regions[] = $country; 
      			}
      		}
@@ -65,24 +66,25 @@ class Geot_Widget extends WP_Widget {
      		<select class="geot_dropdown geot-ddslick" name="geot_dropdown" id="geot_dropdown">
      			<?php
      				$user_country_in_dropdown = false;
-     				foreach ($countries as $key => $c) {
+     				foreach ($countries as $c) {
+
 						$selected = '';
-						if ( $original_country['maxmind_country_code'] == $c->maxmind_country_code ){
+						if ( $original_country->isoCode == $c->iso_code ){
 
 							$user_country_in_dropdown = true;
 						} 
 
      					?>
-     					<option value="<?php echo $c->maxmind_country_code;?>" <?php echo $user_country['maxmind_country_code'] == $c->maxmind_country_code ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($c->maxmind_country_code);?>">
-     						<?php echo $c->maxmind_country;?>
+     					<option value="<?php echo $c->iso_code;?>" <?php echo $user_country->isoCode == $c->iso_code ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($c->iso_code);?>">
+     						<?php echo $c->country;?>
      					</option>
      					<?php
      				}
      				// if the user country is not in dropdown add it
      				if( ! $user_country_in_dropdown  ) {
      					?>
-     					<option value="<?php echo $original_country['maxmind_country_code']?>" <?php echo $user_country['maxmind_country_code'] == $original_country['maxmind_country_code'] ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($original_country['maxmind_country_code']);?>">
-     						<?php echo $original_country['maxmind_country']?>
+     					<option value="<?php echo $original_country->isoCode ?>" <?php echo $user_country->isoCode == $original_country->isoCode ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($original_country->isoCode);?>">
+     						<?php echo $original_country->name?>
      					</option>     	
      					<?php				
      				}
@@ -102,7 +104,7 @@ class Geot_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		if ( isset( $instance[ 'regions' ] ) ) {
-			$regions = $instance[ 'regions' ];
+			$regions =(array)$instance[ 'regions' ];
 		} else {
 			$regions = array(); //empty array
 		}

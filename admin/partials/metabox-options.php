@@ -49,7 +49,7 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 				if( is_array( $countries ) ) {
 					foreach ($countries as $c) {
 						?>
-						<option value="<?php echo $c->maxmind_country_code;?>" <?php selected(true, @in_array($c->maxmind_country_code, @(array)$opts['country_code']) ); ?>> <?php echo $c->maxmind_country; ?></option>
+						<option value="<?php echo $c->iso_code;?>" <?php selected(true, @in_array($c->iso_code, @(array)$opts['country_code']) ); ?>> <?php echo $c->country; ?></option>
 						<?php
 					}
 				}	

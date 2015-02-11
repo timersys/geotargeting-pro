@@ -1,6 +1,7 @@
 <?php
 $countries 	= apply_filters('geot/get_countries', array());
 $regions 	= apply_filters('geot/get_regions', array());
+$city_regions 	= apply_filters('geot/get_city_regions', array());
 ?>
 <div id="geot_editor" class="shortcode_editor" title="Country Geo Target Text"  style="display:none;height:500px">
 	<table class="form-table">
@@ -45,10 +46,27 @@ $regions 	= apply_filters('geot/get_regions', array());
 					if( is_array( $countries ) ) {
 						foreach ($countries as $c) {
 							?>
-							<option value="<?php echo $c->maxmind_country_code;?>"> <?php echo $c->maxmind_country; ?></option>
+							<option value="<?php echo $c->iso_code;?>"> <?php echo $c->country; ?></option>
 							<?php
 						}
 					}	
+					?>
+				</select>
+			</td>
+			<td colspan="2"></td>
+		</tr>
+		<tr valign="top">
+			<th><label for="geot_position"><?php _e( 'Or choose city Regions:', 'geot' ); ?></label></th>
+			<td>
+				<select name="geot[city_region][]" id="geot_city_region" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose cities region name...', 'geot' );?>" >
+					<?php
+					if( is_array( $city_regions ) ) {
+						foreach ($city_regions as $cr) {
+							?>
+							<option value="<?php echo strtolower($cr['name']);?>"> <?php echo $cr['name']; ?></option>
+							<?php
+						}
+					}
 					?>
 				</select>
 			</td>

@@ -102,7 +102,9 @@ class GeoTarget_Admin {
 
 		wp_enqueue_script( 'chosen', plugin_dir_url( __FILE__ ) . 'js/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotargeting-admin.js', array( 'jquery','chosen' ), $this->version, false );
-
+		wp_localize_script(  $this->GeoTarget, 'geot', array(
+			'ajax_url'  => admin_url('admin-ajax.php')
+		));
 	}
 
 	/**
@@ -154,8 +156,12 @@ class GeoTarget_Admin {
 	}
 
 	/**
-	* Saves popup options and rules
-	*/
+	 * Saves popup options and rules
+	 *
+	 * @param $post_id
+	 *
+	 * @return
+	 */
 	public function save_meta_options( $post_id ) {		
 
 		// Verify that the nonce is set and valid.
@@ -269,7 +275,7 @@ class GeoTarget_Admin {
 
 	}
 
-		/**
+	/**
 	 * Handle Licences and updates
 	 * Handle Licences and updates
 	 * @since 1.0.0
@@ -289,7 +295,27 @@ class GeoTarget_Admin {
 			$eddc_license = new Geot_License( GEOT_PLUGIN_FILE, 'GeoTargeting Pro', $this->version	, 'Damian Logghe', $license );
 		
 		}
-	
 
+	}
+
+	/*
+	 * Get a country code and return cities
+	 */
+	public function geot_cities_by_country(){
+		global $wpdb;
+
+		if( empty($_POST['country']))
+			die();
+
+
+		$cities = $wpdb->get_results( $wpdb->prepare( "SELECT id, city FROM {$wpdb->prefix}geot_cities WHERE country_code = %s", array($_POST['country'])));
+
+		if( !empty( $cities ) ){
+			foreach( $cities as $c ) {
+				echo '<option value="'.strtolower($c->city).'">'.$c->city.'</option>';
+			}
+		}
+
+		die();
 	}
 }

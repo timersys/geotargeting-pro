@@ -7,21 +7,28 @@
 
 /**
  * Main function that return is current user target the given countries / regions or not
- * @param  string $country         
- * @param  string $region          
- * @param  string $exclude_country 
- * @param  string $exclude_region  
- * @return bool      
+ *
+ * @param string $what what to target countries|cities
+ * @param string $object
+ * @param string $object_region
+ * @param string $exclude
+ * @param  string $exclude_region
+ *
+ * @return bool
  */
- function geot_target( $country = '', $region = '', $exclude_country = '', $exclude_region  = '' ) {
- 	global $geot;
+ function geot_target( $object = '', $object_region = '', $exclude = '', $exclude_region  = '', $what = 'countries' ) {
+	 global $geot;
 
- 	return $geot->functions->target( $country, $region, $exclude_country, $exclude_region );
+	 if( 'countries' == $what )
+ 	    return $geot->functions->targetCountry( $object, $object_region, $exclude, $exclude_region );
+
+	 return $geot->functions->targetCity( $object, $object_region, $exclude, $exclude_region );
+
  }
 
 /**
  * Get current user country
- * @return array Current user country array
+ * @return object Current user country. Values are $country->isoCode $country->country
  */
  function geot_user_country( ){
  	global $geot;
@@ -38,7 +45,7 @@ function geot_country_code( ) {
 	
 	$c = geot_user_country();
 
-	return $c['maxmind_country_code'];
+	return $c->isoCode;
 }
 
 /** 
@@ -51,20 +58,59 @@ function geot_country_name() {
 
 	$c = $geot->functions->get_user_country();
 
-	return $c['maxmind_country'];
+	return $c->country;
 }
 
 
-/** 
+/**
  * Gets User country by ip. Is not ip given current user country will show
- * 
- * @return  array()
- **/
+ *
+ * @param string $ip
+ *
+ * @return object Current user country. Values are $country->isoCode $country->country
+ */
 function geot_country_by_ip( $ip = '') {
 	global $geot;
 	
-	return $geot->functions->getCountryByIp( $ip );
-	 
+	$data = $geot->functions->getUserDataByIp( $ip );
+
+	return $data['country'];
+}
+
+/**
+ * Gets User state by ip. Is not ip given current user country will show
+ *
+ * @param string $ip
+ *
+ * @return object Current user state. Values are $state->isoCode $state->name
+ */
+function geot_state_by_ip( $ip = '') {
+	global $geot;
+
+	$data = $geot->functions->getUserDataByIp( $ip );
+
+	return $data['state'];
 }
 
 
+/**
+ * Get cities in database
+ *
+ * @param string $country
+ *
+ * @return object cities names with country codes
+ */
+function geot_get_cities( $country = 'US')	{
+
+	$cities = wp_cache_get( 'geot_cities'.$country);
+
+	if( false === $cities ) {
+		global $wpdb;
+		$cities = $wpdb->get_results( $wpdb->prepare( "SELECT country_code, city FROM {$wpdb->prefix}geot_cities WHERE country_code = %s ORDER BY city ", array($country)));
+
+		wp_cache_set( 'geot_cities'.$country, $cities);
+	}
+
+	return $cities;
+
+}

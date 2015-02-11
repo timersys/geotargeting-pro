@@ -92,7 +92,7 @@ class Geot_Widgets  {
 					if( is_array( $countries ) ) {
 						foreach ($countries as $c) {
 							?>
-							<option value="<?php echo $c->maxmind_country_code;?>" <?php selected( in_array($c->maxmind_country_code, $instance['geot']['country_code']), true , true ); ?>> <?php echo $c->maxmind_country; ?></option>
+							<option value="<?php echo $c->iso_code;?>" <?php selected( in_array($c->iso_code, $instance['geot']['country_code']), true , true ); ?>> <?php echo $c->country; ?></option>
 							<?php
 						}
 					}	
@@ -119,22 +119,25 @@ class Geot_Widgets  {
 		$instance['geot_include_mode'] 	= $new_instance['geot_include_mode'];
 		return $instance;
 	}
-	
+
 	/**
 	 * Check if widgets is being targeted and show it if needed
-	 * @return [type] [description]
+	 *
+	 * @param $widget_data
+	 *
+	 * @return bool [type] [description]
 	 */
 	public function target_widgets( $widget_data ) {
 
 
 		if ( !empty( $widget_data['geot']['region'] ) || !empty( $widget_data['geot']['country_code'] ) ) {
 			
-			if ( 'include' == $widget_data['geot_include_mode'] ) {
-				if ( ! geot_target( $widget_data['geot']['country_code'], $widget_data['geot']['region'] ) ) {
+			if ( 'include' == @$widget_data['geot_include_mode'] ) {
+				if ( ! geot_target( @$widget_data['geot']['country_code'], @$widget_data['geot']['region'] ) ) {
 					return false;
 				}	
 			} else {
-				if (! geot_target( array(), array(), $widget_data['geot']['country_code'], $widget_data['geot']['region'] ) ) {
+				if (! geot_target( array(), array(), @$widget_data['geot']['country_code'], @$widget_data['geot']['region'] ) ) {
 					return false;
 				}
 				

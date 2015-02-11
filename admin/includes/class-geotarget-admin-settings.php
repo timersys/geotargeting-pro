@@ -60,9 +60,13 @@ class GeoTarget_Settings {
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 		
 		// initialize
-		if( ! is_array( $opts['region'] ) ) {
+		if( ! is_array( @$opts['region'] ) ) {
 			$opts['region'][] = array( 'name' , 'countries' );
 		}
+		if( ! is_array( @$opts['city_region'] ) ) {
+			$opts['city_region'][] = array( 'name' , 'cities' );
+		}
+
 
 		$countries 	= apply_filters('geot/get_countries', array());
 

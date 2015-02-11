@@ -3,8 +3,8 @@ Contributors: timersys
 Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
-Tested up to: 4.0.1
-Stable tag: 1.0.1
+Tested up to: 4.1
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ GeoTargeting for WordPress will let you country-target your content based on use
 
 == Description ==
 
-Based on Maxmind GeoIP2 data Geo Targeting plugin for WordPress will let you create dynamic content based on your users country.
+Based on Maxmind GeoIP2Lite data Geo Targeting plugin for WordPress will let you create dynamic content based on your users country.
 
 With a simple shortcode you will be able to specify which countries are capable of seing the content or which countries are not allowed.
 
@@ -20,16 +20,6 @@ E.g:
 `[geot country="Argentina"] Messi is the best! [/geot]`
 `[geot country="Portugal"] Cristiano ronaldo is the best! [/geot]`
 
-> <strong>Premium Version</strong><br>
-> 
-> Check the **new premium version** available in ([http://wp.timersys.com/geotargeting/](http://wp.timersys.com/geotargeting/))
->
-> * Editor button to easily add shortcodes
-> * Create multiple country regions to use with shortcodes
-> * Dropdown Widget to let users change their country
-> * Upcoming integration with other populars plugins
-> * Premium support
-> 
 
 = Plugin's Official Site =
 
@@ -67,6 +57,11 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 
 == Changelog ==
+
+= 1.0.2 - 3 Feb =
+* Updated Ip database
+* Added session to cache country calculation and improve performance
+* removed calculation in backend
 
 = 1.0.1 - 9 Dec =
 
