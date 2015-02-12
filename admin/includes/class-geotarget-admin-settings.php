@@ -46,7 +46,6 @@ class GeoTarget_Settings {
 
 	/**
 	 * Settings page for plugin
-	 * @return [type] [description]
 	 */
 	public function settings_page()
 	{
@@ -66,7 +65,15 @@ class GeoTarget_Settings {
 		if( ! is_array( @$opts['city_region'] ) ) {
 			$opts['city_region'][] = array( 'name' , 'cities' );
 		}
-
+		if( empty( $opts['geot_license_key'] ) ) {
+			$opts['geot_license_key'] = '';
+		}
+		if( empty( $opts['maxm_id'] ) ) {
+			$opts['maxm_id'] = '';
+		}
+		if( empty( $opts['maxm_license'] ) ) {
+			$opts['maxm_license'] = '';
+		}
 
 		$countries 	= apply_filters('geot/get_countries', array());
 

@@ -18,6 +18,31 @@
 				
 			</tr>
 			<tr valign="top" class="">
+				<th><h3><?php _e( 'Maxmind:', $this->GeoTarget ); ?></h3></th>
+				<td colspan="3">
+					<p><?php echo sprintf(__( 'If you have <a href="%s">Maxmind API credentials</a>, enter them below', $this->GeoTarget ), 'https://www.maxmind.com/en/geoip2-precision-city-service?rId=timersys'); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="maxm_id"><?php _e( 'Maxmind User ID', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="text" id="maxm_id" name="geot_settings[maxm_id]" value="<?php  echo $opts['maxm_id'];?>" class="regular-text" />
+					<p class="help"><?php _e( 'Enter your Maxmind user id', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="maxm_license"><?php _e( 'Maxmind license key', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="text" id="maxm_license" name="geot_settings[maxm_license]" value="<?php  echo $opts['maxm_license'];?>" class="regular-text" />
+					<p class="help"><?php _e( 'Enter your Maxmind license key', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><h3><?php _e( 'Countries:', $this->GeoTarget ); ?></h3></th>
+				<td colspan="3">
+				</td>
+			</tr>
+			<tr valign="top" class="">
 				<th><label for="region"><?php _e( 'Create new region', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 				<?php 
@@ -47,7 +72,12 @@
 				
 			</tr>
 			<tr valign="top" class="">
-				<th><label for="region"><?php _e( 'Create new cities region', $this->GeoTarget ); ?></label></th>
+				<th><h3><?php _e( 'Cities:', $this->GeoTarget ); ?></h3></th>
+				<td colspan="3">
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="region"><?php _e( 'Create new region', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 				<?php
 
