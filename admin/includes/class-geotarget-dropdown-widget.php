@@ -35,7 +35,8 @@ class Geot_Widget extends WP_Widget {
      		$country_codes = array();
      		//get all countries in selected regions
      		foreach ($regions as $key ) {
-     			$country_codes = array_merge( $saved_regions[$key]['countries'], $country_codes);
+		        if( is_array($saved_regions[$key]['countries']))
+     			    $country_codes = array_merge( $saved_regions[$key]['countries'], $country_codes);
      		}
      	}
      
