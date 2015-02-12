@@ -58,10 +58,14 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 == Changelog ==
 
-= 1.0.2 - 3 Feb =
-* Updated Ip database
+= 1.1 - 11 Feb =
+* Added maxmind queries API Support
+* Change database for Maxmind api database to improve performance and free mysql
+* Added city geolocation
+* Added support for maxmind premium databases
 * Added session to cache country calculation and improve performance
 * removed calculation in backend
+
 
 = 1.0.1 - 9 Dec =
 
