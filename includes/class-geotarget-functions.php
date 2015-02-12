@@ -10,6 +10,7 @@
  * @author     Your Name <email@example.com>
  */
 use GeoIp2\Database\Reader;
+use GeoIp2\Database\Client;
 
 class GeoTarget_Functions {
 
@@ -320,7 +321,7 @@ class GeoTarget_Functions {
 		}
 		// if we have a session it means we already calculated country on session
 		if( !empty($_SESSION['geot_country']) ) {
-		#	return unserialize($_SESSION['geot_country']);
+			return unserialize($_SESSION['geot_country']);
 		}
 
 		$data = $this->getUserDataByIp();
@@ -338,7 +339,7 @@ class GeoTarget_Functions {
 
 		// if we have a session it means we already calculated city on session
 		if( !empty($_SESSION['geot_city']) ) {
-		#	return unserialize($_SESSION['geot_city']);
+			return unserialize($_SESSION['geot_city']);
 		}
 
 		$data = $this->getUserDataByIp();
@@ -356,7 +357,7 @@ class GeoTarget_Functions {
 
 		// if we have a session it means we already calculated city on session
 		if( !empty($_SESSION['geot_state']) ) {
-		#	return unserialize($_SESSION['geot_state']);
+			return unserialize($_SESSION['geot_state']);
 		}
 
 		$data = $this->getUserDataByIp();
@@ -374,7 +375,7 @@ class GeoTarget_Functions {
 
 		// if we have a session it means we already calculated city on session
 		if( !empty($_SESSION['geot_zip']) ) {
-		#	return unserialize($_SESSION['geot_zip']);
+			return unserialize($_SESSION['geot_zip']);
 		}
 
 		$data = $this->getUserDataByIp();
@@ -393,8 +394,13 @@ class GeoTarget_Functions {
 		if( empty( $ip) ) {
 			$ip = apply_filters( 'geot/user_ip', $_SERVER['REMOTE_ADDR']);		
 		}
+		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
-		$reader = new Reader(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb');
+		if( !empty($opts['maxm_id']) && !empty($opts['maxm_license']) ) {
+			$reader = new Client($opts['maxm_id'], $opts['maxm_license']);
+		} else {
+			$reader = new Reader(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb');
+		}
 
 		$record = $reader->city($ip);
 
