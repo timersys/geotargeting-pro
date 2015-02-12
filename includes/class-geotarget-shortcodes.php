@@ -157,7 +157,7 @@ class GeoTarget_Shortcodes {
 
 	/**
 	 * Display the State code of current user
-	 * [geot_state]
+	 * [geot_state_code]
 	 * @return string city name
 	 */
 	function geot_show_state_code() {
@@ -167,7 +167,7 @@ class GeoTarget_Shortcodes {
 
 	/**
 	 * Display the Zip code of current user
-	 * [geot_<ip]
+	 * [geot_zip]
 	 * @return string city name
 	 */
 	function geot_show_zip_code() {

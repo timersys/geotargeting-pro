@@ -63,11 +63,37 @@ function geot_country_name() {
 
 
 /**
+ * Display the user city name
+ * [geot_city_name]
+ * @return string
+ */
+function geot_city_name() {
+	global $geot;
+
+	$c = $geot->functions->get_user_city();
+
+	return $c;
+}
+/**
+ * Displays the zip code
+ * [geot_zip]
+ * @return  string zip code
+ **/
+function geot_zip() {
+	global $geot;
+
+	$zip = $geot->functions->get_user_zip();
+
+	return $zip;
+}
+
+
+/**
  * Gets User country by ip. Is not ip given current user country will show
  *
  * @param string $ip
  *
- * @return object Current user country. Values are $country->isoCode $country->country
+ * @return object Current user country. Values are $country->isoCode $country->name
  */
 function geot_country_by_ip( $ip = '') {
 	global $geot;
