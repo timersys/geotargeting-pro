@@ -75,7 +75,7 @@ class GeoTarget {
 	public function __construct() {
 
 		$this->GeoTarget = 'geotarget';
-		$this->version = '1.0.1';
+		$this->version = '1.1';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -83,7 +83,6 @@ class GeoTarget {
 		$this->define_public_hooks();
 		$this->register_shortcodes();
 		$this->define_admin_hooks();
-
 
 	}
 
@@ -110,6 +109,7 @@ class GeoTarget {
 	 */
 	private function load_dependencies() {
 
+		require plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/autoload.php';
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
@@ -195,6 +195,7 @@ class GeoTarget {
 		$this->loader->add_filter( 'geot/get_post_types', $helpers, 'get_post_types',1,3 );
 		$this->loader->add_filter( 'geot/get_countries', $helpers, 'get_countries',1 );
 		$this->loader->add_filter( 'geot/get_regions', $helpers, 'get_regions',1 );
+		$this->loader->add_filter( 'geot/get_city_regions', $helpers, 'get_city_regions',1 );
 	}
 	/**
 	 * Register all of the hooks related to the dashboard functionality
@@ -207,7 +208,7 @@ class GeoTarget {
 
 		global $pagenow;
 
-		$plugin_admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$plugin_admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -244,6 +245,9 @@ class GeoTarget {
 		// License and Updates	
 		$this->loader->add_action( 'admin_init' , $plugin_admin, 'handle_license', 1 );
 
+		// Ajax admin
+		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $plugin_admin, 'geot_cities_by_country' );
+
 	}
 
 	/**
@@ -259,11 +263,6 @@ class GeoTarget {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		// if( ! is_admin() ) {
-
-		// 	$this->loader->add_action( 'pre_get_posts', $plugin_public, 'filter_query' );
-
-		// }
 
 	}
 
@@ -278,6 +277,11 @@ class GeoTarget {
 		add_shortcode('geot', array( $shortcodes, 'geot_filter') );
 		add_shortcode('geot_country_code', array( $shortcodes, 'geot_show_country_code') );
 		add_shortcode('geot_country_name', array( $shortcodes, 'geot_show_country_name') );
+		add_shortcode('geot_city', array( $shortcodes, 'geot_filter_cities') );
+		add_shortcode('geot_city_name', array( $shortcodes, 'geot_show_city_name') );
+		add_shortcode('geot_state', array( $shortcodes, 'geot_show_state_name') );
+		add_shortcode('geot_state_code', array( $shortcodes, 'geot_show_state_code') );
+		add_shortcode('geot_zip', array( $shortcodes, 'geot_show_zip_code') );
 	}
 
 	/**

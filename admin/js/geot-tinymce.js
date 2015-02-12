@@ -12,41 +12,76 @@
             ed.addCommand('geot_button', function() {
 				
                 jQuery('#geot_editor').dialog({
-                    height: 400,
+                    height: 500,
                     width: '600px',
                     buttons: {
                         "Insert Shortcode": function() {
-                            var str = '[geot ';
-                            
+
                             var mode = jQuery('.geot_include_mode:checked').val();
-                            
-                            if ( jQuery('#geot_region').val() ) {
-                                if (mode=='include') {str+='region="';} else {str+='exclude_region="'; }
-                                
-                                    str+=jQuery('#geot_region').val();
-                                
-                                str+='" ';
-                            }
-                            
-                            if (jQuery('#geot_country').val()) {
-                                if (mode=='include') {str+='country="';} else {str+='exclude_country="'; }
-                                
-                                    str+=jQuery('#geot_country').val();
-                                
-                                str+='" ';
-                            }
-                            var selected_text = ed.selection.getContent();
-                            if( selected_text ){
 
-                                str+="]"+selected_text+"[/geot]";    
+                            if (jQuery('#geot_city_region').val()) {
+                                var str = '[geot_city ';
+                                if (mode == 'include') {
+                                    str += 'region="';
+                                } else {
+                                    str += 'exclude_region="';
+                                }
 
+                                str += jQuery('#geot_city_region').val();
+
+                                str += '" ';
+
+                                var selected_text = ed.selection.getContent();
+                                if (selected_text) {
+
+                                    str += "]" + selected_text + "[/geot_city]";
+
+                                } else {
+
+                                    str += "]YOUR CONTENT HERE[/geot_city]";
+
+                                }
                             } else {
 
-                                str+="]YOUR CONTENT HERE[/geot]";
+                                var str = '[geot ';
 
-                            }   
-                            
-                                        
+                                if (jQuery('#geot_region').val()) {
+                                    if (mode == 'include') {
+                                        str += 'region="';
+                                    } else {
+                                        str += 'exclude_region="';
+                                    }
+
+                                    str += jQuery('#geot_region').val();
+
+                                    str += '" ';
+                                }
+
+                                if (jQuery('#geot_country').val()) {
+                                    if (mode == 'include') {
+                                        str += 'country="';
+                                    } else {
+                                        str += 'exclude_country="';
+                                    }
+
+                                    str += jQuery('#geot_country').val();
+
+                                    str += '" ';
+                                }
+
+
+                                var selected_text = ed.selection.getContent();
+                                if (selected_text) {
+
+                                    str += "]" + selected_text + "[/geot]";
+
+                                } else {
+
+                                    str += "]YOUR CONTENT HERE[/geot]";
+
+                                }
+
+                            }
                             
                             var Editor = tinyMCE.get('content');
                             Editor.focus();
