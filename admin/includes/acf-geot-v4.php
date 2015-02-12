@@ -86,6 +86,7 @@ class acf_field_geot_field extends acf_field {
 			'layout'	=>	'horizontal',
 			'choices'	=>	array(
 				'regions' => __('Regions' ,'geot'),
+				'city-regions' => __('City Regions' ,'geot'),
 				'countries' => __('Countries', 'geot'),
 			)
 		));
@@ -157,6 +158,32 @@ class acf_field_geot_field extends acf_field {
 			
 			<?php	
 			}				
+		} elseif( 'city-regions' == $field['geot_show']) {
+
+			$regions 	= apply_filters('geot/get_city_regions', array());
+
+			if( is_array( $regions ) ) {
+
+				foreach ($regions as $r) {
+					if (!empty( $r['name'] ) ) {
+						$choices[$r['name']] = $r['name'];
+					}
+				}
+
+				do_action('acf/create_field', array(
+					'type'		=>	'select',
+					'multiple'	=>	true,
+					'name'		=>	$field['name'].'[geot_city_regions]',
+					'value'		=>	$field['value']['geot_city_regions'],
+					'choices'	=>	$choices
+				));
+
+			} else { ?>
+
+				<p> Add some regions first.</p>
+
+			<?php
+			}
 		} else {
 
 			$countries 	= apply_filters('geot/get_countries', array());
