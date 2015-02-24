@@ -132,7 +132,7 @@ function geot_get_cities( $country = 'US')	{
 
 	if( false === $cities ) {
 		global $wpdb;
-		$cities = $wpdb->get_results( $wpdb->prepare( "SELECT country_code, city FROM {$wpdb->prefix}geot_cities WHERE country_code = %s ORDER BY city ", array($country)));
+		$cities = $wpdb->get_results( $wpdb->prepare( "SELECT country_code, city FROM {$wpdb->base_prefix}geot_cities WHERE country_code = %s ORDER BY city ", array($country)));
 
 		wp_cache_set( 'geot_cities'.$country, $cities);
 	}

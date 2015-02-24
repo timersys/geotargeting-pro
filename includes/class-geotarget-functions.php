@@ -309,7 +309,7 @@ class GeoTarget_Functions {
 		// If user set cookie use instead
 		if( ! empty( $_COOKIE['geot_country']) ) {
 
-			$query 	 = "SELECT * FROM {$wpdb->prefix}geot_countries WHERE iso_code = %s";
+			$query 	 = "SELECT * FROM {$wpdb->base_prefix}geot_countries WHERE iso_code = %s";
 	
 			$result = $wpdb->get_row( $wpdb->prepare($query, array($_COOKIE['geot_country'])), ARRAY_A );
 			$country = new StdClass;

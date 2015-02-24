@@ -100,6 +100,125 @@ class GeoTarget_Public {
 
 	}
 
+
+	/**
+	 * Add rules to Popups plugin
+	 * @param $choices
+	 */
+	public function add_popups_rules( $choices ) {
+		$choices['Geotargeting'] = array(
+			'geot_country'          => 'Country',
+			'geot_country_region'   => 'Country Region',
+			'geot_city_region'      => 'City Region',
+
+		);
+		return $choices;
+	}
+
+	/**
+	 * Return countries for popup rules
+	 *
+	 * @param $choices
+	 *
+	 * @return mixed
+	 */
+	public function add_country_choices($choices) {
+		$countries = apply_filters('geot/get_countries', array());
+		foreach( $countries as $c ) {
+			$choices[$c->iso_code] = $c->country;
+		}
+		return $choices;
+	}
+
+	/**
+	 * Return countries regions for popup rules
+	 *
+	 * @param $choices
+	 *
+	 * @return mixed
+	 */
+	public function add_country_region_choices($choices) {
+		$regions = apply_filters('geot/get_regions', array());
+		foreach( $regions as $r ) {
+
+			$choices[$r['name']] = $r['name'];
+		}
+		return $choices;
+	}
+
+	/**
+	 * Return cities regions for popup rules
+	 *
+	 * @param $choices
+	 *
+	 * @return mixed
+	 */
+	public function add_city_region_choices($choices) {
+		$regions = apply_filters('geot/get_city_regions', array());
+		foreach( $regions as $r ) {
+
+			$choices[$r['name']] = $r['name'];
+		}
+		return $choices;
+	}
+
+	/**
+	 * [rule_match_logged_user description]
+	 * @param  bool $match false default
+	 * @param  array $rule rule to compare
+	 * @return boolean true if match
+	 */
+	function popup_country_match( $match, $rule ) {
+
+		if ( $rule['operator'] == "==" ) {
+
+			return geot_target( $rule['value'] );
+
+		} else {
+
+			return !geot_target( $rule['value'] );
+
+		}
+
+	}
+
+	/**
+	 * @param  bool $match false default
+	 * @param  array $rule rule to compare
+	 * @return boolean true if match
+	 */
+	function popup_country_region_match( $match, $rule ) {
+
+		if ( $rule['operator'] == "==" ) {
+
+			return geot_target('',$rule['value']);
+
+		} else {
+
+			return !geot_target('',$rule['value']);
+
+		}
+
+	}
+
+	/**
+	 * @param  bool $match false default
+	 * @param  array $rule rule to compare
+	 * @return boolean true if match
+	 */
+	function popup_city_region_match( $match, $rule ) {
+
+		if ( $rule['operator'] == "==" ) {
+
+			return geot_target('',$rule['value'],'','','cities');
+
+		} else {
+
+			return !geot_target('',$rule['value'],'','','cities');
+
+		}
+
+	}
 /*	public function filter_query( $query ){
 
 		// if (  in_array('reviews', @(array)$query->query_vars['post_type']) ) {

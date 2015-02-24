@@ -308,7 +308,7 @@ class GeoTarget_Admin {
 			die();
 
 
-		$cities = $wpdb->get_results( $wpdb->prepare( "SELECT id, city FROM {$wpdb->prefix}geot_cities WHERE country_code = %s", array($_POST['country'])));
+		$cities = $wpdb->get_results( $wpdb->prepare( "SELECT id, city FROM {$wpdb->base_prefix}geot_cities WHERE country_code = %s", array($_POST['country'])));
 
 		if( !empty( $cities ) ){
 			foreach( $cities as $c ) {

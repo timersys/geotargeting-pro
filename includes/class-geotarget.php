@@ -264,6 +264,17 @@ class GeoTarget {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+		// Popups rules
+		$this->loader->add_filter( 'spu/metaboxes/rule_types', $plugin_public, 'add_popups_rules' );
+
+		$this->loader->add_filter( 'spu/rules/rule_values/geot_country', $plugin_public, 'add_country_choices' );
+		$this->loader->add_filter( 'spu/rules/rule_values/geot_country_region', $plugin_public, 'add_country_region_choices' );
+		$this->loader->add_filter( 'spu/rules/rule_values/geot_city_region', $plugin_public, 'add_city_region_choices' );
+
+		$this->loader->add_filter( 'spu/rules/rule_match/geot_country', $plugin_public, 'popup_country_match', 10, 2 );
+		$this->loader->add_filter( 'spu/rules/rule_match/geot_country_region', $plugin_public, 'popup_country_region_match', 10, 2 );
+		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $plugin_public, 'popup_city_region_match', 10, 2 );
+
 	}
 
 	/**
