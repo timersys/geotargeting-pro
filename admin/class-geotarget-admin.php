@@ -286,7 +286,7 @@ class GeoTarget_Admin {
 			require_once(dirname (__FILE__).'/includes/class-license-handler.php' );
 		}
 
-		$opts = get_option( 'spu_settings');
+		$opts = get_option( 'geot_settings');
 
 		$license = @$opts['geot_license_key'];
 

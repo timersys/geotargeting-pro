@@ -89,9 +89,6 @@ if ( !class_exists( 'Geot_License' ) ) {
 		 */
 		public function auto_updater() {
 
-			if ( 'valid' !== get_option( $this->item_shortname . '_license_active' ) )
-				return;
-			
 			// Setup the updater
 			$edd_updater = new EDD_SL_Plugin_Updater( 'http://wp.timersys.com', $this->file, array(
 					'version'   => $this->version,
@@ -111,14 +108,13 @@ if ( !class_exists( 'Geot_License' ) ) {
 		 * @return  void
 		 */
 		public function activate_license() {
-			global $spu;
 
-			if ( !isset( $_POST['spu_settings'] ) ) return;
-			if ( !isset( $_POST['spu_settings'][$this->item_shortname . '_license_key'] ) ) return;
+			if ( !isset( $_POST['geot_settings'] ) ) return;
+			if ( !isset( $_POST['geot_settings'][$this->item_shortname . '_license_key'] ) ) return;
 
-			if ( get_option( $this->item_shortname . '_license_active' ) == 'valid' && $_POST['spu_settings'][$this->item_shortname . '_license_key'] == $this->license ) return;
+			if ( get_option( $this->item_shortname . '_license_active' ) == 'valid' && $_POST['geot_settings'][$this->item_shortname . '_license_key'] == $this->license ) return;
 
-			$license = sanitize_text_field( $_POST['spu_settings'][$this->item_shortname . '_license_key'] ) ;
+			$license = sanitize_text_field( $_POST['geot_settings'][$this->item_shortname . '_license_key'] ) ;
 
 			// Data to send to the API
 			$api_params = array(
@@ -150,8 +146,8 @@ if ( !class_exists( 'Geot_License' ) ) {
 		public function deactivate_license() {
 			global $edd_options;
 
-			if ( !isset( $_POST['spu_settings'] ) ) return;
-			if ( !isset( $_POST['spu_settings'][$this->item_shortname . '_license_key'] ) ) return;
+			if ( !isset( $_POST['geot_settings'] ) ) return;
+			if ( !isset( $_POST['geot_settings'][$this->item_shortname . '_license_key'] ) ) return;
 
 			// Run on deactivate button press
 			if ( isset( $_POST[$this->item_shortname . '_license_key_deactivate'] ) ) {
