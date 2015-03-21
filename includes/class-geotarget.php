@@ -237,11 +237,13 @@ class GeoTarget {
 		//$this->loader->add_action( 'save_post', $plugin_admin, 'save_meta_options' , 20 );
 		
 		$geot_widgets = new Geot_Widgets( $this->get_GeoTarget(), $this->get_version() );
-		// add geot to all widgets
-		$this->loader->add_action( 'in_widget_form' , $geot_widgets, 'add_geot_to_widgets', 5, 3 );
-		$this->loader->add_action( 'widget_display_callback' , $geot_widgets, 'target_widgets' );
-		$this->loader->add_action( 'widget_update_callback' , $geot_widgets, 'save_widgets_data', 5, 3 );
-			
+
+		if ( $this ) { // add check to see if user want to integrate to widgets
+			// add geot to all widgets
+			$this->loader->add_action( 'in_widget_form', $geot_widgets, 'add_geot_to_widgets', 5, 3 );
+			$this->loader->add_action( 'widget_display_callback', $geot_widgets, 'target_widgets' );
+			$this->loader->add_action( 'widget_update_callback', $geot_widgets, 'save_widgets_data', 5, 3 );
+		}
 		// License and Updates	
 		$this->loader->add_action( 'admin_init' , $plugin_admin, 'handle_license', 1 );
 
