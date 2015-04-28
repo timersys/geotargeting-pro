@@ -68,6 +68,9 @@ class GeoTarget_Settings {
 		if( empty( $opts['geot_license_key'] ) ) {
 			$opts['geot_license_key'] = '';
 		}
+		if( empty( $opts['cloudflare'] ) ) {
+			$opts['cloudflare'] = '0';
+		}
 		if( empty( $opts['maxm_id'] ) ) {
 			$opts['maxm_id'] = '';
 		}

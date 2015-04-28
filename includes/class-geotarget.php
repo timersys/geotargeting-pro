@@ -75,7 +75,7 @@ class GeoTarget {
 	public function __construct() {
 
 		$this->GeoTarget = 'geotarget';
-		$this->version = '1.2';
+		$this->version = '1.3';
 
 		$this->load_dependencies();
 		$this->set_locale();

@@ -10,7 +10,7 @@
  * @author     Your Name <email@example.com>
  */
 use GeoIp2\Database\Reader;
-use GeoIp2\Database\Client;
+use GeoIp2\Webservice\Client;
 
 class GeoTarget_Functions {
 
@@ -305,13 +305,15 @@ class GeoTarget_Functions {
 	public function calculateUserCountry() {
 		
 		global $wpdb;
-		
+
+		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 		// If user set cookie use instead
-		if( ! empty( $_COOKIE['geot_country']) ) {
+		if( ! empty( $_COOKIE['geot_country']) || ( !empty( $opts['cloudflare']) && !empty($_SERVER["HTTP_CF_IPCOUNTRY"]) ) ) {
 
 			$query 	 = "SELECT * FROM {$wpdb->base_prefix}geot_countries WHERE iso_code = %s";
-	
-			$result = $wpdb->get_row( $wpdb->prepare($query, array($_COOKIE['geot_country'])), ARRAY_A );
+			$iso_code = empty( $_COOKIE['geot_country'] ) ? $_SERVER["HTTP_CF_IPCOUNTRY"] : $_COOKIE['geot_country'];
+
+			$result = $wpdb->get_row( $wpdb->prepare($query, array( $iso_code )), ARRAY_A );
 			$country = new StdClass;
 
 			$country->name      = $result['country'];

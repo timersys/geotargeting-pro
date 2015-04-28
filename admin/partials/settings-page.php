@@ -18,6 +18,19 @@
 				
 			</tr>
 			<tr valign="top" class="">
+				<th><h3><?php _e( 'Cloudflare:', $this->GeoTarget ); ?></h3></th>
+				<td colspan="3">
+					<p><?php _e( 'If you want to rely country detection to your cloudflare account check below', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="maxm_id"><?php _e( 'Use Cloudflare', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="checkbox" id="maxm_id" name="geot_settings[cloudflare]" value="1" <?php checked($opts['cloudflare'],'1');?>/>
+					<p class="help"><?php _e( 'Use Cloudflare country detection', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
 				<th><h3><?php _e( 'Maxmind:', $this->GeoTarget ); ?></h3></th>
 				<td colspan="3">
 					<p><?php echo sprintf(__( 'If you have <a href="%s">Maxmind API credentials</a>, enter them below', $this->GeoTarget ), 'https://www.maxmind.com/en/geoip2-precision-city-service?rId=timersys'); ?></p>
