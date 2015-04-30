@@ -10,7 +10,7 @@
  * @author     Your Name <email@example.com>
  */
 use GeoIp2\Database\Reader;
-use GeoIp2\Webservice\Client;
+use GeoIp2\WebService\Client;
 
 class GeoTarget_Functions {
 
