@@ -308,7 +308,7 @@ class GeoTarget_Functions {
 
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 		// If user set cookie use instead
-		if( ! empty( $_COOKIE['geot_country']) || ( !empty( $opts['cloudflare']) && !empty($_SERVER["HTTP_CF_IPCOUNTRY"]) ) ) {
+		if( !defined('GEOT_DEBUG') &&  ! empty( $_COOKIE['geot_country']) || ( !empty( $opts['cloudflare']) && !empty($_SERVER["HTTP_CF_IPCOUNTRY"]) ) ) {
 
 			$query 	 = "SELECT * FROM {$wpdb->base_prefix}geot_countries WHERE iso_code = %s";
 			$iso_code = empty( $_COOKIE['geot_country'] ) ? $_SERVER["HTTP_CF_IPCOUNTRY"] : $_COOKIE['geot_country'];
@@ -322,7 +322,7 @@ class GeoTarget_Functions {
 			return $country;
 		}
 		// if we have a session it means we already calculated country on session
-		if( !empty($_SESSION['geot_country']) ) {
+		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_country']) ) {
 			return unserialize($_SESSION['geot_country']);
 		}
 
@@ -340,7 +340,7 @@ class GeoTarget_Functions {
 
 
 		// if we have a session it means we already calculated city on session
-		if( !empty($_SESSION['geot_city']) ) {
+		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_city']) ) {
 			return unserialize($_SESSION['geot_city']);
 		}
 
@@ -358,7 +358,7 @@ class GeoTarget_Functions {
 
 
 		// if we have a session it means we already calculated city on session
-		if( !empty($_SESSION['geot_state']) ) {
+		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_state']) ) {
 			return unserialize($_SESSION['geot_state']);
 		}
 
@@ -376,7 +376,7 @@ class GeoTarget_Functions {
 
 
 		// if we have a session it means we already calculated city on session
-		if( !empty($_SESSION['geot_zip']) ) {
+		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_zip']) ) {
 			return unserialize($_SESSION['geot_zip']);
 		}
 
