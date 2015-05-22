@@ -195,7 +195,7 @@ class GeoTarget_Functions {
 
 		$user_city = $this->userCity;
 
-		
+
 		if ( count( $city ) > 0 ) {
 
 			foreach ( $city as $c ) {
@@ -310,14 +310,9 @@ class GeoTarget_Functions {
 		// If user set cookie use instead
 		if( !defined('GEOT_DEBUG') &&  ! empty( $_COOKIE['geot_country']) || ( !empty( $opts['cloudflare']) && !empty($_SERVER["HTTP_CF_IPCOUNTRY"]) ) ) {
 
-			$query 	 = "SELECT * FROM {$wpdb->base_prefix}geot_countries WHERE iso_code = %s";
 			$iso_code = empty( $_COOKIE['geot_country'] ) ? $_SERVER["HTTP_CF_IPCOUNTRY"] : $_COOKIE['geot_country'];
 
-			$result = $wpdb->get_row( $wpdb->prepare($query, array( $iso_code )), ARRAY_A );
-			$country = new StdClass;
-
-			$country->name      = $result['country'];
-			$country->isoCode   = $result['iso_code'];
+			$country = $this->getCountryByIsoCode( $iso_code );
 
 			return $country;
 		}
@@ -398,14 +393,26 @@ class GeoTarget_Functions {
 		}
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
-		if( !empty($opts['maxm_id']) && !empty($opts['maxm_license']) ) {
-			$reader = new Client($opts['maxm_id'], $opts['maxm_license']);
+
+		if ( ! empty( $opts['maxm_id'] ) && ! empty( $opts['maxm_license'] ) ) {
+			$reader = new Client( $opts['maxm_id'], $opts['maxm_license'] );
 		} else {
-			$reader = new Reader(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb');
+			$reader = new Reader( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb' );
 		}
 
-		$record = $reader->city($ip);
-
+		try {
+			$record = $reader->city($ip);
+		} catch( GeoIp2\Exception\AddressNotFoundException $e ) {
+			if( !empty($opts['fallback_country'])) {
+				return array(
+					'country' => $this->getCountryByIsoCode($opts['fallback_country']),
+					'city'    => '',
+					'zip'     => '',
+					'state'   => '',
+				);
+			}
+			return false;
+		}
 		$country = $record->country;
 		$city    = $record->city->name;
 		$cp      = $record->postal->code;
@@ -423,6 +430,24 @@ class GeoTarget_Functions {
 			'state'   => $state,
 		);
 
+	}
+
+	/**
+	 * Get country from database and return object like maxmind
+	 * @param $iso_code
+	 *
+	 * @return StdClass
+	 */
+	private function getCountryByIsoCode( $iso_code ) {
+		global $wpdb;
+		$query 	 = "SELECT * FROM {$wpdb->base_prefix}geot_countries WHERE iso_code = %s";
+		$result = $wpdb->get_row( $wpdb->prepare($query, array( $iso_code )), ARRAY_A );
+		$country = new StdClass;
+
+		$country->name      = $result['country'];
+		$country->isoCode   = $result['iso_code'];
+
+		return $country;
 	}
 
 }	

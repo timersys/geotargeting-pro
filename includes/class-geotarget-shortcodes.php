@@ -152,7 +152,7 @@ class GeoTarget_Shortcodes {
 	 */
 	function geot_show_state_name() {
 		$state = $this->functions->get_user_state();
-		return $state->name;
+		return isset( $state->name ) ? $state->name : false ;
 	}
 
 	/**
@@ -162,7 +162,7 @@ class GeoTarget_Shortcodes {
 	 */
 	function geot_show_state_code() {
 		$state = $this->functions->get_user_state();
-		return $state->isoCode;
+		return isset( $state->isoCode ) ? $state->isoCode : false;
 	}
 
 	/**

@@ -51,6 +51,24 @@
 				</td>
 			</tr>
 			<tr valign="top" class="">
+				<th><label for="region"><?php _e( 'Fallback Country', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+
+					<select name="geot_settings[fallback_country]"  class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
+						<?php
+						foreach ($countries as $c) {
+							?>
+							<option value="<?php echo $c->iso_code?>" <?php selected( $c->iso_code, @$opts['fallback_country'] ); ?>> <?php echo $c->country; ?></option>
+						<?php
+						}
+						?>
+					</select>
+
+					<p class="help"><?php _e( 'If the user IP is not detected plugin will fallback to this country', $this->GeoTarget ); ?></p>
+				</td>
+
+			</tr>
+			<tr valign="top" class="">
 				<th><h3><?php _e( 'Countries:', $this->GeoTarget ); ?></h3></th>
 				<td colspan="3">
 				</td>
