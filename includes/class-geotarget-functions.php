@@ -227,6 +227,58 @@ class GeoTarget_Functions {
 	}
 
 	/**
+	 * Main function that return if user target the given state or not
+	 *
+	 * @param string $state
+	 * @param string $exclude_state
+	 *
+	 * @return bool
+	 *
+	 */
+	public function targetState( $state = '', $exclude_state = '' )
+	{
+
+		//Push state list into array
+		$state 			= $this->toArray( $state );
+
+		$exclude_state 	= $this->toArray( $exclude_state );
+
+		//set target to false
+		$target = false;
+
+		$user_state = $this->userState;
+
+
+		if ( count( $state ) > 0 ) {
+
+			foreach ( $state as $c ) {
+
+				if ( strtolower( $user_state ) == strtolower( $c ) ) {
+					$target = true;
+				}
+
+			}
+		} else {
+			// If we don't have states to target return true
+			$target = true;
+
+		}
+
+		if ( count( $exclude_state ) > 0 ) {
+
+			foreach ( $exclude_state as $c ) {
+
+				if ( strtolower( $user_state ) == strtolower( $c ) ) {
+					$target = false;
+				}
+
+			}
+		}
+
+		return $target;
+	}
+
+	/**
 	 * Helper function to conver to array
 	 * @param  string $value comma separated countries, etc
 	 * @return array  
@@ -383,10 +435,13 @@ class GeoTarget_Functions {
 
 	/**
 	 * Get Country by ip
-	 * @param  string $ip 
-	 * @return array     country and city array
+	 *
+	 * @param  string $ip
+	 * @param bool $maxmin_free_db
+	 *
+	 * @return array country and city array
 	 */
-	public function getUserDataByIp( $ip = "" ) {
+	public function getUserDataByIp( $ip = "", $maxmin_free_db = false ) {
 
 		if( empty( $ip) ) {
 			$ip = apply_filters( 'geot/user_ip', $_SERVER['REMOTE_ADDR']);		
@@ -394,7 +449,7 @@ class GeoTarget_Functions {
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
 
-		if ( ! empty( $opts['maxm_id'] ) && ! empty( $opts['maxm_license'] ) ) {
+		if ( ! empty( $opts['maxm_id'] ) && ! empty( $opts['maxm_license'] ) && !$maxmin_free_db ) {
 			$reader = new Client( $opts['maxm_id'], $opts['maxm_license'] );
 		} else {
 			$reader = new Reader( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb' );
@@ -402,16 +457,17 @@ class GeoTarget_Functions {
 
 		try {
 			$record = $reader->city($ip);
-		} catch( GeoIp2\Exception\AddressNotFoundException $e ) {
-			if( !empty($opts['fallback_country'])) {
-				return array(
-					'country' => $this->getCountryByIsoCode($opts['fallback_country']),
-					'city'    => '',
-					'zip'     => '',
-					'state'   => '',
-				);
-			}
-			return false;
+		} catch( GeoIp2\Exception\OutOfQueriesException $e ) {
+			Geotarget_Emails::OutOfQueriesException();
+			// fallback to free version
+			return $this->getUserDataByIp( $ip, true );
+		} catch( GeoIp2\Exception\AuthenticationException $e ) {
+			Geotarget_Emails::AuthenticationException();
+			// fallback to free version
+			return $this->getUserDataByIp( $ip, true );
+		} catch( Exception $e ) {
+			//for any other exception show fallback country
+			return $this->getFallbackCountry();
 		}
 		$country = $record->country;
 		$city    = $record->city->name;
@@ -448,6 +504,24 @@ class GeoTarget_Functions {
 		$country->isoCode   = $result['iso_code'];
 
 		return $country;
+	}
+
+	/**
+	 * If we have a maxmind exception, return
+	 * @return array|bool
+	 */
+	private function getFallbackCountry() {
+		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+
+		if( !empty($opts['fallback_country'])) {
+			return array(
+				'country' => $this->getCountryByIsoCode($opts['fallback_country']),
+				'city'    => '',
+				'zip'     => '',
+				'state'   => '',
+			);
+		}
+		return false;
 	}
 
 }	

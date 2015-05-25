@@ -75,7 +75,7 @@ class GeoTarget {
 	public function __construct() {
 
 		$this->GeoTarget = 'geotarget';
-		$this->version = '1.3.1';
+		$this->version = '1.3.2';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -110,52 +110,15 @@ class GeoTarget {
 	private function load_dependencies() {
 
 		require plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/autoload.php';
-		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-loader.php';
-
-		/**
-		 * The class responsible for defining internationalization functionality
-		 * of the plugin.
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-i18n.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the Dashboard.
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-geotarget-admin.php';
-
-		/**
-		 * Geotargeting functions
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-functions.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-geotarget-public.php';
-
-		/**
-		 * The class responsible for defining all helper filters
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-filters.php';
-		
-		/**
-		 * The class responsible for registering shortcodes
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-shortcodes.php';
-		
-		/**
-		 * Widget
-		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-emails.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
-		
-		/**
-		 * Target all Widgets
-		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 
 
@@ -289,11 +252,12 @@ class GeoTarget {
 		$shortcodes = new GeoTarget_Shortcodes( $this->get_GeoTarget(), $this->get_version(), $this->functions );
 
 		add_shortcode('geot', array( $shortcodes, 'geot_filter') );
+		add_shortcode('geot_city', array( $shortcodes, 'geot_filter_cities') );
+		add_shortcode('geot_state', array( $shortcodes, 'geot_filter_states') );
 		add_shortcode('geot_country_code', array( $shortcodes, 'geot_show_country_code') );
 		add_shortcode('geot_country_name', array( $shortcodes, 'geot_show_country_name') );
-		add_shortcode('geot_city', array( $shortcodes, 'geot_filter_cities') );
 		add_shortcode('geot_city_name', array( $shortcodes, 'geot_show_city_name') );
-		add_shortcode('geot_state', array( $shortcodes, 'geot_show_state_name') );
+		add_shortcode('geot_state_name', array( $shortcodes, 'geot_show_state_name') );
 		add_shortcode('geot_state_code', array( $shortcodes, 'geot_show_state_code') );
 		add_shortcode('geot_zip', array( $shortcodes, 'geot_show_zip_code') );
 	}

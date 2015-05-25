@@ -109,6 +109,31 @@ class GeoTarget_Shortcodes {
 		return '';
 	}
 
+	/**
+	 * Shows provided content only if the location
+	 * criteria are met.
+	 * [geot_state state="Florida"]content[/geot_state]
+	 *
+	 * @param $atts
+	 * @param $content
+	 *
+	 * @return string
+	 */
+	function geot_filter_states($atts, $content)
+	{
+		extract( shortcode_atts( array(
+			'ip' 				=> $_SERVER['REMOTE_ADDR'],
+			'state'			    =>'',
+			'exclude_state'	    =>'',
+		), $atts ) );
+
+
+		if ( $this->functions->targetState( $state, $exclude_state ) )
+			return do_shortcode( $content );
+
+		return '';
+	}
+
 
 	/** 
 	 * Displays the 2 character country for the current user
@@ -152,7 +177,8 @@ class GeoTarget_Shortcodes {
 	 */
 	function geot_show_state_name() {
 		$state = $this->functions->get_user_state();
-		return isset( $state->name ) ? $state->name : false ;
+
+		return !empty( $state->names ) ? $state->name : false ;
 	}
 
 	/**
@@ -162,7 +188,7 @@ class GeoTarget_Shortcodes {
 	 */
 	function geot_show_state_code() {
 		$state = $this->functions->get_user_state();
-		return isset( $state->isoCode ) ? $state->isoCode : false;
+		return !empty( $state->isoCode ) ? $state->isoCode : false;
 	}
 
 	/**
@@ -172,7 +198,7 @@ class GeoTarget_Shortcodes {
 	 */
 	function geot_show_zip_code() {
 		$zip = $this->functions->get_user_zip();
-		return $zip;
+		return !empty($zip) ? $zip : false;
 	}
 
 }	
