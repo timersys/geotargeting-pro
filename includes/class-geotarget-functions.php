@@ -54,7 +54,8 @@ class GeoTarget_Functions {
 	 */
 	public function targetCountry( $country = '', $region = '', $exclude_country = '', $exclude_region  = '')
 	{
-
+		if( $this->isSearchEngine() )
+			return true;
 		//Push country list into array
 		$country 			= $this->toArray( $country );
 		
@@ -146,6 +147,8 @@ class GeoTarget_Functions {
 	 */
 	public function targetCity( $city = '', $region = '', $exclude_city = '', $exclude_region  = '')
 	{
+		if( $this->isSearchEngine() )
+			return true;
 
 		//Push city list into array
 		$city 			= $this->toArray( $city );
@@ -237,6 +240,8 @@ class GeoTarget_Functions {
 	 */
 	public function targetState( $state = '', $exclude_state = '' )
 	{
+		if( $this->isSearchEngine() )
+			return true;
 
 		//Push state list into array
 		$state 			= $this->toArray( $state );
@@ -521,6 +526,22 @@ class GeoTarget_Functions {
 				'state'   => '',
 			);
 		}
+		return false;
+	}
+
+	/**
+	 * Check if "user" is a search engine
+	 */
+	private function isSearchEngine() {
+		$referrer = isset($_SERVER['HTTP_REFERRER']) ? $_SERVER['HTTP_REFERRER'] : '';
+
+		$SE = apply_filters( 'geot/search_engines', array('/search?', '.google.', 'web.info.com', 'search.', 'del.icio.us/search', 'soso.com', '/search/', '.yahoo.', '.bing.' ) );
+
+		foreach ($SE as $url) {
+			if ( strpos( $referrer,$url ) !== false )
+				return  true;
+		}
+
 		return false;
 	}
 
