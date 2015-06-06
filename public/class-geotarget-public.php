@@ -110,7 +110,7 @@ class GeoTarget_Public {
 			'geot_country'          => 'Country',
 			'geot_country_region'   => 'Country Region',
 			'geot_city_region'      => 'City Region',
-
+			'geot_state'            => 'State',
 		);
 		return $choices;
 	}
@@ -219,6 +219,25 @@ class GeoTarget_Public {
 		}
 
 	}
+	/**
+	 * @param  bool $match false default
+	 * @param  array $rule rule to compare
+	 * @return boolean true if match
+	 */
+	function popup_state_match( $match, $rule ) {
+
+		if ( $rule['operator'] == "==" ) {
+
+			return geot_target_state($rule['value'],'');
+
+		} else {
+
+			return !geot_target_state($rule['value'],'');
+
+		}
+
+	}
+
 /*	public function filter_query( $query ){
 
 		// if (  in_array('reviews', @(array)$query->query_vars['post_type']) ) {

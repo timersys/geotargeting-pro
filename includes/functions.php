@@ -7,9 +7,9 @@
 
 /**
  * Main function that return is current user target the given countries / regions or not
- *
+ * Originally was to target also cities so I left that just in case but now we use geot_target_city
  * @param string $what what to target countries|cities
- * @param string $object
+ * @param string $object single country/city or comma separated list
  * @param string $object_region
  * @param string $exclude
  * @param  string $exclude_region
@@ -23,6 +23,38 @@
  	    return $geot->functions->targetCountry( $object, $object_region, $exclude, $exclude_region );
 
 	 return $geot->functions->targetCity( $object, $object_region, $exclude, $exclude_region );
+
+ }
+
+/**
+ * Main function that return is current user target the given city / regions or not
+ *
+ * @param string $city single city or comma list of cities
+ * @param string $city_region
+ * @param string $exclude
+ * @param  string $exclude_region
+ *
+ * @return bool
+ */
+ function geot_target_city( $city = '', $city_region = '', $exclude = '', $exclude_region  = '') {
+	 global $geot;
+
+	 return $geot->functions->targetCity( $city, $city_region, $exclude, $exclude_region );
+
+ }
+
+/**
+ * Main function that return is current user target the given state or not
+ *
+ * @param string $state single state or comma separated list of states
+ * @param string $exclude
+ *
+ * @return bool
+ */
+ function geot_target_state( $state = '', $exclude = '') {
+	 global $geot;
+
+	 return $geot->functions->targetState( $state, $exclude );
 
  }
 
