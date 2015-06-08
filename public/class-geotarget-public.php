@@ -53,8 +53,11 @@ class GeoTarget_Public {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @var      string    $GeoTarget       The name of the plugin.
-	 * @var      string    $version    The version of this plugin.
+	 *
+	 * @param string $GeoTarget
+	 * @param string $version
+	 * @param $functions
+	 *
 	 */
 	public function __construct( $GeoTarget, $version, $functions ) {
 

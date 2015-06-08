@@ -198,6 +198,10 @@ class GeoTarget_Functions {
 
 		$user_city = $this->userCity;
 
+		// if user city is not defined return false
+		if ( empty( $user_city ) )
+			return apply_filters('geot/target_city/return_on_user_null', false);
+
 		if ( count( $city ) > 0 ) {
 
 			foreach ( $city as $c ) {
@@ -208,7 +212,7 @@ class GeoTarget_Functions {
 
 			}
 		} else {
-			// If we don't have countries to target return true
+			// If we don't have city to target return true
 			$target = true;
 
 		}
@@ -251,9 +255,9 @@ class GeoTarget_Functions {
 		$target = false;
 
 		$user_state = $this->userState;
-
+		// if user state is not defined return false
 		if ( empty( $user_state->names ) )
-			return true;
+			return apply_filters('geot/target_state/return_on_user_null', false);
 
 		if ( count( $state ) > 0 ) {
 
@@ -479,11 +483,11 @@ class GeoTarget_Functions {
 			return $this->getFallbackCountry();
 		}
 		$country    = $record->country;
-		$city       = isset( $record->city->names ) ? $record->city->name : '';
-		$cp         = isset( $record->postal->code ) ?  $record->postal->code : '';
-		$state      = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : '';
-		$continent  = isset( $record->continent->names ) ? $record->continent->name : '';
-		$location   = isset( $record->location ) ? $record->location : '';
+		$city       = $record->city->name ;
+		$cp         = $record->postal->code ;
+		$state      = $record->mostSpecificSubdivision ;
+		$continent  = $record->continent->name ;
+		$location   = $record->location ;
 
 		$_SESSION['geot_country']   = serialize($country);
 		$_SESSION['geot_city']      = serialize($city);
