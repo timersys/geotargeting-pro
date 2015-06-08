@@ -37,6 +37,17 @@
 				</td>
 			</tr>
 			<tr valign="top" class="">
+				<th><label for="maxm_service"><?php _e( 'GeoIP2 Precision Service', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><select id="maxm_service" name="geot_settings[maxm_service]">
+								<option value="city" <?php  selected( $opts['maxm_service'], 'city');?>>City</option>
+								<option value="country" <?php  selected( $opts['maxm_service'], 'country');?>>Country</option>
+								<option value="insights" <?php  selected( $opts['maxm_service'], 'insights');?>>Insights</option>
+							</select>
+					<p class="help"><?php _e( 'Choose the precision service you purchased', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
 				<th><label for="maxm_id"><?php _e( 'Maxmind User ID', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 					<label><input type="text" id="maxm_id" name="geot_settings[maxm_id]" value="<?php  echo $opts['maxm_id'];?>" class="regular-text" />

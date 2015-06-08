@@ -77,6 +77,9 @@ class GeoTarget_Settings {
 		if( empty( $opts['maxm_license'] ) ) {
 			$opts['maxm_license'] = '';
 		}
+		if( empty( $opts['maxm_service'] ) ) {
+			$opts['maxm_service'] = 'city';
+		}
 
 		$countries 	= apply_filters('geot/get_countries', array());
 

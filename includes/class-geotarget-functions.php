@@ -198,7 +198,6 @@ class GeoTarget_Functions {
 
 		$user_city = $this->userCity;
 
-
 		if ( count( $city ) > 0 ) {
 
 			foreach ( $city as $c ) {
@@ -253,12 +252,14 @@ class GeoTarget_Functions {
 
 		$user_state = $this->userState;
 
+		if ( empty( $user_state->names ) )
+			return true;
 
 		if ( count( $state ) > 0 ) {
 
 			foreach ( $state as $c ) {
 
-				if ( strtolower( $user_state ) == strtolower( $c ) ) {
+				if ( strtolower( $user_state->name ) == strtolower( $c ) || strtolower( $user_state->isoCode ) == strtolower( $c ) ) {
 					$target = true;
 				}
 
@@ -273,7 +274,7 @@ class GeoTarget_Functions {
 
 			foreach ( $exclude_state as $c ) {
 
-				if ( strtolower( $user_state ) == strtolower( $c ) ) {
+				if ( strtolower( $user_state->name ) == strtolower( $c ) || strtolower( $user_state->isoCode ) == strtolower( $c ) ) {
 					$target = false;
 				}
 
@@ -454,14 +455,17 @@ class GeoTarget_Functions {
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
 
-		if ( ! empty( $opts['maxm_id'] ) && ! empty( $opts['maxm_license'] ) && !$maxmin_free_db ) {
-			$reader = new Client( $opts['maxm_id'], $opts['maxm_license'] );
-		} else {
-			$reader = new Reader( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb' );
-		}
-
 		try {
-			$record = $reader->city($ip);
+			if ( ! empty( $opts['maxm_id'] ) && ! empty( $opts['maxm_license'] ) && !$maxmin_free_db ) {
+				$reader       = new Client( $opts['maxm_id'], $opts['maxm_license'] );
+				$service_func = $opts['maxm_service'];
+				if ( method_exists( $reader, $service_func ) ) {
+					$record = $reader->$service_func( $ip );
+				}
+			} else {
+				$reader = new Reader( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb' );
+				$record = $reader->city( $ip );
+			}
 		} catch( GeoIp2\Exception\OutOfQueriesException $e ) {
 			Geotarget_Emails::OutOfQueriesException();
 			// fallback to free version
@@ -474,24 +478,31 @@ class GeoTarget_Functions {
 			//for any other exception show fallback country
 			return $this->getFallbackCountry();
 		}
-		$country = $record->country;
-		$city    = $record->city->name;
-		$cp      = $record->postal->code;
-		$state   = $record->mostSpecificSubdivision;
+		$country    = $record->country;
+		$city       = isset( $record->city->names ) ? $record->city->name : '';
+		$cp         = isset( $record->postal->code ) ?  $record->postal->code : '';
+		$state      = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : '';
+		$continent  = isset( $record->continent->names ) ? $record->continent->name : '';
+		$location   = isset( $record->location ) ? $record->location : '';
 
 		$_SESSION['geot_country']   = serialize($country);
 		$_SESSION['geot_city']      = serialize($city);
-		$_SESSION['geot_zip']        = serialize($cp);
+		$_SESSION['geot_zip']       = serialize($cp);
 		$_SESSION['geot_state']     = serialize($state);
+		$_SESSION['geot_continent'] = serialize($continent);
+		$_SESSION['geot_location']  = serialize($location);
 
 		return array(
-			'country' => $country,
-			'city'    => $city,
-			'zip'     => $cp,
-			'state'   => $state,
+			'country'   => $country,
+			'city'      => $city,
+			'zip'       => $cp,
+			'state'     => $state,
+			'continent' => $continent,
+			'location'  => $location,
 		);
 
 	}
+
 
 	/**
 	 * Get country from database and return object like maxmind
