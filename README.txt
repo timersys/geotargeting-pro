@@ -4,7 +4,7 @@ Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.2.2
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,13 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 
 == Changelog ==
+
+= 1.3.3 - 8 Jun =
+* Fixed error emails when run out of queries
+* Added support for the three available maxmin webservices (city, country and insigths)
+* Fixed error with state geotargeting
+* API function returns now return more data
+* Updated Maxmind db
 
 = 1.3.2 - 25 May =
 
