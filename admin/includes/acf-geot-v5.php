@@ -29,7 +29,7 @@ class acf_field_geot_field extends acf_field {
 		*  label (string) Multiple words, can include spaces, visible when selecting a field type
 		*/
 		
-		$this->label = __('FIELD_LABEL', 'acf-geot_field');
+		$this->label = __('GeoTargetting', 'acf-geot_field');
 		
 		
 		/*
@@ -44,7 +44,10 @@ class acf_field_geot_field extends acf_field {
 		*/
 		
 		$this->defaults = array(
-			'font_size'	=> 14,
+			'geot_show' 		=> 'regions',
+			'geot_condition'	=> 'include',
+			'geot_regions'		=> '',
+			'geot_countries'	=> ''
 		);
 		
 		
@@ -54,7 +57,7 @@ class acf_field_geot_field extends acf_field {
 		*/
 		
 		$this->l10n = array(
-			'error'	=> __('Error! Please enter a higher value', 'acf-geot_field'),
+			'error'	=> __('Error! Please enter a value', 'acf-geot_field'),
 		);
 		
 				
@@ -90,11 +93,15 @@ class acf_field_geot_field extends acf_field {
 		*/
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Font Size','acf-geot_field'),
-			'instructions'	=> __('Customise the input font size','acf-geot_field'),
-			'type'			=> 'number',
-			'name'			=> 'font_size',
-			'prepend'		=> 'px',
+			'label'			=> __('Show Regions or Countries','acf-geot_field'),
+			'instructions'	=> __('Check what to show on front end','acf-geot_field'),
+			'type'			=> 'radio',
+			'name'			=> 'geot_show',
+			'choices'	=>	array(
+				'regions'       => __('Regions' ,'geot'),
+				'city-regions'  => __('City Regions' ,'geot'),
+				'countries'     => __('Countries', 'geot'),
+			)
 		));
 
 	}
@@ -117,25 +124,106 @@ class acf_field_geot_field extends acf_field {
 	*/
 	
 	function render_field( $field ) {
-		
-		
-		/*
-		*  Review the data of $field.
-		*  This will show what data is available
-		*/
-		
-		echo '<pre>';
-			print_r( $field );
-		echo '</pre>';
-		
-		
-		/*
-		*  Create a simple text input using the 'font_size' setting.
-		*/
-		
+
 		?>
-		<input type="text" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo esc_attr($field['value']) ?>" style="font-size:<?php echo $field['font_size'] ?>px;" />
-		<?php
+		<div>
+			<?php
+
+			create_field( array(
+				'type'		=>	'radio',
+				'name'		=>	$field['name'].'[geot_condition]',
+				'value'		=>	$field['value']['geot_condition'],
+				'layout'	=>	'horizontal',
+				'choices'	=>	array(
+					'exclude' => __('Exclude to' ,'geot'),
+					'include' => __('Show to', 'geot'),
+				)
+			));
+
+			if( 'regions' == $field['geot_show']) {
+
+				$regions 	= apply_filters('geot/get_regions', array());
+
+				if( is_array( $regions ) ) {
+
+					foreach ($regions as $r) {
+						if (!empty( $r['name'] ) ) {
+							$choices[$r['name']] = $r['name'];
+						}
+					}
+
+					create_field( array(
+						'type'		=>	'select',
+						'multiple'	=>	true,
+						'name'		=>	$field['name'].'[geot_regions]',
+						'value'		=>	$field['value']['geot_regions'],
+						'choices'	=>	$choices
+					));
+
+				} else { ?>
+
+					<p> Add some regions first.</p>
+
+				<?php
+				}
+			} elseif( 'city-regions' == $field['geot_show']) {
+
+				$regions 	= apply_filters('geot/get_city_regions', array());
+
+				if( is_array( $regions ) ) {
+
+					foreach ($regions as $r) {
+						if (!empty( $r['name'] ) ) {
+							$choices[$r['name']] = $r['name'];
+						}
+					}
+
+					create_field( array(
+						'type'		=>	'select',
+						'multiple'	=>	true,
+						'name'		=>	$field['name'].'[geot_city_regions]',
+						'value'		=>	$field['value']['geot_city_regions'],
+						'choices'	=>	$choices
+					));
+
+				} else { ?>
+
+					<p> Add some regions first.</p>
+
+				<?php
+				}
+			} else {
+
+				$countries 	= apply_filters('geot/get_countries', array());
+
+				if( is_array( $countries ) ) {
+
+					foreach ($countries as $r) {
+						if( !empty( $r->country ) ) {
+
+							$choices[$r->iso_code] = $r->country;
+
+						}
+					}
+
+					create_field( array(
+						'type'		=>	'select',
+						'multiple'	=>	true,
+						'name'		=>	$field['name'].'[geot_countries]',
+						'value'		=>	$field['value']['geot_countries'],
+						'choices'	=>	$choices
+					));
+
+				} else { ?>
+
+					<p> Add some countries first.</p>
+
+				<?php
+				}
+			}
+			?>
+		</div>
+	<?php
 	}
 	
 		
@@ -542,5 +630,3 @@ class acf_field_geot_field extends acf_field {
 
 // create field
 new acf_field_geot_field();
-
-?>
