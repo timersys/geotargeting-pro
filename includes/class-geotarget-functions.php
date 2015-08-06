@@ -29,7 +29,9 @@ class GeoTarget_Functions {
 	 * @since    1.0.0
 	 */
 	public function __construct( ) {
-		if( !is_admin() )
+		if( !is_admin()
+		    && ! defined('DOING_CRON')
+		    && ! defined('DOING_AJAX') )
 			add_action('init' , array($this,'setUserData' ) );
 	}
 
