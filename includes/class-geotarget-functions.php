@@ -106,7 +106,6 @@ class GeoTarget_Functions {
 			
 		$user_country = $this->userCountry;
 
-			
 		if ( count( $country ) > 0 ) {
 
 			foreach ( $country as $c ) {

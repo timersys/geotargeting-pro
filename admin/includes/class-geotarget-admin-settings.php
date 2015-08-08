@@ -65,6 +65,9 @@ class GeoTarget_Settings {
 		if( ! is_array( @$opts['city_region'] ) ) {
 			$opts['city_region'][] = array( 'name' , 'cities' );
 		}
+		if( ! is_array( @$opts['redirection'] ) ) {
+			$opts['redirection'][] = array( 'name' , 'countries' );
+		}
 		if( empty( $opts['geot_license_key'] ) ) {
 			$opts['geot_license_key'] = '';
 		}

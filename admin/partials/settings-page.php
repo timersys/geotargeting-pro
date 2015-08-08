@@ -105,6 +105,7 @@
 									}
 								?>
 							</select>
+
 						</div>	
 					<?php } 
 				}?>
@@ -160,7 +161,55 @@
 				</td>
 
 			</tr>
-			
+
+			<tr valign="top" class="">
+				<th><h3><?php _e( 'Country Redirections:', $this->GeoTarget ); ?></h3></th>
+				<td colspan="3"><p><?php _e( 'If you want to redirect users from certain countries / regions to other sites, use the section below:', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="redirection"><?php _e( 'Create new redirection', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<?php
+
+					if( !empty( $opts['redirection'] ) ) {
+						foreach ( $opts['redirection'] as $redirection ) { @$i++;?>
+
+							<div class="redirection-group"  data-id="<?php echo $i;?>" >
+
+								<input type="text" placeholder="http://... Enter destination url" name="geot_settings[redirection][<?php echo $i;?>][name]" value="<?php echo !empty( $redirection['name'] )? esc_attr($redirection['name']): '' ; ?>" class="regular-text"/>
+								<a href="#" class="remove-redirection"title="<?php _e( 'Remove Redirection', $this->GeoTarget );?>">-</a>
+								<select name="geot_settings[redirection][<?php echo $i;?>][countries][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
+									<?php
+									foreach ($countries as $c) {
+										?>
+										<option value="<?php echo $c->iso_code?>" <?php selected(true, @in_array( $c->iso_code, @$redirection['countries']) ); ?>> <?php echo $c->country; ?></option>
+									<?php
+									}
+									?>
+								</select>
+								<p>or</p>
+								<select name="geot_settings[redirection][<?php echo $i;?>][regions][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type region name...', $this->GeoTarget );?>" >
+									<?php
+									$saved_regions 	= apply_filters('geot/get_regions', array());
+									foreach ($saved_regions as $k => $r) {
+										?>
+										<option value="<?php echo $r['name']?>" <?php selected(true, @in_array( $r['name'], @$redirection['regions']) ); ?>> <?php echo $r['name']; ?></option>
+									<?php
+									}
+									?>
+								</select>
+
+							</div>
+						<?php }
+					}?>
+					<a href="#" class="add-redirection button">Add Redirection</a>
+					<p class="help"><?php _e( 'Add as many countries you need for each redirection', $this->GeoTarget ); ?></p>
+				</td>
+
+			</tr>
+
+
 			<?php do_action( 'geot/settings_page/after' ); ?>
 			<tr><td><input type="submit" class="button-primary" value="<?php _e( 'Save settings', $this->GeoTarget );?>"/></td>
 			<?php wp_nonce_field('geot_save_settings','geot_nonce'); ?>

@@ -241,6 +241,24 @@ class GeoTarget_Public {
 
 	}
 
+	/**
+	 * If redirections are added redirect users
+	 */
+	function geot_redirections() {
+		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+
+		if( empty( $opts['redirection'] ) )
+			return;
+
+		foreach( $opts['redirection'] as $r ) {
+			if( geot_target( @$r['countries'], @$r['regions'] ) ) {
+				wp_redirect( $r['name'], apply_filters( 'geot/redirection_status', '301') );
+				exit;
+			}
+		}
+
+	}
+
 /*	public function filter_query( $query ){
 
 		// if (  in_array('reviews', @(array)$query->query_vars['post_type']) ) {

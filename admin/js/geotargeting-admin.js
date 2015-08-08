@@ -50,6 +50,25 @@
 			region.remove();
 		});
 
+        $(".add-redirection").click( function(e){
+            e.preventDefault();
+            var redirection 		= $(this).prev('.redirection-group');
+            var new_redirection 	= redirection.clone();
+            var new_id		= parseInt( redirection.data('id') ) + 1;
+
+            new_redirection.find('input[type="text"]').attr('name', 'geot_settings[redirection]['+new_id+'][name]').val('');
+            new_redirection.find('select').eq(0).attr('name', 'geot_settings[redirection]['+new_id+'][countries][]').find("option:selected").removeAttr("selected");
+            new_redirection.find('select').eq(1).attr('name', 'geot_settings[redirection]['+new_id+'][regions][]').find("option:selected").removeAttr("selected");
+            new_redirection.find('.chosen-container').remove();
+            new_redirection.insertAfter(redirection);
+            $(".geot-chosen-select").chosen({width:"90%",no_results_text: "Oops, nothing found!"});
+        });
+
+        $(".geot-settings").on('click','.remove-redirection', function(e){
+            e.preventDefault();
+            var redirection 		= $(this).parent('.redirection-group');
+            redirection.remove();
+        });
 		$(".country_ajax").on('change', function(){
 			load_cities($(this));
 		});
