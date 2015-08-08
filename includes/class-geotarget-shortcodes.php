@@ -140,11 +140,14 @@ class GeoTarget_Shortcodes {
 	 * [geot_country_code]   [geot_country_code]
 	 * @return  string country CODE
 	 **/
-	function geot_show_country_code() {
+	function geot_show_country_code($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
 
 		$c = $this->functions->get_user_country();
 
-		return $c->isoCode;
+		return !empty($c->isoCode) ? $c->isoCode : $default;
 	}
 
 
@@ -153,11 +156,14 @@ class GeoTarget_Shortcodes {
 	 * [geot_country_name]
 	 * @return  string country name
 	 **/
-	function geot_show_country_name() {
+	function geot_show_country_name($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
 
 		$c = $this->functions->get_user_country();
 
-		return $c->name;
+		return !empty( $c->name ) ? $c->name : $default;
 	}
 
 	/**
@@ -165,9 +171,13 @@ class GeoTarget_Shortcodes {
 	 * [geot_city_name]
 	 * @return string city name
 	 */
-	function geot_show_city_name() {
+	function geot_show_city_name($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
 		$c = $this->functions->get_user_city();
-		return $c;
+		return !empty( $c ) ? $c : $default;
 	}
 
 	/**
@@ -175,10 +185,14 @@ class GeoTarget_Shortcodes {
 	 * [geot_state]
 	 * @return string city name
 	 */
-	function geot_show_state_name() {
+	function geot_show_state_name($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
 		$state = $this->functions->get_user_state();
 
-		return !empty( $state->names ) ? $state->name : false ;
+		return !empty( $state->names ) ? $state->name : $default;
 	}
 
 	/**
@@ -186,9 +200,13 @@ class GeoTarget_Shortcodes {
 	 * [geot_state_code]
 	 * @return string city name
 	 */
-	function geot_show_state_code() {
+	function geot_show_state_code($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
 		$state = $this->functions->get_user_state();
-		return !empty( $state->isoCode ) ? $state->isoCode : false;
+		return !empty( $state->isoCode ) ? $state->isoCode : $default;
 	}
 
 	/**
@@ -196,9 +214,13 @@ class GeoTarget_Shortcodes {
 	 * [geot_zip]
 	 * @return string city name
 	 */
-	function geot_show_zip_code() {
+	function geot_show_zip_code($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
 		$zip = $this->functions->get_user_zip();
-		return !empty($zip) ? $zip : false;
+		return !empty($zip) ? $zip : $default;
 	}
 
 }	
