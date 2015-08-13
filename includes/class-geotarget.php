@@ -196,8 +196,8 @@ class GeoTarget {
 		$this->loader->add_action( 'acf/register_fields', $plugin_admin, 'add_geot_to_acfv4' );
 		
 
-		//$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_meta_boxes' );
-		//$this->loader->add_action( 'save_post', $plugin_admin, 'save_meta_options' , 20 );
+		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_meta_boxes' );
+		$this->loader->add_action( 'save_post', $plugin_admin, 'save_meta_options' , 20 );
 		
 		$geot_widgets = new Geot_Widgets( $this->get_GeoTarget(), $this->get_version() );
 
@@ -248,6 +248,8 @@ class GeoTarget {
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_country_region', $plugin_public, 'popup_country_region_match', 10, 2 );
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $plugin_public, 'popup_city_region_match', 10, 2 );
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_state', $plugin_public, 'popup_state_match', 10, 2 );
+
+		$this->loader->add_filter( 'the_content', $plugin_public, 'check_if_geotargeted_content', 99 );
 
 	}
 

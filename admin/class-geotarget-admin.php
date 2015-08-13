@@ -140,6 +140,13 @@ class GeoTarget_Admin {
 		$countries 	= apply_filters('geot/get_countries', array());
 		$regions 	= apply_filters('geot/get_regions', array());
 
+		if( !isset( $opts['forbidden_text'] ) )
+			$opts['forbidden_text'] = __( 'This content is restricted on your region', $this->GeoTarget);
+
+		if( !isset( $opts['geot_include_mode'] ) )
+			$opts['geot_include_mode'] = 'include';
+
+
 		include 'partials/metabox-options.php';
 	}
 	
@@ -170,9 +177,11 @@ class GeoTarget_Admin {
 		}
 
 		// can user edit this post?
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		if ( ! current_user_can( 'edit_post', $post_id ) )
 			return $post_id;
-		}
+
+		if( did_action( 'save_post' ) !== 1 )
+			return $post_id;
 
 		$opts = $_POST['geot'];
 		$country_codes = '';
@@ -191,7 +200,6 @@ class GeoTarget_Admin {
 
 		if( is_array($opts['region'] ) ) {
 
-
 			foreach ($opts['region'] as $region) {
 				foreach ($regions as $r) {
 					if( $region == $r['name'] ) {
@@ -207,7 +215,6 @@ class GeoTarget_Admin {
 
 	/**
 	 * Add filters for tinymce buttons
-	 * @return [type] [description]
 	 */
 	public function register_tiny_buttons() {
 		add_filter( "mce_external_plugins", array( $this, "add_button" ) );
@@ -237,7 +244,6 @@ class GeoTarget_Admin {
 
 	/**
 	 * Add popup editor for
-	 * @return [type] [description]
 	 */
 	function add_editor() {
 

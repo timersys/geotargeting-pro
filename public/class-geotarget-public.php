@@ -285,5 +285,27 @@ class GeoTarget_Public {
 		 
 		    return $where;
 	}*/
+	public function check_if_geotargeted_content( $content ) {
+		global $post;
 
+		if( $countries = get_post_meta( $post->ID, 'geot_countries', true) ) {
+
+			$opts = get_post_meta( $post->ID, 'geot_options', true );
+			if ( $opts['geot_include_mode'] == 'include' ) {
+				if ( geot_target( $countries ) ) {
+					return $content;
+				} else {
+					return apply_filters( 'geot/forbidden_text', $opts['forbidden_text'] );
+				}
+			} else {
+				if ( !geot_target( $countries ) ) {
+					return $content;
+				} else {
+					return apply_filters( 'geot/forbidden_text', $opts['forbidden_text'] );
+				}
+			}
+		}
+
+		return $content;
+	}
 }

@@ -133,14 +133,10 @@ class GeoTarget_Filters {
 	 * @return array    
 	 */
 	public static function get_cpt_options( $post_id ) {
-		
-		$defaults = array(
-			'country_code'	=> '',
-		);
-		
+
 		$opts = get_post_meta( $post_id, 'geot_options', true );
 
-		return wp_parse_args( $opts, apply_filters( 'geot/metaboxes/default_options', $defaults ) );
+		return $opts;
 	
 	}
 
