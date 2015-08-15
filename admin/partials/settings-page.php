@@ -192,10 +192,13 @@
 								<select name="geot_settings[redirection][<?php echo $i;?>][regions][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type region name...', $this->GeoTarget );?>" >
 									<?php
 									$saved_regions 	= apply_filters('geot/get_regions', array());
-									foreach ($saved_regions as $k => $r) {
-										?>
-										<option value="<?php echo $r['name']?>" <?php selected(true, @in_array( $r['name'], @$redirection['regions']) ); ?>> <?php echo $r['name']; ?></option>
-									<?php
+									if( !empty( $saved_regions ) ) {
+										foreach ( $saved_regions as $k => $r ) {
+											?>
+											<option
+												value="<?php echo $r['name'] ?>" <?php selected( true, @in_array( $r['name'], @$redirection['regions'] ) ); ?>> <?php echo $r['name']; ?></option>
+										<?php
+										}
 									}
 									?>
 								</select>

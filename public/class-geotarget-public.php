@@ -247,10 +247,12 @@ class GeoTarget_Public {
 	function geot_redirections() {
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
-		if( empty( $opts['redirection'] ) )
+		if( is_admin() || defined('DOING_AJAX') || empty( $opts['redirection'] ) )
 			return;
 
 		foreach( $opts['redirection'] as $r ) {
+			if( empty($r['name']) || !filter_var($r['name'], FILTER_VALIDATE_URL))
+				continue;
 			if( geot_target( @$r['countries'], @$r['regions'] ) ) {
 				wp_redirect( $r['name'], apply_filters( 'geot/redirection_status', '301') );
 				exit;
