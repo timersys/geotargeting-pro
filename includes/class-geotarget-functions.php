@@ -483,12 +483,13 @@ class GeoTarget_Functions {
 			//for any other exception show fallback country
 			return $this->getFallbackCountry();
 		}
+
 		$country    = $record->country;
-		$city       = $record->city->name ;
-		$cp         = $record->postal->code ;
-		$state      = $record->mostSpecificSubdivision ;
-		$continent  = $record->continent->name ;
-		$location   = $record->location ;
+		$city       = isset( $record->city ) ? $record->city->name : false ;
+		$cp         = isset( $record->postal ) ? $record->postal->code : false;
+		$state      = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : false;
+		$continent  = isset( $record->continent->name ) ? $record->continent->name : false;
+		$location   = isset( $record->location ) ? $record->location: false;
 
 		$_SESSION['geot_country']   = serialize($country);
 		$_SESSION['geot_city']      = serialize($city);
