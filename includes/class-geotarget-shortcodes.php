@@ -163,7 +163,7 @@ class GeoTarget_Shortcodes {
 
 		$c = $this->functions->get_user_country();
 
-		return !empty( $c->name ) ? $c->name : $default;
+		return !empty( $c->names ) ? $c->name : $default;
 	}
 
 	/**
