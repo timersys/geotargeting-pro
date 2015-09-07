@@ -115,8 +115,8 @@ class Geot_Widgets  {
 	 */
 	public function save_widgets_data( $instance, $new_instance, $old_instance ) {
 		
-		$instance['geot']  				= (array)$new_instance['geot'];
-		$instance['geot_include_mode'] 	= $new_instance['geot_include_mode'];
+		$instance['geot']  				= isset( $new_instance['geot'] ) ? (array) $new_instance['geot'] : '';
+		$instance['geot_include_mode'] 	= isset( $new_instance['geot_include_mode'] ) ? $new_instance['geot_include_mode'] : '';
 		return $instance;
 	}
 
