@@ -208,6 +208,7 @@
 					}?>
 					<a href="#" class="add-redirection button">Add Redirection</a>
 					<p class="help"><?php _e( 'Add as many countries you need for each redirection', $this->GeoTarget ); ?></p>
+					<p class="help"><?php echo sprintf(__( 'If you need to create internal redirects check <a href="%s">this</a>', $this->GeoTarget ),'https://timersys.com/geotargeting/docs/commons-problems/#3'); ?></p>
 				</td>
 
 			</tr>
