@@ -56,6 +56,9 @@ input.geot_license_{
 	margin-top: 10px;
 }
 #geot_widget .chosen-container-multi .chosen-choices li.search-field input[type=text],
+#geot_editor .chosen-container-multi .chosen-choices li.search-field,
+#geot_editor .chosen-container,
+#geot_editor .chosen-container ul,
 #geot_editor .chosen-container-multi .chosen-choices li.search-field input[type=text]{
 	width: 100% !important;
 }

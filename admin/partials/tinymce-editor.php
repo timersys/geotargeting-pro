@@ -3,7 +3,11 @@ $countries 	= apply_filters('geot/get_countries', array());
 $regions 	= apply_filters('geot/get_regions', array());
 $city_regions 	= apply_filters('geot/get_city_regions', array());
 ?>
+<form name="form" autocomplete="off">
 <div id="geot_editor" class="shortcode_editor" title="Country Geo Target Text"  style="display:none;height:500px">
+	<div style="display: none;"><!--hack for chrome-->
+		<input type="text" id="PreventChromeAutocomplete" name="PreventChromeAutocomplete" autocomplete="address-level4" />
+	</div>
 	<table class="form-table">
 		<tr>
     		<th><label for="geot_what"><?php _e( 'Choose:', 'geot' ); ?></label></th>
@@ -74,3 +78,4 @@ $city_regions 	= apply_filters('geot/get_city_regions', array());
 		</tr>
 	</table>
 </div>
+</form>
