@@ -487,7 +487,7 @@ class GeoTarget_Functions {
 		$country    = $record->country;
 		$city       = isset( $record->city ) ? $record->city->name : false ;
 		$cp         = isset( $record->postal ) ? $record->postal->code : false;
-		$state      = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : false;
+		$state      = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
 		$continent  = isset( $record->continent->name ) ? $record->continent->name : false;
 		$location   = isset( $record->location ) ? $record->location: false;
 
@@ -499,6 +499,7 @@ class GeoTarget_Functions {
 		$_SESSION['geot_location']  = serialize($location);
 
 		return array(
+			'record'    => $record,
 			'country'   => $country,
 			'city'      => $city,
 			'zip'       => $cp,
