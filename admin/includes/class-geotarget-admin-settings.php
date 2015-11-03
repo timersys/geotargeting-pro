@@ -71,6 +71,9 @@ class GeoTarget_Settings {
 		if( empty( $opts['geot_license_key'] ) ) {
 			$opts['geot_license_key'] = '';
 		}
+		if( empty( $opts['debug_mode'] ) ) {
+			$opts['debug_mode'] = '0';
+		}
 		if( empty( $opts['cloudflare'] ) ) {
 			$opts['cloudflare'] = '0';
 		}

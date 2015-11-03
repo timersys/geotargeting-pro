@@ -15,7 +15,13 @@
 					<label><input type="text" id="license" name="geot_settings[geot_license_key]" value="<?php  echo $opts['geot_license_key'];?>" class="regular-text <?php echo 'geot_license_' . get_option( 'geot_license_active' );?>" /> 
 					<p class="help"><?php _e( 'Enter your license key to get automatic updates', $this->GeoTarget ); ?></p>
 				</td>
-				
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="maxm_id"><?php _e( 'Debug Mode', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="checkbox" id="maxm_id" name="geot_settings[debug_mode]" value="1" <?php checked($opts['debug_mode'],'1');?>/>
+						<p class="help"><?php _e( 'If you want to calculate user data on every page load and print in the footer debug info with check this. Not recommended on live sites', $this->GeoTarget ); ?></p>
+				</td>
 			</tr>
 			<tr valign="top" class="">
 				<th><h3><?php _e( 'Cloudflare:', $this->GeoTarget ); ?></h3></th>

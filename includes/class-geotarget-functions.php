@@ -22,6 +22,11 @@ class GeoTarget_Functions {
 	protected $userCity;
 	protected $userState;
 	protected $userZip;
+	/**
+	 * Plugin settings
+	 * @var array
+	 */
+	protected $opts;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -33,6 +38,8 @@ class GeoTarget_Functions {
 		    && ! defined('DOING_CRON')
 		    && ! defined('DOING_AJAX') )
 			add_action('init' , array($this,'setUserData' ) );
+
+		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 	}
 
 	/**
@@ -369,9 +376,8 @@ class GeoTarget_Functions {
 		
 		global $wpdb;
 
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 		// If user set cookie use instead
-		if( !defined('GEOT_DEBUG') &&  ! empty( $_COOKIE['geot_country']) || ( !empty( $opts['cloudflare']) && !empty($_SERVER["HTTP_CF_IPCOUNTRY"]) ) ) {
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE['geot_country']) || ( !empty( $this->opts['cloudflare']) && !empty($_SERVER["HTTP_CF_IPCOUNTRY"]) ) ) {
 
 			$iso_code = empty( $_COOKIE['geot_country'] ) ? $_SERVER["HTTP_CF_IPCOUNTRY"] : $_COOKIE['geot_country'];
 
@@ -380,7 +386,7 @@ class GeoTarget_Functions {
 			return $country;
 		}
 		// if we have a session it means we already calculated country on session
-		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_country']) ) {
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_country']) ) {
 			return unserialize($_SESSION['geot_country']);
 		}
 
@@ -398,7 +404,7 @@ class GeoTarget_Functions {
 
 
 		// if we have a session it means we already calculated city on session
-		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_city']) ) {
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_city']) ) {
 			return unserialize($_SESSION['geot_city']);
 		}
 
@@ -416,7 +422,7 @@ class GeoTarget_Functions {
 
 
 		// if we have a session it means we already calculated city on session
-		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_state']) ) {
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_state']) ) {
 			return unserialize($_SESSION['geot_state']);
 		}
 
@@ -434,7 +440,7 @@ class GeoTarget_Functions {
 
 
 		// if we have a session it means we already calculated city on session
-		if( !defined('GEOT_DEBUG') && !empty($_SESSION['geot_zip']) ) {
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_zip']) ) {
 			return unserialize($_SESSION['geot_zip']);
 		}
 
@@ -457,13 +463,11 @@ class GeoTarget_Functions {
 		if( empty( $ip) ) {
 			$ip = apply_filters( 'geot/user_ip', $_SERVER['REMOTE_ADDR']);		
 		}
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
-
 
 		try {
-			if ( ! empty( $opts['maxm_id'] ) && ! empty( $opts['maxm_license'] ) && !$maxmin_free_db ) {
-				$reader       = new Client( $opts['maxm_id'], $opts['maxm_license'] );
-				$service_func = $opts['maxm_service'];
+			if ( ! empty( $this->opts['maxm_id'] ) && ! empty( $this->opts['maxm_license'] ) && !$maxmin_free_db ) {
+				$reader       = new Client( $this->opts['maxm_id'], $this->opts['maxm_license'] );
+				$service_func = $this->opts['maxm_service'];
 				if ( method_exists( $reader, $service_func ) ) {
 					$record = $reader->$service_func( $ip );
 				}
@@ -488,7 +492,7 @@ class GeoTarget_Functions {
 		$city       = isset( $record->city ) ? $record->city->name : false ;
 		$cp         = isset( $record->postal ) ? $record->postal->code : false;
 		$state      = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
-		$continent  = isset( $record->continent->name ) ? $record->continent->name : false;
+		$continent  = isset( $record->continent ) ? $record->continent->name : false;
 		$location   = isset( $record->location ) ? $record->location: false;
 
 		$_SESSION['geot_country']   = serialize($country);
@@ -534,11 +538,10 @@ class GeoTarget_Functions {
 	 * @return array|bool
 	 */
 	private function getFallbackCountry() {
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
-		if( !empty($opts['fallback_country'])) {
+		if( !empty($this->opts['fallback_country'])) {
 			return array(
-				'country' => $this->getCountryByIsoCode($opts['fallback_country']),
+				'country' => $this->getCountryByIsoCode($this->opts['fallback_country']),
 				'city'    => '',
 				'zip'     => '',
 				'state'   => '',

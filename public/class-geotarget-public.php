@@ -74,18 +74,6 @@ class GeoTarget_Public {
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in GeoTarget_Public_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The GeoTarget_Public_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'css/geotarget-public.css', array(), $this->version, 'all' );
 
 	}
@@ -309,5 +297,28 @@ class GeoTarget_Public {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Print current user data in footer
+	 */
+	public function print_debug_info() {
+		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		if( !defined('GEOT_DEBUG') && empty( $opts['debug_mode'] ) )
+			return;
+		$user_data = $this->functions->getUserDataByIp();
+		if( empty( $user_data['country'] ) )
+			return;
+		?>
+		<!-- Geotargeting plugin Debug Info
+		Country: <?php echo $user_data['country']->name . PHP_EOL;?>
+		Country code: <?php echo $user_data['country']->isoCode . PHP_EOL;?>
+		State: <?php echo $user_data['state']->name . PHP_EOL;?>
+		State code: <?php echo $user_data['state']->isoCode . PHP_EOL;?>
+		City: <?php echo $user_data['city'] . PHP_EOL;?>
+		Zip: <?php echo $user_data['zip'] . PHP_EOL;?>
+		Continent: <?php echo $user_data['continent'] . PHP_EOL;?>
+		-->
+		<?php
 	}
 }
