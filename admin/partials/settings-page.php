@@ -218,8 +218,19 @@
 				</td>
 
 			</tr>
-
-
+			<tr valign="top" class="">
+				<th><h3><?php _e( 'Uninstall:', $this->GeoTarget ); ?></h3></th>
+				<td colspan="3">
+					<p><?php _e( 'Check this if you want to <strong>delete all plugin data</strong> on uninstall' , $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="maxm_id"><?php _e( 'Uninstall', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="checkbox" id="" name="geot_settings[geot_uninstall]" value="1" <?php checked($opts['geot_uninstall'],'1');?>/>
+						<p class="help"><?php _e( 'Will delete all database records and plugin settings when you delete the plugin', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
 			<?php do_action( 'geot/settings_page/after' ); ?>
 			<tr><td><input type="submit" class="button-primary" value="<?php _e( 'Save settings', $this->GeoTarget );?>"/></td>
 			<?php wp_nonce_field('geot_save_settings','geot_nonce'); ?>

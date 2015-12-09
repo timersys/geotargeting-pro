@@ -86,6 +86,9 @@ class GeoTarget_Settings {
 		if( empty( $opts['maxm_service'] ) ) {
 			$opts['maxm_service'] = 'city';
 		}
+		if( empty( $opts['geot_uninstall'] ) ) {
+			$opts['geot_uninstall'] = '';
+		}
 
 		$countries 	= apply_filters('geot/get_countries', array());
 

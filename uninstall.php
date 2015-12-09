@@ -29,3 +29,16 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+$opts = get_option( 'geot_settings' );
+
+if( isset( $opts['geot_unistall']) && '1' == $opts['geot_unistall'] ) {
+	// delete settings
+	delete_option('geot_settings');
+	delete_option('geot_version');
+	// delete sql data
+	global $wpdb;
+	$cities_table = $wpdb->base_prefix . 'geot_cities';
+	$countries_table = $wpdb->base_prefix . 'geot_countries';
+	$wpdb->query( "DROP TABLE IF EXISTS $cities_table;DROP TABLE IF EXISTS $countries_table;");
+}
