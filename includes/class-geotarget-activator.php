@@ -34,44 +34,41 @@ class GeoTarget_Activator {
 
 		$current_version = get_option( 'geot_version' );
 
-		// Only adds table if version 1.1 or if is being installed
-		if( empty($current_version) || version_compare( '1.1', $current_version ) >= 0 ) {
+		$country_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}geot_countries` (
+		`id`	 		INT(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, -- the id just for numeric
+		`iso_code` 		VARCHAR(2) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip start from maxmind data
+		`country` 		VARCHAR(150) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip end of maxmind data
+		PRIMARY KEY( `id`),
+        INDEX (iso_code, country)
+		) DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI AUTO_INCREMENT=1 ;";
 
-			$country_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}geot_countries` (
-			`id`	 		INT(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, -- the id just for numeric
-			`iso_code` 		VARCHAR(2) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip start from maxmind data
-			`country` 		VARCHAR(150) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip end of maxmind data	
-			PRIMARY KEY( `id`),
- 			INDEX (iso_code, country)
-			) DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI AUTO_INCREMENT=1 ;";
+		$city_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}geot_cities` (
+		`id`	 		INT(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, -- the id just for numeric
+		`country_code` 		VARCHAR(2) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip start from maxmind data
+		`city` 		VARCHAR(150) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip end of maxmind data
+		PRIMARY KEY( `id`),
+		INDEX (country_code, city)
+		) DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI AUTO_INCREMENT=1 ;";
 
-			$city_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}geot_cities` (
-			`id`	 		INT(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, -- the id just for numeric
-			`country_code` 		VARCHAR(2) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip start from maxmind data
-			`city` 		VARCHAR(150) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip end of maxmind data	
-			PRIMARY KEY( `id`),
-			INDEX (country_code, city)
-			) DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI AUTO_INCREMENT=1 ;";
+		$table_name = "{$wpdb->base_prefix}geot_countries";
 
-			$table_name = "{$wpdb->base_prefix}geot_countries";
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		if ($wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'") != $table_name) {
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-			if ($wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'") != $table_name) {
+			dbDelta( $country_table );
+			self::add_countries_to_db();
+		}
+		$city_table_name = "{$wpdb->base_prefix}geot_cities";
+		if ($wpdb->get_var( "SHOW TABLES LIKE '{$city_table_name}'") != $city_table_name) {
+			dbDelta( $city_table );
 
-				dbDelta( $country_table );
-				self::add_countries_to_db();
-			}
-			$city_table_name = "{$wpdb->base_prefix}geot_cities";
-			if ($wpdb->get_var( "SHOW TABLES LIKE '{$city_table_name}'") != $city_table_name) {
-				dbDelta( $city_table );
-
-				for ( $i = 1; $i <= 6; $i ++ ) {
-					$csv_file  = dirname( __FILE__ ) . '/data/geot_cities' . $i . '.csv';
-					$load_data = "LOAD DATA LOCAL INFILE '{$csv_file}' INTO TABLE `{$wpdb->base_prefix}geot_cities` CHARACTER SET UTF8 FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `country_code` , `city`);";
-					$wpdb->query( $load_data );
-				}
+			for ( $i = 1; $i <= 6; $i ++ ) {
+				$csv_file  = dirname( __FILE__ ) . '/data/geot_cities' . $i . '.csv';
+				$load_data = "LOAD DATA LOCAL INFILE '{$csv_file}' INTO TABLE `{$wpdb->base_prefix}geot_cities` CHARACTER SET UTF8 FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `country_code` , `city`);";
+				$wpdb->query( $load_data );
 			}
 		}
+
 		// update version number to current one
 		update_option( 'geot_version', GEOT_VERSION);
 	}
