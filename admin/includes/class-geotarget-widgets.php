@@ -44,6 +44,12 @@ class Geot_Widgets  {
 		if ( empty( $instance['geot_include_mode'] ) )  {
 			$instance['geot_include_mode'] = '';
 		}
+		if ( empty( $instance['geot_states'] ) )  {
+			$instance['geot_states'] = '';
+		}
+		if ( empty( $instance['geot_cities'] ) )  {
+			$instance['geot_cities'] = '';
+		}
 		if ( empty( $instance['geot']['region'] ) )  {
 			$instance['geot']['region'] = array();
 		}
@@ -99,7 +105,15 @@ class Geot_Widgets  {
 					?>
 				</select>
 			</p>
-			</table>
+			<p>
+				<label for="geot_position"><?php _e( 'Or type cities or city regions (comma separated):', 'geot' ); ?></label><br />
+				<input type="text" class="geot_text" name="<?php echo $t->get_field_name('geot_cities');?>" value="<?php echo esc_attr($instance['geot_cities']);?>" />
+			</p>
+			<p>
+				<label for="geot_position"><?php _e( 'Or type states (comma separated):', 'geot' ); ?></label><br />
+				<input type="text" class="geot_text" name="<?php echo $t->get_field_name('geot_states');?>" value="<?php echo esc_attr($instance['geot_states']);?>" />
+			</p>
+				</table>
 		</div>	
 
 		<?php	
@@ -117,6 +131,8 @@ class Geot_Widgets  {
 		
 		$instance['geot']  				= isset( $new_instance['geot'] ) ? (array) $new_instance['geot'] : '';
 		$instance['geot_include_mode'] 	= isset( $new_instance['geot_include_mode'] ) ? $new_instance['geot_include_mode'] : '';
+		$instance['geot_cities'] 	    = isset( $new_instance['geot_cities'] ) ? $new_instance['geot_cities'] : '';
+		$instance['geot_states'] 	    = isset( $new_instance['geot_states'] ) ? $new_instance['geot_states'] : '';
 		return $instance;
 	}
 
@@ -130,17 +146,36 @@ class Geot_Widgets  {
 	public function target_widgets( $widget_data ) {
 
 
-		if ( !empty( $widget_data['geot']['region'] ) || !empty( $widget_data['geot']['country_code'] ) ) {
+		if ( !empty( $widget_data['geot']['region'] ) || !empty( $widget_data['geot']['country_code'] ) || !empty( $widget_data['geot_cities'] ) || !empty( $widget_data['geot_states'] ) ) {
 			
 			if ( 'include' == @$widget_data['geot_include_mode'] ) {
-				if ( ! geot_target( @$widget_data['geot']['country_code'], @$widget_data['geot']['region'] ) ) {
-					return false;
-				}	
-			} else {
-				if (! geot_target( array(), array(), @$widget_data['geot']['country_code'], @$widget_data['geot']['region'] ) ) {
-					return false;
+				if( !empty( $widget_data['geot_cities'] ) ) {
+					if ( ! geot_target_city( @$widget_data['geot_cities'], @$widget_data['geot_cities'] ) ) {
+						return false;
+					}
+				} elseif( !empty( $widget_data['geot_states'] ) ) {
+					if ( ! geot_target_state( @$widget_data['geot_states'] ) ) {
+						return false;
+					}
+				} else {
+					if ( ! geot_target( @$widget_data['geot']['country_code'], @$widget_data['geot']['region'] ) ) {
+						return false;
+					}
 				}
-				
+			} else {
+				if( !empty( $widget_data['geot_cities'] ) ) {
+					if ( ! geot_target_city( array(), array(), @$widget_data['geot_cities'], @$widget_data['geot_cities'] ) ) {
+						return false;
+					}
+				} elseif( !empty( $widget_data['geot_states'] ) ) {
+					if ( ! geot_target_state( array(), @$widget_data['geot_states'] ) ) {
+						return false;
+					}
+				} else {
+					if ( ! geot_target( array(), array(), @$widget_data['geot']['country_code'], @$widget_data['geot']['region'] ) ) {
+						return false;
+					}
+				}
 			}
 		}
 
