@@ -94,14 +94,9 @@ class GeoTarget_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		global $pagenow;		   			        
-   		
-		if( 'post.php' == $pagenow ) {
-			wp_enqueue_script('jquery-ui-dialog');
-   		}	
 
 		wp_enqueue_script( 'chosen', plugin_dir_url( __FILE__ ) . 'js/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotargeting-admin.js', array( 'jquery','chosen' ), $this->version, false );
+		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotargeting-admin.js', array( 'jquery','chosen','jquery-ui-dialog'), $this->version, false );
 		wp_localize_script(  $this->GeoTarget, 'geot', array(
 			'ajax_url'  => admin_url('admin-ajax.php')
 		));
