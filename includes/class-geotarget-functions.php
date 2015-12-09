@@ -307,12 +307,12 @@ class GeoTarget_Functions {
 			return array();
 		
 		if ( is_array( $value ) )
-			return $value;
+			return array_map('trim', $value );
 	
 		if ( stripos($value, ',') > 0)
-			return explode( ',',$value );
+			return array_map( 'trim', explode( ',', $value ) );
 	
-		return array( $value );
+		return array( trim( $value ) );
 	}
 
 
