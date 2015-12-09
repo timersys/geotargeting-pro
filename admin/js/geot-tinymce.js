@@ -17,9 +17,53 @@
                     buttons: {
                         "Insert Shortcode": function() {
 
-                            var mode = jQuery('.geot_include_mode:checked').val();
+                            var mode = jQuery('#geot_editor .geot_include_mode:checked').val();
 
-                            if (jQuery('#geot_city_region').val()) {
+                            if ( jQuery('#geot_state').val() ) {
+                                var str = '[geot_state ';
+                                if (mode == 'include') {
+                                    str += 'state="';
+                                } else {
+                                    str += 'exclude_state="';
+                                }
+
+                                str += jQuery('#geot_state').val();
+
+                                str += '" ';
+
+                                var selected_text = ed.selection.getContent();
+                                if (selected_text) {
+
+                                    str += "]" + selected_text + "[/geot_state]";
+
+                                } else {
+
+                                    str += "]YOUR CONTENT HERE[/geot_state]";
+
+                                }
+                            } else if ( jQuery('#geot_city').val() ) {
+                                var str = '[geot_city ';
+                                if (mode == 'include') {
+                                    str += 'city="';
+                                } else {
+                                    str += 'exclude_city="';
+                                }
+
+                                str += jQuery('#geot_city').val();
+
+                                str += '" ';
+
+                                var selected_text = ed.selection.getContent();
+                                if (selected_text) {
+
+                                    str += "]" + selected_text + "[/geot_city]";
+
+                                } else {
+
+                                    str += "]YOUR CONTENT HERE[/geot_city]";
+
+                                }
+                            } else if (jQuery('#geot_city_region').val()) {
                                 var str = '[geot_city ';
                                 if (mode == 'include') {
                                     str += 'region="';

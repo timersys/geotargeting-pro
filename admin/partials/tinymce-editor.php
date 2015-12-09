@@ -12,7 +12,7 @@ $city_regions 	= apply_filters('geot/get_city_regions', array());
 		<tr>
     		<th><label for="geot_what"><?php _e( 'Choose:', 'geot' ); ?></label></th>
     		<td>
-    			<input type="radio" class="geot_include_mode" name="geot_include_mode" value="include" CHECKED> <strong>Only show content in</strong><br />
+    			<input type="radio" class="geot_include_mode" name="geot_include_mode" value="include"> <strong>Only show content in</strong><br />
             	<input type="radio" class="geot_include_mode" name="geot_include_mode" value="exclude"> <strong>Never show content in</strong><br /><br />
             </td>
         </tr>	
@@ -60,6 +60,13 @@ $city_regions 	= apply_filters('geot/get_city_regions', array());
 			<td colspan="2"></td>
 		</tr>
 		<tr valign="top">
+			<th><label for="geot_position"><?php _e( 'Or type cities:', 'geot' ); ?></label></th>
+			<td>
+				<input type="text" name="geot[city]" id="geot_city"data-placeholder="<?php _e( 'Type cities separated by comma', 'geot' );?>" style="width: 100%;"/>
+			</td>
+			<td colspan="2"></td>
+		</tr>
+		<tr valign="top">
 			<th><label for="geot_position"><?php _e( 'Or choose city Regions:', 'geot' ); ?></label></th>
 			<td>
 				<select name="geot[city_region][]" id="geot_city_region" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose cities region name...', 'geot' );?>" >
@@ -73,6 +80,13 @@ $city_regions 	= apply_filters('geot/get_city_regions', array());
 					}
 					?>
 				</select>
+			</td>
+			<td colspan="2"></td>
+		</tr>
+		<tr valign="top">
+			<th><label for="geot_position"><?php _e( 'Or type states:', 'geot' ); ?></label></th>
+			<td>
+				<input type="text" name="geot[state]" id="geot_state" data-placeholder="<?php _e( 'Type states separated by comma', 'geot' );?>" style="width: 100%;"/>
 			</td>
 			<td colspan="2"></td>
 		</tr>
