@@ -311,13 +311,13 @@ class GeoTarget_Public {
 			return;
 		?>
 		<!-- Geotargeting plugin Debug Info
-		Country: <?php echo $user_data['country']->name . PHP_EOL;?>
-		Country code: <?php echo $user_data['country']->isoCode . PHP_EOL;?>
-		State: <?php echo $user_data['state']->name . PHP_EOL;?>
-		State code: <?php echo $user_data['state']->isoCode . PHP_EOL;?>
-		City: <?php echo $user_data['city'] . PHP_EOL;?>
-		Zip: <?php echo $user_data['zip'] . PHP_EOL;?>
-		Continent: <?php echo $user_data['continent'] . PHP_EOL;?>
+		Country: <?php echo @$user_data['country']->name . PHP_EOL;?>
+		Country code: <?php echo @$user_data['country']->isoCode . PHP_EOL;?>
+		State: <?php echo @$user_data['state']->name . PHP_EOL;?>
+		State code: <?php echo @$user_data['state']->isoCode . PHP_EOL;?>
+		City: <?php echo @$user_data['city'] . PHP_EOL;?>
+		Zip: <?php echo @$user_data['zip'] . PHP_EOL;?>
+		Continent: <?php echo @$user_data['continent'] . PHP_EOL;?>
 		-->
 		<?php
 	}
