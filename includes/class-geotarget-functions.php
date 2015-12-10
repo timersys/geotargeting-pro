@@ -377,9 +377,9 @@ class GeoTarget_Functions {
 		global $wpdb;
 
 		// If user set cookie use instead
-		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE['geot_country']) || ( !empty( $this->opts['cloudflare']) && !empty($_SERVER["HTTP_CF_IPCOUNTRY"]) ) ) {
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE['geot_country']) ) {
 
-			$iso_code = empty( $_COOKIE['geot_country'] ) ? $_SERVER["HTTP_CF_IPCOUNTRY"] : $_COOKIE['geot_country'];
+			$iso_code = empty( $_COOKIE['geot_country'] ) ? '' : $_COOKIE['geot_country'];
 
 			$country = $this->getCountryByIsoCode( $iso_code );
 
@@ -461,39 +461,51 @@ class GeoTarget_Functions {
 	public function getUserDataByIp( $ip = "", $maxmin_free_db = false ) {
 
 		if( empty( $ip) ) {
-			$ip = apply_filters( 'geot/user_ip', $_SERVER['REMOTE_ADDR']);		
+			$ip = $this->getUserIP();
 		}
+		$country    = '';
+		$city       = '';
+		$cp         = '';
+		$state      = '';
+		$continent  = '';
+		$location   = '';
 
-		try {
-			if ( ! empty( $this->opts['maxm_id'] ) && ! empty( $this->opts['maxm_license'] ) && !$maxmin_free_db ) {
-				$reader       = new Client( $this->opts['maxm_id'], $this->opts['maxm_license'] );
-				$service_func = $this->opts['maxm_service'];
-				if ( method_exists( $reader, $service_func ) ) {
-					$record = $reader->$service_func( $ip );
+		if( !empty( $this->opts['cloudflare']) && !empty( $_SERVER["HTTP_CF_IPCOUNTRY"] ) ) {
+			$country = $this->getCountryByIsoCode( $_SERVER["HTTP_CF_IPCOUNTRY"] );
+		} else {
+			try {
+				if ( ! empty( $this->opts['maxm_id'] ) && ! empty( $this->opts['maxm_license'] ) && ! $maxmin_free_db ) {
+					$reader       = new Client( $this->opts['maxm_id'], $this->opts['maxm_license'] );
+					$service_func = $this->opts['maxm_service'];
+					if ( method_exists( $reader, $service_func ) ) {
+						$record = $reader->$service_func( $ip );
+					}
+				} else {
+					$reader = new Reader( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb' );
+					$record = $reader->city( $ip );
 				}
-			} else {
-				$reader = new Reader( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb' );
-				$record = $reader->city( $ip );
-			}
-		} catch( GeoIp2\Exception\OutOfQueriesException $e ) {
-			Geotarget_Emails::OutOfQueriesException();
-			// fallback to free version
-			return $this->getUserDataByIp( $ip, true );
-		} catch( GeoIp2\Exception\AuthenticationException $e ) {
-			Geotarget_Emails::AuthenticationException();
-			// fallback to free version
-			return $this->getUserDataByIp( $ip, true );
-		} catch( Exception $e ) {
-			//for any other exception show fallback country
-			return $this->getFallbackCountry();
-		}
+			} catch ( GeoIp2\Exception\OutOfQueriesException $e ) {
+				Geotarget_Emails::OutOfQueriesException();
 
-		$country    = $record->country;
-		$city       = isset( $record->city ) ? $record->city->name : false ;
-		$cp         = isset( $record->postal ) ? $record->postal->code : false;
-		$state      = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
-		$continent  = isset( $record->continent ) ? $record->continent->name : false;
-		$location   = isset( $record->location ) ? $record->location: false;
+				// fallback to free version
+				return $this->getUserDataByIp( $ip, true );
+			} catch ( GeoIp2\Exception\AuthenticationException $e ) {
+				Geotarget_Emails::AuthenticationException();
+
+				// fallback to free version
+				return $this->getUserDataByIp( $ip, true );
+			} catch ( Exception $e ) {
+				//for any other exception show fallback country
+				return $this->getFallbackCountry();
+			}
+
+			$country   = $record->country;
+			$city      = isset( $record->city ) ? $record->city->name : false;
+			$cp        = isset( $record->postal ) ? $record->postal->code : false;
+			$state     = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
+			$continent = isset( $record->continent ) ? $record->continent->name : false;
+			$location  = isset( $record->location ) ? $record->location : false;
+		}
 
 		$_SESSION['geot_country']   = serialize($country);
 		$_SESSION['geot_city']      = serialize($city);
@@ -564,6 +576,22 @@ class GeoTarget_Functions {
 		}
 
 		return false;
+	}
+
+	/**
+	 * We get user IP but check with different services to see if they provided real user ip
+	 * @return mixed|void
+	 */
+	public function getUserIP() {
+		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '1.1.1.1';
+		// cloudflare
+		$ip = isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : $ip;
+		// reblaze
+		$ip = isset( $_SERVER['X-Real-IP'] ) ? $_SERVER['X-Real-IP'] : $ip;
+		// Sucuri
+		$ip = isset( $_SERVER['HTTP_X_SUCURI_CLIENTIP'] ) ? $_SERVER['HTTP_X_SUCURI_CLIENTIP'] : $ip;
+
+		return apply_filters( 'geot/user_ip', $ip );
 	}
 
 }	

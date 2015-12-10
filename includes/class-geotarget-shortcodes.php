@@ -67,7 +67,7 @@ class GeoTarget_Shortcodes {
 	function geot_filter($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $_SERVER['REMOTE_ADDR'],
+			'ip' 				=> $this->functions->getUserIP(),
 			'country'			=>'',
 			'region'			=>'',
 			'exclude_country'	=>'',
@@ -95,7 +95,7 @@ class GeoTarget_Shortcodes {
 	function geot_filter_cities($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $_SERVER['REMOTE_ADDR'],
+			'ip' 				=> $this->functions->getUserIP(),
 			'city'			    =>'',
 			'region'			=>'',
 			'exclude_city'	    =>'',
@@ -122,7 +122,7 @@ class GeoTarget_Shortcodes {
 	function geot_filter_states($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $_SERVER['REMOTE_ADDR'],
+			'ip' 				=> $this->functions->getUserIP(),
 			'state'			    =>'',
 			'exclude_state'	    =>'',
 		), $atts ) );
