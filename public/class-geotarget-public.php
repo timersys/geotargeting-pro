@@ -249,32 +249,67 @@ class GeoTarget_Public {
 
 	}
 
-/*	public function filter_query( $query ){
-
-		// if (  in_array('reviews', @(array)$query->query_vars['post_type']) ) {
-
-  //       	$query->set( 'meta_query', array(
-  //       			array(
-  //       				'key' 		=> 'geot_countries',
-  //       				'value' 	=> 'AR',
-  //       				'compare' 	=> 'LIKE',
-  //       			)
-  //       	) );
-
-  //       	#add_filter( 'posts_where', array( $this, 'add_extra_meta_query') );
-  //   	}
+	/**
+	 * @param $query
+	 */
+	public function handle_geotargeted_posts( $query ){
+		if ( ! is_admin() && $query->is_main_query() ) {
+			// Get all posts that are being geotargeted
+			$post_to_exclude = $this->get_geotargeted_posts( $query );
+			if( !empty( $post_to_exclude ) ) {
+				$query->set('post__not_in', $post_to_exclude );
+			}
+		}
 	}
 
-	public function add_extra_meta_query( $where = '' ){
+	/**
+	 * Pass the current query to get post type.
+	 * Then we get all the posts with geotarget options and
+	 * check each of them to see which one we need to exclude from loop
+	 * @param $query
+	 *
+	 * @return array|void
+	 */
+	private function get_geotargeted_posts( $query ) {
+		global $wpdb;
 
-		    global $wpdb;
- 
-		    $where .= " AND (( $wpdb->postmeta.meta_key = 'geot_countries' AND $wpdb->postmeta.meta_value LIKE 'AR' ))";
-		 
-		    remove_filter( 'posts_where',  array( $this, 'add_extra_meta_query') );
-		 
-		    return $where;
-	}*/
+		$posts_to_exclude = array();
+		// get all posts with geo options set ( ideally would be to retrieve just for the post type queried but I can't get post_type
+		$sql = "SELECT ID, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
+LEFT JOIN $wpdb->postmeta pm ON p.ID = pm.post_id
+LEFT JOIN $wpdb->postmeta pm2 ON p.ID = pm2.post_id
+WHERE p.post_status = 'publish'
+AND pm.meta_key = 'geot_countries'
+AND pm2.meta_key = 'geot_options'
+AND pm.meta_value != ''";
+		$geot_posts = $wpdb->get_results( $sql );
+
+		if( $geot_posts ) {
+			foreach( $geot_posts as $p ) {
+				$options = unserialize( $p->geot_options );
+				// if remove for loop is off continue
+				if( ! isset( $options['geot_remove_post']) || '1' != $options['geot_remove_post'] )
+					continue;
+
+				$mode = $options['geot_include_mode'];
+				if( 'exclude' == $mode ) {
+					if( geot_target( $p->geot_countries ) )
+						$posts_to_exclude[] = $p->ID;
+				} elseif ( 'include' == $mode ) {
+					if( ! geot_target( $p->geot_countries ) )
+						$posts_to_exclude[] = $p->ID;
+				}
+			}
+		}
+		return $posts_to_exclude;
+	}
+
+	/**
+	 * Function that filter the_content and show message if post is geotargeted
+	 * @param $content
+	 *
+	 * @return mixed|void
+	 */
 	public function check_if_geotargeted_content( $content ) {
 		global $post;
 

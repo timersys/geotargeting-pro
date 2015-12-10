@@ -70,6 +70,15 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 		<td colspan="2"></td>
 	</tr>
 	<tr valign="top">
+		<th><label for="geot_position"><?php _e( 'Remove post from loop:', 'geot' ); ?></label></th>
+		<td>
+
+			<input type="checkbox" class="geot_remove_post" name="geot[geot_remove_post]" value="1" <?php checked( $opts['geot_remove_post'], '1', true ); ?>> <?php _e( 'If checked post will be removed from loop otherwise show message below', 'geot');?><br />
+
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr valign="top">
 		<th><label for="geot_position"><?php _e( 'Show if user is not allowed to see content:', 'geot' ); ?></label></th>
 		<td>
 			<textarea style="width:90%;height: 50px;" name="geot[forbidden_text]" data-placeholder="<?php _e( 'Type the text that user will see if not allowed to view content', 'geot' );?>"><?php echo $opts['forbidden_text'];?></textarea>

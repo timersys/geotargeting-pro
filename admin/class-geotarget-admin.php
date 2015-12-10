@@ -138,6 +138,9 @@ class GeoTarget_Admin {
 		if( !isset( $opts['forbidden_text'] ) )
 			$opts['forbidden_text'] = __( 'This content is restricted on your region', $this->GeoTarget);
 
+		if( !isset( $opts['geot_remove_post'] ) )
+			$opts['geot_remove_post'] = '';
+
 		if( !isset( $opts['geot_include_mode'] ) )
 			$opts['geot_include_mode'] = 'include';
 
