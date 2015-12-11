@@ -3,8 +3,8 @@ Contributors: timersys
 Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
-Tested up to: 4.3.1
-Stable tag: 1.4.2
+Tested up to: 4.4
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,17 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 
 == Changelog ==
+
+= 1.5 = - 10 Dic =
+
+* Updated maxmind db
+* Autodetection of Cloudflare, Sucuri , Reblaze
+* Widgets can be geotargeted by states and cities
+* Posts can be now completely removed from loop
+* Fixed bug with shortcode generator
+* Added cities and states to shortcode generator
+* Fixed bug with plugin activation
+* Added option to delete all data from database on uninstall
 
 = 1.4.2 - 4 Nov =
 * Added debug mode into the settings of plugin
