@@ -30,6 +30,16 @@
 class GeoTarget {
 
 	/**
+	 * @var GeoTarget_Public $public
+	 */
+	public $public;
+
+	/**
+	 * @var GeoTarget_Admin $admin
+	 */
+	public $admin;
+
+	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
 	 *
@@ -62,6 +72,59 @@ class GeoTarget {
 	 * @var object
 	 */
 	public $functions;
+
+
+	/**
+	 * Plugin Instance
+	 * @since 1.0.0
+	 * @var The Geot plugin instance
+	 */
+	protected static $_instance = null;
+
+	/**
+	 * Main Geot Instance
+	 *
+	 * Ensures only one instance of WSI is loaded or can be loaded.
+	 *
+	 * @since 1.0.0
+	 * @static
+	 * @see GEOT()
+	 * @return Geot - Main instance
+	 */
+	public static function instance() {
+		if ( is_null( self::$_instance ) ) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+
+	/**
+	 * Cloning is forbidden.
+	 * @since 1.0.0
+	 */
+	public function __clone() {
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wsi' ), '2.1' );
+	}
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 * @since 1.0.0
+	 */
+	public function __wakeup() {
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wsi' ), '2.1' );
+	}
+
+	/**
+	 * Auto-load in-accessible properties on demand.
+	 * @param mixed $key
+	 * @since 1.0.0
+	 * @return mixed
+	 */
+	public function __get( $key ) {
+		if ( in_array( $key, array( 'payment_gateways', 'shipping', 'mailer', 'checkout' ) ) ) {
+			return $this->$key();
+		}
+	}
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -171,33 +234,33 @@ class GeoTarget {
 
 		global $pagenow;
 
-		$plugin_admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
+		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'init', $plugin_admin, 'register_tiny_buttons' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $this->admin, 'register_tiny_buttons' );
    		
    		// Add html for shortcodes popup
    		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
 
-			$this->loader->add_action( 'in_admin_footer', $plugin_admin, 'add_editor' );
+			$this->loader->add_action( 'in_admin_footer', $this->admin, 'add_editor' );
    			
    		}
 		
 		// register dropdown widget
-		$this->loader->add_action( 'widgets_init', $plugin_admin, 'register_widgets');
+		$this->loader->add_action( 'widgets_init', $this->admin, 'register_widgets');
 
 		// settings page
-		$this->loader->add_action( 'admin_menu' , $plugin_admin, 'add_settings_menu' );
+		$this->loader->add_action( 'admin_menu' , $this->admin, 'add_settings_menu' );
 
 
 		// Add geot to Advanced custom fields plugin
-		$this->loader->add_action( 'acf/include_field_types', $plugin_admin, 'add_geot_to_acfv5' );
-		$this->loader->add_action( 'acf/register_fields', $plugin_admin, 'add_geot_to_acfv4' );
+		$this->loader->add_action( 'acf/include_field_types', $this->admin, 'add_geot_to_acfv5' );
+		$this->loader->add_action( 'acf/register_fields', $this->admin, 'add_geot_to_acfv4' );
 		
 
-		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'add_meta_boxes' );
-		$this->loader->add_action( 'save_post', $plugin_admin, 'save_meta_options' , 20 );
+		$this->loader->add_action( 'add_meta_boxes', $this->admin, 'add_meta_boxes' );
+		$this->loader->add_action( 'save_post', $this->admin, 'save_meta_options' , 20 );
 		
 		$geot_widgets = new Geot_Widgets( $this->get_GeoTarget(), $this->get_version() );
 
@@ -209,10 +272,10 @@ class GeoTarget {
 			$this->loader->add_action( 'widget_update_callback', $geot_widgets, 'save_widgets_data', 5, 3 );
 		}
 		// License and Updates	
-		$this->loader->add_action( 'admin_init' , $plugin_admin, 'handle_license', 1 );
+		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_license', 1 );
 
 		// Ajax admin
-		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $plugin_admin, 'geot_cities_by_country' );
+		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
 
 	}
 
@@ -225,13 +288,13 @@ class GeoTarget {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$this->public = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version(), $this->functions );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		$this->loader->add_action( 'init', $plugin_public, 'geot_redirections' );
-		$this->loader->add_action( 'wp_footer', $plugin_public, 'print_debug_info', 999 );
-		$this->loader->add_action( 'pre_get_posts', $plugin_public, 'handle_geotargeted_posts' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_scripts' );
+		$this->loader->add_action( 'init', $this->public, 'geot_redirections' );
+		$this->loader->add_action( 'wp_footer', $this->public, 'print_debug_info', 999 );
+		$this->loader->add_action( 'pre_get_posts', $this->public, 'handle_geotargeted_posts' );
 
 		// Popups rules
 
@@ -240,18 +303,18 @@ class GeoTarget {
 		add_action( 'spu/rules/print_geot_city_region_field', array( 'Spu_Helper', 'print_select' ), 10, 2 );
 		add_action( 'spu/rules/print_geot_state_field', array( 'Spu_Helper', 'print_textfield' ), 10, 1 );
 
-		$this->loader->add_filter( 'spu/metaboxes/rule_types', $plugin_public, 'add_popups_rules' );
+		$this->loader->add_filter( 'spu/metaboxes/rule_types', $this->public, 'add_popups_rules' );
 
-		$this->loader->add_filter( 'spu/rules/rule_values/geot_country', $plugin_public, 'add_country_choices' );
-		$this->loader->add_filter( 'spu/rules/rule_values/geot_country_region', $plugin_public, 'add_country_region_choices' );
-		$this->loader->add_filter( 'spu/rules/rule_values/geot_city_region', $plugin_public, 'add_city_region_choices' );
+		$this->loader->add_filter( 'spu/rules/rule_values/geot_country', $this->public, 'add_country_choices' );
+		$this->loader->add_filter( 'spu/rules/rule_values/geot_country_region', $this->public, 'add_country_region_choices' );
+		$this->loader->add_filter( 'spu/rules/rule_values/geot_city_region', $this->public, 'add_city_region_choices' );
 
-		$this->loader->add_filter( 'spu/rules/rule_match/geot_country', $plugin_public, 'popup_country_match', 10, 2 );
-		$this->loader->add_filter( 'spu/rules/rule_match/geot_country_region', $plugin_public, 'popup_country_region_match', 10, 2 );
-		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $plugin_public, 'popup_city_region_match', 10, 2 );
-		$this->loader->add_filter( 'spu/rules/rule_match/geot_state', $plugin_public, 'popup_state_match', 10, 2 );
+		$this->loader->add_filter( 'spu/rules/rule_match/geot_country', $this->public, 'popup_country_match', 10, 2 );
+		$this->loader->add_filter( 'spu/rules/rule_match/geot_country_region', $this->public, 'popup_country_region_match', 10, 2 );
+		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $this->public, 'popup_city_region_match', 10, 2 );
+		$this->loader->add_filter( 'spu/rules/rule_match/geot_state', $this->public, 'popup_state_match', 10, 2 );
 
-		$this->loader->add_filter( 'the_content', $plugin_public, 'check_if_geotargeted_content', 99 );
+		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
 
 	}
 

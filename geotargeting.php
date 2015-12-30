@@ -73,9 +73,14 @@ global $geot;
  *
  * @since    1.0.0
  */
-$geot = new GeoTarget();
 
-$geot->run();
+function run_Geot() {
+
+	$plugin = GeoTarget::instance();
+	$plugin->run();
+	return $plugin;
+}
+$GLOBALS['geot'] = run_Geot();
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 
