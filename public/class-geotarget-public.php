@@ -242,8 +242,11 @@ class GeoTarget_Public {
 			if( empty($r['name']) || !filter_var($r['name'], FILTER_VALIDATE_URL))
 				continue;
 			if( geot_target( @$r['countries'], @$r['regions'] ) ) {
-				wp_redirect( $r['name'], apply_filters( 'geot/redirection_status', '301') );
-				exit;
+				// one extra chance to let users cancel redirection
+				if( apply_filters( 'geot/perform_redirect', true, $r, $opts ) ) {
+					wp_redirect( $r['name'], apply_filters( 'geot/redirection_status', '301' ) );
+					exit;
+				}
 			}
 		}
 
