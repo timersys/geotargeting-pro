@@ -294,7 +294,8 @@ class GeoTarget {
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $this->public, 'geot_redirections' );
 		$this->loader->add_action( 'wp_footer', $this->public, 'print_debug_info', 999 );
-		$this->loader->add_action( 'pre_get_posts', $this->public, 'handle_geotargeted_posts' );
+		#$this->loader->add_action( 'pre_get_posts', $this->public, 'handle_geotargeted_posts' );
+		$this->loader->add_action( 'posts_where', $this->public, 'handle_geotargeted_posts' );
 
 		// Popups rules
 

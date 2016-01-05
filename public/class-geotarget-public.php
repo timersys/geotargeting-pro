@@ -252,28 +252,30 @@ class GeoTarget_Public {
 
 	}
 
-	/**
-	 * @param $query
-	 */
-	public function handle_geotargeted_posts( $query ){
-		if ( ! is_admin() && $query->is_main_query() ) {
-			// Get all posts that are being geotargeted
-			$post_to_exclude = $this->get_geotargeted_posts( $query );
-			if( !empty( $post_to_exclude ) ) {
-				$query->set('post__not_in', $post_to_exclude );
-			}
-		}
-	}
 
 	/**
-	 * Pass the current query to get post type.
+	 * Filter where argument of main query to exclude geotargeted posts
+	 * @param $where
+	 *
+	 * @return string
+	 */
+	public function handle_geotargeted_posts( $where ){
+		if ( ! is_admin()  ) {
+			// Get all posts that are being geotargeted
+			$post_to_exclude = $this->get_geotargeted_posts( );
+			if( !empty( $post_to_exclude ) ) {
+				$where .= " AND ID NOT IN ('". implode( "'", $post_to_exclude )."')";
+			}
+		}
+		return $where;
+	}
+	/**
 	 * Then we get all the posts with geotarget options and
 	 * check each of them to see which one we need to exclude from loop
-	 * @param $query
 	 *
 	 * @return array|void
 	 */
-	private function get_geotargeted_posts( $query ) {
+	private function get_geotargeted_posts( ) {
 		global $wpdb;
 
 		$posts_to_exclude = array();
