@@ -11,6 +11,7 @@
  */
 use GeoIp2\Database\Reader;
 use GeoIp2\WebService\Client;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 class GeoTarget_Functions {
 
@@ -566,14 +567,11 @@ class GeoTarget_Functions {
 	 * Check if "user" is a search engine
 	 */
 	private function isSearchEngine() {
-		$referrer = isset($_SERVER['HTTP_REFERRER']) ? $_SERVER['HTTP_REFERRER'] : '';
+		$CrawlerDetect = new CrawlerDetect;
 
-		$SE = apply_filters( 'geot/search_engines', array('/search?', '.google.', 'web.info.com', 'search.', 'del.icio.us/search', 'soso.com', '/search/', '.yahoo.', '.bing.' ) );
-
-		foreach ($SE as $url) {
-			if ( strpos( $referrer,$url ) !== false )
-				return  true;
-		}
+		// Check the user agent of the current 'visitor'
+		if( $CrawlerDetect->isCrawler() )
+			return true;
 
 		return false;
 	}
