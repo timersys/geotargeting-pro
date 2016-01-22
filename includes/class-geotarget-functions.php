@@ -590,6 +590,8 @@ class GeoTarget_Functions {
 		$ip = isset( $_SERVER['HTTP_X_SUCURI_CLIENTIP'] ) ? $_SERVER['HTTP_X_SUCURI_CLIENTIP'] : $ip;
 		// Ezoic
 		$ip = isset( $_SERVER['X-FORWARDED-FOR'] ) ? $_SERVER['X-FORWARDED-FOR'] : $ip;
+		// akamai
+		$ip = isset( $_SERVER['True-Client-IP'] ) ? $_SERVER['True-Client-IP'] : $ip;
 
 		return apply_filters( 'geot/user_ip', $ip );
 	}
