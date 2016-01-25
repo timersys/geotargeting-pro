@@ -470,6 +470,7 @@ class GeoTarget_Functions {
 		$state      = '';
 		$continent  = '';
 		$location   = '';
+		$using_api  = false;
 
 		if( !empty( $this->opts['cloudflare']) && !empty( $_SERVER["HTTP_CF_IPCOUNTRY"] ) ) {
 			$country = $this->getCountryByIsoCode( $_SERVER["HTTP_CF_IPCOUNTRY"] );
@@ -478,6 +479,7 @@ class GeoTarget_Functions {
 				if ( ! empty( $this->opts['maxm_id'] ) && ! empty( $this->opts['maxm_license'] ) && ! $maxmin_free_db ) {
 					$reader       = new Client( $this->opts['maxm_id'], $this->opts['maxm_license'] );
 					$service_func = $this->opts['maxm_service'];
+					$using_api    = true;
 					if ( method_exists( $reader, $service_func ) ) {
 						$record = $reader->$service_func( $ip );
 					}
@@ -501,11 +503,13 @@ class GeoTarget_Functions {
 			}
 
 			$country   = $record->country;
-			$city      = isset( $record->city ) ? $record->city->name : false;
-			$cp        = isset( $record->postal ) ? $record->postal->code : false;
-			$state     = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
 			$continent = isset( $record->continent ) ? $record->continent->name : false;
-			$location  = isset( $record->location ) ? $record->location : false;
+			if(  ! $using_api || ( $using_api && $service_func != 'country' ) ) {
+				$city     = isset( $record->city ) ? $record->city->name : false;
+				$cp       = isset( $record->postal ) ? $record->postal->code : false;
+				$state    = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
+				$location = isset( $record->location ) ? $record->location : false;
+			}
 		}
 
 		$_SESSION['geot_country']   = serialize($country);
