@@ -32,7 +32,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 $opts = get_option( 'geot_settings' );
 
-if( isset( $opts['geot_unistall']) && '1' == $opts['geot_unistall'] ) {
+if( isset( $opts['geot_uninstall']) && '1' == $opts['geot_uninstall'] ) {
 	// delete settings
 	delete_option('geot_settings');
 	delete_option('geot_version');
