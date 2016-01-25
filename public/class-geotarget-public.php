@@ -260,11 +260,13 @@ class GeoTarget_Public {
 	 * @return string
 	 */
 	public function handle_geotargeted_posts( $where ){
+		global $wpdb;
+
 		if ( ! is_admin()  ) {
 			// Get all posts that are being geotargeted
 			$post_to_exclude = $this->get_geotargeted_posts( );
 			if( !empty( $post_to_exclude ) ) {
-				$where .= " AND ID NOT IN ('". implode( "'", $post_to_exclude )."')";
+				$where .= " AND {$wpdb->posts}.ID NOT IN ('". implode( "'", $post_to_exclude )."')";
 			}
 		}
 		return $where;
