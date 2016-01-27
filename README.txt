@@ -4,7 +4,7 @@ Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.4.1
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,14 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 
 == Changelog ==
+
+= 1.5.2 - 27 Jan =
+* Added CrawlerDetect Class to avoid geotargeting for most crawlers / bots / social sharing tools
+* Ezoic Support
+* Akamai Support
+* Fixed bug with wpml sites
+* Fixed bug with country Insights service
+* Fixed bug with uninstall option not deleting data
 
 = 1.5.1 - 15 Jan =
 * Updated database
