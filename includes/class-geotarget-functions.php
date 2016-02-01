@@ -112,7 +112,7 @@ class GeoTarget_Functions {
 		//set target to false	
 		$target = false;
 			
-		$user_country = $this->userCountry;
+		$user_country = $this->get_user_country();
 
 		if ( count( $country ) > 0 ) {
 
@@ -205,7 +205,7 @@ class GeoTarget_Functions {
 		//set target to false
 		$target = false;
 
-		$user_city = $this->userCity;
+		$user_city = $this->get_user_city();
 
 		// if user city is not defined return false
 		if ( empty( $user_city ) )
@@ -263,7 +263,7 @@ class GeoTarget_Functions {
 		//set target to false
 		$target = false;
 
-		$user_state = $this->userState;
+		$user_state = $this->get_user_state();
 		// if user state is not defined return false
 		if ( empty( $user_state->names ) )
 			return apply_filters('geot/target_state/return_on_user_null', false);
