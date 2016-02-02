@@ -570,7 +570,7 @@ class GeoTarget_Functions {
 	/**
 	 * Check if "user" is a search engine
 	 */
-	private function isSearchEngine() {
+	public function isSearchEngine() {
 		$CrawlerDetect = new CrawlerDetect;
 
 		// Check the user agent of the current 'visitor'
