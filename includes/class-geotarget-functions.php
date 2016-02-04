@@ -16,10 +16,16 @@ use Jaybizzle\CrawlerDetect\CrawlerDetect;
 class GeoTarget_Functions {
 
 	/**
+	 * All data calculated for user
+	 * @var array
+	 */
+	protected $calculated_data;
+
+	/**
 	 * Current user country and cityused everywhere
 	 * @var string
 	 */
-	protected  $userCountry;
+	protected $userCountry;
 	protected $userCity;
 	protected $userState;
 	protected $userZip;
@@ -374,7 +380,7 @@ class GeoTarget_Functions {
 	 * @return array     country array
 	 */
 	public function calculateUserCountry() {
-		
+
 		global $wpdb;
 
 		// If user set cookie use instead
@@ -385,10 +391,6 @@ class GeoTarget_Functions {
 			$country = $this->getCountryByIsoCode( $iso_code );
 
 			return $country;
-		}
-		// if we have a session it means we already calculated country on session
-		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_country']) ) {
-			return unserialize($_SESSION['geot_country']);
 		}
 
 		$data = $this->getUserDataByIp();
@@ -403,12 +405,6 @@ class GeoTarget_Functions {
 	 */
 	public function calculateUserCity() {
 
-
-		// if we have a session it means we already calculated city on session
-		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_city']) ) {
-			return unserialize($_SESSION['geot_city']);
-		}
-
 		$data = $this->getUserDataByIp();
 
 		return $data['city'];
@@ -421,12 +417,6 @@ class GeoTarget_Functions {
 	 */
 	public function calculateUserState() {
 
-
-		// if we have a session it means we already calculated city on session
-		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_state']) ) {
-			return unserialize($_SESSION['geot_state']);
-		}
-
 		$data = $this->getUserDataByIp();
 
 		return $data['state'];
@@ -438,12 +428,6 @@ class GeoTarget_Functions {
 	 * @return string   zip code
 	 */
 	public function calculateUserZip() {
-
-
-		// if we have a session it means we already calculated city on session
-		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) && !empty($_SESSION['geot_zip']) ) {
-			return unserialize($_SESSION['geot_zip']);
-		}
 
 		$data = $this->getUserDataByIp();
 
@@ -460,6 +444,12 @@ class GeoTarget_Functions {
 	 * @return array country and city array
 	 */
 	public function getUserDataByIp( $ip = "", $maxmin_free_db = false ) {
+		// if we already calculated it on execution return
+		if( !empty ( $this->calculated_data ) )
+			return $this->calculated_data;
+		// If we already calculated on session return
+		if( !empty ( $_SESSION['geot_data'] ) && ( empty( $this->opts['debug_mode'] ) && ! defined('GEOT_DEBUG') ) )
+			return unserialize( $_SESSION['geot_data'] );
 
 		if( empty( $ip) ) {
 			$ip = $this->getUserIP();
@@ -519,7 +509,7 @@ class GeoTarget_Functions {
 		$_SESSION['geot_continent'] = serialize($continent);
 		$_SESSION['geot_location']  = serialize($location);
 
-		return array(
+		$this->calculated_data = array(
 			'record'    => $record,
 			'country'   => $country,
 			'city'      => $city,
@@ -528,7 +518,8 @@ class GeoTarget_Functions {
 			'continent' => $continent,
 			'location'  => $location,
 		);
-
+		$_SESSION['geot_data']  = serialize( $this->calculated_data );
+		return $this->calculated_data;
 	}
 
 
