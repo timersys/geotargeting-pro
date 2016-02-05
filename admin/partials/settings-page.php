@@ -195,7 +195,7 @@
 									?>
 								</select>
 								<p>or</p>
-								<select name="geot_settings[redirection][<?php echo $i;?>][regions][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type region name...', $this->GeoTarget );?>" >
+								<select name="geot_settings[redirection][<?php echo $i;?>][regions][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type a country region name...', $this->GeoTarget );?>" >
 									<?php
 									$saved_regions 	= apply_filters('geot/get_regions', array());
 									if( !empty( $saved_regions ) ) {
@@ -208,6 +208,22 @@
 									}
 									?>
 								</select>
+								<p>or</p>
+								<select name="geot_settings[redirection][<?php echo $i;?>][city_regions][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type a city region name...', $this->GeoTarget );?>" >
+									<?php
+									$saved_city_regions 	= apply_filters('geot/get_city_regions', array());
+									if( !empty( $saved_city_regions ) ) {
+										foreach ( $saved_city_regions as $k => $r ) {
+											?>
+											<option
+												value="<?php echo $r['name'] ?>" <?php selected( true, @in_array( $r['name'], @$redirection['city_regions'] ) ); ?>> <?php echo $r['name']; ?></option>
+										<?php
+										}
+									}
+									?>
+								</select>
+								<p>or</p>
+								<input type="text" placeholder="Type a state" name="geot_settings[redirection][<?php echo $i;?>][state]" value="<?php echo !empty( $redirection['state'] )? esc_attr($redirection['state']): '' ; ?>" class="regular-text"/>
 
 							</div>
 						<?php }
