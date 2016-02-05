@@ -1,6 +1,6 @@
 <?php
 /**
- * Shortcodes  functions
+ * Shortcodes  functions for AJAX mode
  *
  * @link       http://wp.timersys.com/geotargeting/
  * @since      1.0.0
@@ -9,14 +9,7 @@
  * @subpackage GeoTarget/includes
  * @author     Your Name <email@example.com>
  */
-class GeoTarget_Shortcodes {
-
-	/**
-	 * @since   1.6
-	 * @access  private
-	 * @var     Array of plugin settings
-	 */
-	private $opts;
+class GeoTarget_Ajax_Shortcodes {
 	/**
 	 * The ID of this plugin.
 	 *
@@ -36,13 +29,11 @@ class GeoTarget_Shortcodes {
 	private $version;
 
 	/**
-	 * Plugin functions
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      object    Plugin functions
+	 * @since   1.6
+	 * @access  private
+	 * @var     Array of plugin settings
 	 */
-	private $functions;
+	private $opts;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -50,13 +41,11 @@ class GeoTarget_Shortcodes {
 	 * @since    1.0.0
 	 * @var      string    $GeoTarget       The name of this plugin.
 	 * @var      string    $version    The version of this plugin.
-	 * @var      class    instance of GeotFunctions
 	 */
-	public function __construct( $GeoTarget, $version, $functions ) {
+	public function __construct( $GeoTarget, $version ) {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
-		$this->functions = $functions;
 		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 	}
 
@@ -66,7 +55,7 @@ class GeoTarget_Shortcodes {
 	 */
 	public function register_shortcodes() {
 
-		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
+		if( ! isset( $this->opts['ajax_mode'] ) || $this->opts['ajax_mode'] != '1' )
 			return;
 
 		add_shortcode('geot', array( $this, 'geot_filter') );
@@ -94,18 +83,14 @@ class GeoTarget_Shortcodes {
 	function geot_filter($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $this->functions->getUserIP(),
 			'country'			=>'',
 			'region'			=>'',
 			'exclude_country'	=>'',
 			'exclude_region'	=>''
 		), $atts ) );
 		
-				
-		if ( $this->functions->targetCountry( $country, $region, $exclude_country, $exclude_region ) )
-			return do_shortcode( $content );
-			
-		return '';
+		return '<span class="geot-ajax geot-filter" data-action="country_filter" data-filter="'.$country.'" data-region="'.$region.'" data-ex_filter="'.$exclude_country.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</span>';
+
 	}
 
 	/**
@@ -122,18 +107,14 @@ class GeoTarget_Shortcodes {
 	function geot_filter_cities($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $this->functions->getUserIP(),
 			'city'			    =>'',
 			'region'			=>'',
 			'exclude_city'	    =>'',
 			'exclude_region'	=>''
 		), $atts ) );
 
+		return '<span class="geot-ajax geot-filter" data-action="city_filter" data-filter="'.$city.'" data-region="'.$region.'" data-ex_filter="'.$exclude_city.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</span>';
 
-		if ( $this->functions->targetCity( $city, $region, $exclude_city, $exclude_region ) )
-			return do_shortcode( $content );
-
-		return '';
 	}
 
 	/**
@@ -149,16 +130,12 @@ class GeoTarget_Shortcodes {
 	function geot_filter_states($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $this->functions->getUserIP(),
 			'state'			    =>'',
 			'exclude_state'	    =>'',
 		), $atts ) );
 
+		return '<span class="geot-ajax geot-filter" data-action="state_filter" data-filter="'.$state.'" data-ex_filter="'.$exclude_state.'" >' . do_shortcode( $content ) . '</span>';
 
-		if ( $this->functions->targetState( $state, $exclude_state ) )
-			return do_shortcode( $content );
-
-		return '';
 	}
 
 
@@ -172,9 +149,7 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$c = $this->functions->get_user_country();
-
-		return !empty($c->isoCode) ? $c->isoCode : $default;
+		return '<span class="geot-ajax" data-action="country_code" data-default="' . do_shortcode( $default ). '"></span>';
 	}
 
 
@@ -188,9 +163,8 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$c = $this->functions->get_user_country();
+		return '<span class="geot-ajax" data-action="country_name" data-default="' . do_shortcode( $default ). '"></span>';
 
-		return !empty( $c->names ) ? $c->name : $default;
 	}
 
 	/**
@@ -203,8 +177,8 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$c = $this->functions->get_user_city();
-		return !empty( $c ) ? $c : $default;
+		return '<span class="geot-ajax" data-action="city_name" data-default="' . do_shortcode( $default ). '"></span>';
+
 	}
 
 	/**
@@ -217,9 +191,7 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$state = $this->functions->get_user_state();
-
-		return !empty( $state->names ) ? $state->name : $default;
+		return '<span class="geot-ajax" data-action="state_name" data-default="' . do_shortcode( $default ). '"></span>';
 	}
 
 	/**
@@ -232,8 +204,7 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$state = $this->functions->get_user_state();
-		return !empty( $state->isoCode ) ? $state->isoCode : $default;
+		return '<span class="geot-ajax" data-action="state_code" data-default="' . do_shortcode( $default ). '"></span>';
 	}
 
 	/**
@@ -246,8 +217,7 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$zip = $this->functions->get_user_zip();
-		return !empty($zip) ? $zip : $default;
+		return '<span class="geot-ajax" data-action="zip" data-default="' . do_shortcode( $default ). '"></span>';
 	}
 
 }	

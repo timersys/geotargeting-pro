@@ -501,7 +501,6 @@ class GeoTarget_Functions {
 				$location = isset( $record->location ) ? $record->location : false;
 			}
 		}
-
 		$_SESSION['geot_country']   = serialize($country);
 		$_SESSION['geot_city']      = serialize($city);
 		$_SESSION['geot_zip']       = serialize($cp);
