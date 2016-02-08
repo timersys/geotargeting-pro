@@ -239,6 +239,9 @@ class GeoTarget_Public {
 
 		if( is_admin() || defined('DOING_AJAX') || empty( $opts['redirection'] ) || $geot->functions->isSearchEngine() )
 			return;
+		
+		if( strpos( $_SERVER['REQUEST_URI'], 'wp-login' ) !== false )
+			return;
 
 		foreach( $opts['redirection'] as $r ) {
 			if( empty($r['name']) || !filter_var($r['name'], FILTER_VALIDATE_URL))
