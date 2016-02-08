@@ -239,8 +239,8 @@ class GeoTarget_Public {
 
 		if( is_admin() || defined('DOING_AJAX') || empty( $opts['redirection'] ) || $geot->functions->isSearchEngine() )
 			return;
-		
-		if( strpos( $_SERVER['REQUEST_URI'], 'wp-login' ) !== false )
+
+		if( strpos( $_SERVER['REQUEST_URI'], apply_filters( 'geot/login_page_string', 'wp-login' ) ) !== false )
 			return;
 
 		foreach( $opts['redirection'] as $r ) {
