@@ -14,6 +14,11 @@ use GeoIp2\WebService\Client;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 class GeoTarget_Functions {
+	/**
+	 * Class to detect bots
+	 * @var CrawlerDetect
+	 */
+	public $CrawlerDetect;
 
 	/**
 	 * All data calculated for user
@@ -47,6 +52,7 @@ class GeoTarget_Functions {
 			add_action('init' , array($this,'setUserData' ) );
 
 		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$this->CrawlerDetect = new CrawlerDetect;
 	}
 
 	/**
@@ -560,12 +566,14 @@ class GeoTarget_Functions {
 
 	/**
 	 * Check if "user" is a search engine
+	 *
+	 * @param string $user_agent
+	 *
+	 * @return bool
 	 */
-	public function isSearchEngine() {
-		$CrawlerDetect = new CrawlerDetect;
-
+	public function isSearchEngine( $user_agent = null ) {
 		// Check the user agent of the current 'visitor'
-		if( $CrawlerDetect->isCrawler() )
+		if( $this->CrawlerDetect->isCrawler( $user_agent ) )
 			return true;
 
 		return false;

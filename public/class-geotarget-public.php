@@ -259,7 +259,7 @@ class GeoTarget_Public {
 					$redirect = true;
 				}
 			}
-			
+
 			if( $redirect ) {
 				// one extra chance to let users cancel redirection
 				if ( apply_filters( 'geot/perform_redirect', true, $r, $opts ) ) {
