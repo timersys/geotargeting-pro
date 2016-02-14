@@ -80,51 +80,62 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
 
 }
 
-    if( $('.geot-ajax').length ) {
-        var data = {
-            'action' : 'geot_ajax',
-            'geots'  : {}
-            },
-            uniqueId = null,
-            getUniqueName = function(prefix) {
-                if (!uniqueId) uniqueId = (new Date()).getTime();
-                return prefix + (uniqueId++);
-            };
-        $('.geot-ajax').each(function(){
 
-            var uniqid = getUniqueName( 'geot' );
-            $(this).attr( 'id', uniqid );
-            data.geots[uniqid] = {
-                'action'    : $(this).data('action') || '',
-                'filter'    : $(this).data('filter') || '',
-                'region'    : $(this).data('region') || '',
-                'ex_filter' : $(this).data('ex_filter') || '',
-                'ex_region' : $(this).data('ex_region') || '',
-            }
-        });
-        var onSuccess = function( response ) {
-            if( response.success ) {
-                var results = response.data;
-                var i; console.log(results);
-                for( i = 0; i < results.length ; ++i ){
-                    if( results[i].action.indexOf('filter') > -1 ) {
-                        if( results[i].value == true ) {
+    var data = {
+        'action' : 'geot_ajax',
+        'geots'  : {}
+        },
+        uniqueId = null,
+        getUniqueName = function(prefix) {
+            if (!uniqueId) uniqueId = (new Date()).getTime();
+            return prefix + (uniqueId++);
+        };
+    $('.geot-ajax').each(function(){
+
+        var uniqid = getUniqueName( 'geot' );
+        $(this).attr( 'id', uniqid );
+        data.geots[uniqid] = {
+            'action'    : $(this).data('action') || '',
+            'filter'    : $(this).data('filter') || '',
+            'region'    : $(this).data('region') || '',
+            'ex_filter' : $(this).data('ex_filter') || '',
+            'ex_region' : $(this).data('ex_region') || '',
+        }
+    });
+    var onSuccess = function( response ) {
+        if( response.success ) {
+            var results = response.data,
+                i,
+                remove  = response.posts.remove,
+                hide    = response.posts.hide;
+            console.log(response);
+            if( results.length ) {
+                for (i = 0; i < results.length; ++i) {
+                    if (results[i].action.indexOf('filter') > -1) {
+                        if (results[i].value == true) {
                             var html = $('#' + results[i].id).html();
-                            $('#' + results[i].id).replaceWith( html );
+                            $('#' + results[i].id).replaceWith(html);
                         }
                         $('#' + results[i].id).remove();
                     } else {
                         $('#' + results[i].id).replaceWith(results[i].value);
                     }
                 }
-                //$('.geot-country-name').each(function(){
-                //    var geo_data = $(this).data('default');
-                //    if( response.data.length )
-                //        geo_data = response.data;
-                //    $(this).replaceWith( geo_data );
-                //});
+            }
+            if( remove.length ) {
+                for (i = 0; i < remove.length; ++i) {
+                    var id = remove[i];
+                    $('#post-' + id + ', .post-' + id).remove();
+                }
+            }
+            if( hide.length ) {
+                for (i = 0; i < hide.length; ++i) {
+                    var id = hide[i].id;
+                    $('#post-' + id + ' .entry-content, .post-' + id +' .entry-content').html( '<p>'+ hide[i].msg +'</p>' );
+                }
             }
         }
-        GeotRequest( data, onSuccess )
     }
+    GeotRequest( data, onSuccess )
+
 })( jQuery );
