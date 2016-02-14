@@ -10,6 +10,9 @@
 		<table class="form-table">
 			<?php do_action( 'geot/settings_page/before' ); ?>
 			<tr valign="top" class="">
+				<th><h3><?php _e( 'Main settings:', $this->GeoTarget ); ?></h3></th>
+			</tr>
+			<tr valign="top" class="">
 				<th><label for="license"><?php _e( 'Enter your license key', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 					<label><input type="text" id="license" name="geot_settings[geot_license_key]" value="<?php  echo $opts['geot_license_key'];?>" class="regular-text <?php echo 'geot_license_' . get_option( 'geot_license_active' );?>" /> 
@@ -28,6 +31,42 @@
 				<td colspan="3">
 					<label><input type="checkbox" id="ajax_mode" name="geot_settings[ajax_mode]" value="1" <?php checked($opts['ajax_mode'],'1');?>/>
 						<p class="help"><?php _e( 'In Ajax mode, after page load an extra request is made to get all data and everything is updated with javascript. That makes the plugin compatible with any cache plugin. More info on: ', $this->GeoTarget ); ?><a href="https://timersys.com/geotargeting/docs/ajax-mode/">Ajax mode info</a></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="region"><?php _e( 'Fallback Country', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+
+					<select name="geot_settings[fallback_country]"  class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
+						<option value=""><?php _e( 'Choose One', $this->GeoTarget );?></option>
+						<?php
+						foreach ($countries as $c) {
+							?>
+							<option value="<?php echo $c->iso_code?>" <?php selected( $c->iso_code, @$opts['fallback_country'] ); ?>> <?php echo $c->country; ?></option>
+							<?php
+						}
+						?>
+					</select>
+
+					<p class="help"><?php _e( 'If the user IP is not detected plugin will fallback to this country', $this->GeoTarget ); ?></p>
+				</td>
+
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="bots"><?php _e( 'Bots Country', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<select name="geot_settings[bots_country]"  class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
+						<option value=""><?php _e( 'Choose One', $this->GeoTarget );?></option>
+						<?php
+						foreach ($countries as $c) {
+							?>
+							<option value="<?php echo $c->iso_code?>" <?php selected( $c->iso_code, @$opts['bots_country'] ); ?>> <?php echo $c->country; ?></option>
+							<?php
+						}
+						?>
+					</select>
+
+					<p class="help"><?php _e( 'All bots / crawlers will be treated as the are from this country. More info in ', $this->GeoTarget ); ?><a href="https://timersys.com/geotargeting/docs/bots-seo/">Bots in Geotargeting</a></p>
 				</td>
 			</tr>
 			<tr valign="top" class="">
@@ -74,24 +113,7 @@
 					<p class="help"><?php _e( 'Enter your Maxmind license key', $this->GeoTarget ); ?></p>
 				</td>
 			</tr>
-			<tr valign="top" class="">
-				<th><label for="region"><?php _e( 'Fallback Country', $this->GeoTarget ); ?></label></th>
-				<td colspan="3">
 
-					<select name="geot_settings[fallback_country]"  class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
-						<?php
-						foreach ($countries as $c) {
-							?>
-							<option value="<?php echo $c->iso_code?>" <?php selected( $c->iso_code, @$opts['fallback_country'] ); ?>> <?php echo $c->country; ?></option>
-						<?php
-						}
-						?>
-					</select>
-
-					<p class="help"><?php _e( 'If the user IP is not detected plugin will fallback to this country', $this->GeoTarget ); ?></p>
-				</td>
-
-			</tr>
 			<tr valign="top" class="">
 				<th><h3><?php _e( 'Countries:', $this->GeoTarget ); ?></h3></th>
 				<td colspan="3">

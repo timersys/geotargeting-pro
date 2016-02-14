@@ -76,8 +76,6 @@ class GeoTarget_Functions {
 	 */
 	public function targetCountry( $country = '', $region = '', $exclude_country = '', $exclude_region  = '')
 	{
-		if( $this->isSearchEngine() )
-			return true;
 		//Push country list into array
 		$country 			= $this->toArray( $country );
 		
@@ -168,9 +166,6 @@ class GeoTarget_Functions {
 	 */
 	public function targetCity( $city = '', $region = '', $exclude_city = '', $exclude_region  = '')
 	{
-		if( $this->isSearchEngine() )
-			return true;
-
 		//Push city list into array
 		$city 			= $this->toArray( $city );
 
@@ -264,9 +259,6 @@ class GeoTarget_Functions {
 	 */
 	public function targetState( $state = '', $exclude_state = '' )
 	{
-		if( $this->isSearchEngine() )
-			return true;
-
 		//Push state list into array
 		$state 			= $this->toArray( $state );
 
@@ -450,6 +442,7 @@ class GeoTarget_Functions {
 	 * @return array country and city array
 	 */
 	public function getUserDataByIp( $ip = "", $maxmin_free_db = false ) {
+
 		// if we already calculated it on execution return
 		if( !empty ( $this->calculated_data ) )
 			return $this->calculated_data;
@@ -468,7 +461,9 @@ class GeoTarget_Functions {
 		$location   = '';
 		$using_api  = false;
 
-		if( !empty( $this->opts['cloudflare']) && !empty( $_SERVER["HTTP_CF_IPCOUNTRY"] ) ) {
+		if( $this->isSearchEngine() && ! empty( $this->opts['bots_country'] ) ) {
+			return $this->getBotsCountry();
+		}elseif( !empty( $this->opts['cloudflare']) && !empty( $_SERVER["HTTP_CF_IPCOUNTRY"] ) ) {
 			$country = $this->getCountryByIsoCode( $_SERVER["HTTP_CF_IPCOUNTRY"] );
 		} else {
 			try {
@@ -552,15 +547,31 @@ class GeoTarget_Functions {
 	 */
 	private function getFallbackCountry() {
 
-		if( !empty($this->opts['fallback_country'])) {
+		if( empty($this->opts['fallback_country']) )
+			$this->opts['fallback_country'] = 'US';
+
 			return array(
-				'country' => $this->getCountryByIsoCode($this->opts['fallback_country']),
+				'country' => $this->getCountryByIsoCode( $this->opts['fallback_country'] ),
 				'city'    => '',
 				'zip'     => '',
 				'state'   => '',
 			);
-		}
-		return false;
+
+	}
+
+	/**
+	 * Bots can be treated as all from one country
+	 * @return array
+	 */
+	private function getBotsCountry() {
+
+		return array(
+			'country' => $this->getCountryByIsoCode($this->opts['bots_country']),
+			'city'    => '',
+			'zip'     => '',
+			'state'   => '',
+		);
+
 	}
 
 	/**
