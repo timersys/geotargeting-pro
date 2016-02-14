@@ -50,6 +50,12 @@ class GeoTarget_Public {
 	private $functions;
 
 	/**
+	 * Plugin settings
+	 * @var array
+	 */
+	protected $opts;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -64,7 +70,7 @@ class GeoTarget_Public {
 		$this->GeoTarget 	= $GeoTarget;
 		$this->version 		= $version;
 		$this->functions 	= $functions;
-
+		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 	}
 
 	/**
@@ -86,8 +92,11 @@ class GeoTarget_Public {
 	public function enqueue_scripts() {
 
 
-		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotarget-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotarget-public.js', array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/ddslick.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script( $this->GeoTarget, 'geot', array(
+			'ajax_url'  => admin_url( 'admin-ajax.php')
+		) );
 
 	}
 
@@ -284,6 +293,9 @@ class GeoTarget_Public {
 	public function handle_geotargeted_posts( $where ){
 		global $wpdb;
 
+		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
+			return $where;
+
 		if ( ! is_admin()  ) {
 			// Get all posts that are being geotargeted
 			$post_to_exclude = $this->get_geotargeted_posts( );
@@ -342,6 +354,9 @@ AND pm.meta_value != ''";
 	public function check_if_geotargeted_content( $content ) {
 		global $post;
 
+		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
+			return $content;
+
 		if( $countries = get_post_meta( $post->ID, 'geot_countries', true) ) {
 
 			$opts = get_post_meta( $post->ID, 'geot_options', true );
@@ -349,13 +364,13 @@ AND pm.meta_value != ''";
 				if ( geot_target( $countries ) ) {
 					return $content;
 				} else {
-					return apply_filters( 'geot/forbidden_text', $opts['forbidden_text'] );
+					return apply_filters( 'geot/forbidden_text', '<p>' . $opts['forbidden_text'] . '</p>' );
 				}
 			} else {
 				if ( !geot_target( $countries ) ) {
 					return $content;
 				} else {
-					return apply_filters( 'geot/forbidden_text', $opts['forbidden_text'] );
+					return apply_filters( 'geot/forbidden_text', '<p>' . $opts['forbidden_text'] . '</p>' );
 				}
 			}
 		}

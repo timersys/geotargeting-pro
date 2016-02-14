@@ -40,6 +40,11 @@ class GeoTarget {
 	public $admin;
 
 	/**
+	 * @var mixed|void Geotarget settings
+	 */
+	public $opts;
+
+	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.
 	 *
@@ -146,7 +151,7 @@ class GeoTarget {
 		$this->define_public_hooks();
 		$this->register_shortcodes();
 		$this->define_admin_hooks();
-
+		$this->register_ajax_calls();
 	}
 
 	/**
@@ -180,6 +185,8 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-geotarget-public.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-shortcodes.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax-shortcodes.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-emails.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
@@ -294,9 +301,9 @@ class GeoTarget {
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $this->public, 'geot_redirections' );
 		$this->loader->add_action( 'wp_footer', $this->public, 'print_debug_info', 999 );
-		#$this->loader->add_action( 'pre_get_posts', $this->public, 'handle_geotargeted_posts' );
-		$this->loader->add_action( 'posts_where', $this->public, 'handle_geotargeted_posts' );
 
+		$this->loader->add_action( 'posts_where', $this->public, 'handle_geotargeted_posts' );
+		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
 		// Popups rules
 
 		add_action( 'spu/rules/print_geot_country_field', array( 'Spu_Helper', 'print_select' ), 10, 2 );
@@ -315,7 +322,7 @@ class GeoTarget {
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $this->public, 'popup_city_region_match', 10, 2 );
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_state', $this->public, 'popup_state_match', 10, 2 );
 
-		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
+
 
 	}
 
@@ -326,16 +333,11 @@ class GeoTarget {
 	private function register_shortcodes()
 	{
 		$shortcodes = new GeoTarget_Shortcodes( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$ajax_shortcodes = new GeoTarget_Ajax_Shortcodes( $this->get_GeoTarget(), $this->get_version() );
 
-		add_shortcode('geot', array( $shortcodes, 'geot_filter') );
-		add_shortcode('geot_city', array( $shortcodes, 'geot_filter_cities') );
-		add_shortcode('geot_state', array( $shortcodes, 'geot_filter_states') );
-		add_shortcode('geot_country_code', array( $shortcodes, 'geot_show_country_code') );
-		add_shortcode('geot_country_name', array( $shortcodes, 'geot_show_country_name') );
-		add_shortcode('geot_city_name', array( $shortcodes, 'geot_show_city_name') );
-		add_shortcode('geot_state_name', array( $shortcodes, 'geot_show_state_name') );
-		add_shortcode('geot_state_code', array( $shortcodes, 'geot_show_state_code') );
-		add_shortcode('geot_zip', array( $shortcodes, 'geot_show_zip_code') );
+		$this->loader->add_action( 'init', $shortcodes, 'register_shortcodes' );
+		$this->loader->add_action( 'init', $ajax_shortcodes, 'register_shortcodes' );
+
 	}
 
 	/**
@@ -376,6 +378,16 @@ class GeoTarget {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	private function register_ajax_calls() {
+
+		$ajax_class = new GeoTarget_Ajax( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+
+		$this->loader->add_action( 'wp_ajax_geot_ajax' , $ajax_class, 'geot_ajax' );
+		$this->loader->add_action( 'wp_ajax_nopriv_geot_ajax' , $ajax_class, 'geot_ajax' );
+
+
 	}
 
 }

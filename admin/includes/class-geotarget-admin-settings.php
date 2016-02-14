@@ -89,6 +89,9 @@ class GeoTarget_Settings {
 		if( empty( $opts['geot_uninstall'] ) ) {
 			$opts['geot_uninstall'] = '';
 		}
+		if( empty( $opts['ajax_mode'] ) ) {
+			$opts['ajax_mode'] = '0';
+		}
 
 		$countries 	= apply_filters('geot/get_countries', array());
 

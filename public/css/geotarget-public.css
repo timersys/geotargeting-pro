@@ -288,6 +288,9 @@
 .geot_dropdown_container .geotdd-option span.geot-flag{
 	margin-top: 0;
 }
+.geot-ajax.geot-filter{
+	display: none;
+}
 @media only screen and (min-width: 900px) {
 	.geot_dropdown_container .geotdd-options{
 		width: 800px;
