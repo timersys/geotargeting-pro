@@ -59,8 +59,8 @@ class GeoTarget_Ajax {
 	 */
 	public function geot_ajax(){
 
-		$geots = array();
-
+		$geots = $posts = array();
+		$posts = $this->get_geotargeted_posts();
 		if( isset( $_POST['geots'] ) ) {
 			foreach( $_POST['geots'] as $id => $geot ) {
 				if( method_exists( $this, $geot['action'] ) ) {
@@ -71,9 +71,9 @@ class GeoTarget_Ajax {
 					);
 				}
 			}
-			echo json_encode( array( 'success' => 1, 'data' => $geots ) );
-			die();
 		}
+		echo json_encode( array( 'success' => 1, 'data' => $geots, 'posts' => $posts ) );
+		die();
 	}
 
 	/**
@@ -200,6 +200,61 @@ class GeoTarget_Ajax {
 			return true;
 
 		return false;
+	}
+
+
+	/**
+	 * Get all post that are geotargeted
+	 *
+	 * @return array|void
+	 */
+	private function get_geotargeted_posts( ) {
+		global $wpdb;
+
+		$posts_to_exclude = array();
+		$content_to_hide = array();
+		// get all posts with geo options set ( ideally would be to retrieve just for the post type queried but I can't get post_type
+		$sql = "SELECT ID, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
+LEFT JOIN $wpdb->postmeta pm ON p.ID = pm.post_id
+LEFT JOIN $wpdb->postmeta pm2 ON p.ID = pm2.post_id
+WHERE p.post_status = 'publish'
+AND pm.meta_key = 'geot_countries'
+AND pm2.meta_key = 'geot_options'
+AND pm.meta_value != ''";
+		$geot_posts = $wpdb->get_results( $sql );
+
+		if( $geot_posts ) {
+			foreach( $geot_posts as $p ) {
+				$options = unserialize( $p->geot_options );
+				$mode = $options['geot_include_mode'];
+				if( 'exclude' == $mode ) {
+					if( geot_target( $p->geot_countries ) ){
+						if( ! isset( $options['geot_remove_post']) || '1' != $options['geot_remove_post'] )
+							$content_to_hide[] = array(
+								'id' => $p->ID,
+								'msg'=> apply_filters( 'geot/forbidden_text', $options['forbidden_text'] )
+							);
+						else
+							$posts_to_exclude[] = $p->ID;
+					}
+				} elseif ( 'include' == $mode ) {
+					if( ! geot_target( $p->geot_countries ) ) {
+						if ( ! isset( $options['geot_remove_post'] ) || '1' != $options['geot_remove_post'] ) {
+							$content_to_hide[] = array(
+								'id' => $p->ID,
+								'msg'=> apply_filters( 'geot/forbidden_text', $options['forbidden_text'] )
+							);
+						} else {
+							$posts_to_exclude[] = $p->ID;
+						}
+					}
+				}
+			}
+		}
+		return array(
+			'remove' => $posts_to_exclude,
+			'hide'   => $content_to_hide
+		);
 	}
 
 }	
