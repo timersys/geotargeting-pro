@@ -301,9 +301,9 @@ class GeoTarget {
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $this->public, 'geot_redirections' );
 		$this->loader->add_action( 'wp_footer', $this->public, 'print_debug_info', 999 );
-		#$this->loader->add_action( 'pre_get_posts', $this->public, 'handle_geotargeted_posts' );
-		$this->loader->add_action( 'posts_where', $this->public, 'handle_geotargeted_posts' );
 
+		$this->loader->add_action( 'posts_where', $this->public, 'handle_geotargeted_posts' );
+		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
 		// Popups rules
 
 		add_action( 'spu/rules/print_geot_country_field', array( 'Spu_Helper', 'print_select' ), 10, 2 );
@@ -322,7 +322,7 @@ class GeoTarget {
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $this->public, 'popup_city_region_match', 10, 2 );
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_state', $this->public, 'popup_state_match', 10, 2 );
 
-		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
+
 
 	}
 
