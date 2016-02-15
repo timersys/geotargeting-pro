@@ -136,6 +136,39 @@ function geot_country_by_ip( $ip = '') {
 }
 
 /**
+ * Grabs the whole record from Maxmind Database
+ *
+ * @param string $ip
+ *
+ * @return object
+ */
+function geot_data( $ip = '') {
+	global $geot;
+
+	$data = $geot->functions->getUserDataByIp( $ip );
+
+	return $data['record'];
+}
+/**
+ * Gets user lat / long
+ *
+ * @param string $ip
+ *
+ * @return object ->longitude , ->latitude, ->time_zone
+ */
+function geot_location( $ip = '') {
+	global $geot;
+
+	$data = $geot->functions->getUserDataByIp( $ip );
+	if( empty( $data['record']->location ) )
+		return;
+
+	return $data['record']->location;
+}
+
+
+
+/**
  * Gets User state by ip. Is not ip given current user country will show
  *
  * @param string $ip
