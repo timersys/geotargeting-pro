@@ -3,8 +3,8 @@ Contributors: timersys
 Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
-Tested up to: 4.4.1
-Stable tag: 1.5.2
+Tested up to: 4.4.2
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,17 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 
 == Changelog ==
+
+= 1.6 - Feb 15 =
+
+* New Ajax mode to make compatible with all cache plugins
+* Updated db
+* Improved code, now it's 3 times faster
+* You can redirect cities / states now
+* Improved redirection script
+* Bots/ Crawlers are excluded from redirections now
+* Bots/ Crawlers have a new setting to set country for them
+* Added new API wrapper functions for latitude, longitude, time zone, and full record
 
 = 1.5.2 - 27 Jan =
 * Added CrawlerDetect Class to avoid geotargeting for most crawlers / bots / social sharing tools
