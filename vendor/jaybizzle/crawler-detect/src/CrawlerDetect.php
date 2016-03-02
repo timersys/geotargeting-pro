@@ -116,6 +116,7 @@ class CrawlerDetect
         'DomainAppender',
         'drupact',
         'EARTHCOM',
+        'ECCP',
         'ec2linkfinder',
         'ElectricMonk',
         'Embedly',
