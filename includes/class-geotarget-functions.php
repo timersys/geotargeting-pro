@@ -381,16 +381,6 @@ class GeoTarget_Functions {
 
 		global $wpdb;
 
-		// If user set cookie use instead
-		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE['geot_country']) ) {
-
-			$iso_code = empty( $_COOKIE['geot_country'] ) ? '' : $_COOKIE['geot_country'];
-
-			$country = $this->getCountryByIsoCode( $iso_code );
-
-			return $country;
-		}
-
 		$data = $this->getUserDataByIp();
 
 		return $data['country'];
@@ -446,8 +436,22 @@ class GeoTarget_Functions {
 		// if we already calculated it on execution return
 		if( !empty ( $this->calculated_data ) )
 			return $this->calculated_data;
-		// If we already calculated on session return
-		if( !empty ( $_SESSION['geot_data'] ) && ( empty( $this->opts['debug_mode'] ) && ! defined('GEOT_DEBUG') ) )
+
+		// If user set cookie use instead
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE['geot_country']) ) {
+
+			$iso_code = $_COOKIE['geot_country'];
+
+			return array(
+				'country' => $this->getCountryByIsoCode( $iso_code ),
+				'city'    => '',
+				'zip'     => '',
+				'state'   => '',
+			);
+		}
+
+		// If we already calculated on session return (if we are not calling by IP)
+		if( empty( $ip ) && !empty ( $_SESSION['geot_data'] ) && ( empty( $this->opts['debug_mode'] ) && ! defined('GEOT_DEBUG') ) )
 			return unserialize( $_SESSION['geot_data'] );
 
 		if( empty( $ip) ) {
