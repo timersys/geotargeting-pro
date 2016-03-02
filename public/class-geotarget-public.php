@@ -275,7 +275,7 @@ class GeoTarget_Public {
 			if( $redirect ) {
 				// one extra chance to let users cancel redirection
 				if ( apply_filters( 'geot/perform_redirect', true, $r, $opts ) ) {
-					wp_redirect( $r['name'], apply_filters( 'geot/redirection_status', '301' ) );
+					wp_redirect( apply_filters( 'geot/redirection_url', $r['name'] ), apply_filters( 'geot/redirection_status', '301' ) );
 					exit;
 				}
 			}
