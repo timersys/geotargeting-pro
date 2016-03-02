@@ -196,7 +196,7 @@ class GeoTarget_Admin {
 		}
 		$regions 	= apply_filters('geot/get_regions', array());
 
-		if( is_array($opts['region'] ) ) {
+		if( isset( $opts['region'] ) && is_array( $opts['region'] ) ) {
 
 			foreach ($opts['region'] as $region) {
 				foreach ($regions as $r) {
