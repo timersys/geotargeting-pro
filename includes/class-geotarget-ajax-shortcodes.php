@@ -89,7 +89,7 @@ class GeoTarget_Ajax_Shortcodes {
 			'exclude_region'	=>''
 		), $atts ) );
 		
-		return '<span class="geot-ajax geot-filter" data-action="country_filter" data-filter="'.$country.'" data-region="'.$region.'" data-ex_filter="'.$exclude_country.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</span>';
+		return '<div class="geot-ajax geot-filter" data-action="country_filter" data-filter="'.$country.'" data-region="'.$region.'" data-ex_filter="'.$exclude_country.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</div>';
 
 	}
 
@@ -113,7 +113,7 @@ class GeoTarget_Ajax_Shortcodes {
 			'exclude_region'	=>''
 		), $atts ) );
 
-		return '<span class="geot-ajax geot-filter" data-action="city_filter" data-filter="'.$city.'" data-region="'.$region.'" data-ex_filter="'.$exclude_city.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</span>';
+		return '<div class="geot-ajax geot-filter" data-action="city_filter" data-filter="'.$city.'" data-region="'.$region.'" data-ex_filter="'.$exclude_city.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</div>';
 
 	}
 
@@ -134,7 +134,7 @@ class GeoTarget_Ajax_Shortcodes {
 			'exclude_state'	    =>'',
 		), $atts ) );
 
-		return '<span class="geot-ajax geot-filter" data-action="state_filter" data-filter="'.$state.'" data-ex_filter="'.$exclude_state.'" >' . do_shortcode( $content ) . '</span>';
+		return '<div class="geot-ajax geot-filter" data-action="state_filter" data-filter="'.$state.'" data-ex_filter="'.$exclude_state.'" >' . do_shortcode( $content ) . '</div>';
 
 	}
 
