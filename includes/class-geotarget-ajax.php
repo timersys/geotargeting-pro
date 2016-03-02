@@ -86,7 +86,7 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_country();
 
-		return !empty( $r->names ) ? $r->name : '';
+		return !empty( $r->names ) || !empty( $r->name ) ? $r->name : '';
 
 	}
 
