@@ -76,9 +76,9 @@ class Geot_Widget extends WP_Widget {
 						} 
 
      					?>
-     					<option value="<?php echo $c->iso_code;?>" <?php echo $user_country->isoCode == $c->iso_code ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($c->iso_code);?>">
-     						<?php echo $c->country;?>
-     					</option>
+     					<option value="<?php echo $c->iso_code;?>" <?php echo $user_country->isoCode == $c->iso_code ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($c->iso_code);?>"><?php
+					        echo $c->country;
+					    ?></option>
      					<?php
      				}
      				// if the user country is not in dropdown add it

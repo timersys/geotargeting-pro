@@ -91,9 +91,13 @@ class GeoTarget_Public {
 	 */
 	public function enqueue_scripts() {
 
+		$src = 'js/geotarget-public.js';
+		if( ! isset( $this->opts['debug_mode'] ) ) {
+			$src = 'js/min/geotarget-public-min.js';
+		}
 
-		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotarget-public.js', array( 'jquery' ), $this->version, true );
-		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/ddslick.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . $src , array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/min/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( $this->GeoTarget, 'geot', array(
 			'ajax_url'  => admin_url( 'admin-ajax.php')
 		) );

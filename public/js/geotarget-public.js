@@ -6,13 +6,14 @@
 
 
 
-          $('#geot_dropdown').ddslick({
-			    onSelected: function(data){
-			    	var country_code = data.selectedData.value;
-			        GeotCreateCookie('geot_country', country_code,999);
-			        window.location.reload();
-			    }
-			});
+          $('#geot_dropdown').chosen({
+                no_results_text: "Oops, nothing found!",
+                search_contains: true,
+			}).change( function(e, data){
+              var country_code = data.selected;
+              GeotCreateCookie('geot_country', country_code,999);
+              window.location.reload();
+            });
 	  });
 	 
 
