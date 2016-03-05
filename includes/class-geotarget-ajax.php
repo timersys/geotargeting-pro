@@ -86,7 +86,10 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_country();
 
-		return !empty( $r->names ) || !empty( $r->name ) ? $r->name : '';
+		if ( !empty( $r->names ) )
+			return apply_filters( 'geot/shortcodes/country_name', $r->name, $r );
+
+		return  apply_filters( 'geot/shortcodes/country_name_default', $geot['default'] );
 
 	}
 
@@ -100,7 +103,10 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_city();
 
-		return !empty( $r ) ? $r : '';
+		if ( !empty( $r ) )
+			return apply_filters( 'geot/shortcodes/city_name', $r );
+
+		return  apply_filters( 'geot/shortcodes/city_name_default', $geot['default'] );
 
 	}
 
@@ -114,7 +120,10 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_state();
 
-		return !empty( $r->names ) ? $r->name : '';
+		if ( !empty( $r->names ) )
+			return apply_filters( 'geot/shortcodes/state_name', $r->name, $r );
+
+		return  apply_filters( 'geot/shortcodes/state_name_default', $geot['default'] );
 
 	}
 
@@ -128,7 +137,7 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_state();
 
-		return !empty( $r->isoCode ) ? $r->isoCode : '';
+		return !empty( $r->isoCode ) ? $r->isoCode : $geot['default'];
 
 	}
 
@@ -142,7 +151,7 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_zip();
 
-		return !empty( $r ) ? $r : '';
+		return !empty( $r ) ? $r : $geot['default'];
 
 	}
 
@@ -156,7 +165,7 @@ class GeoTarget_Ajax {
 
 		$c = $this->functions->get_user_country();
 
-		return !empty( $c->isoCode ) ? $c->isoCode : '';
+		return !empty( $c->isoCode ) ? $c->isoCode : $geot['default'];
 
 	}
 

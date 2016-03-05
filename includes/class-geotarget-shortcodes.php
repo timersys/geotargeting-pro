@@ -190,7 +190,10 @@ class GeoTarget_Shortcodes {
 
 		$c = $this->functions->get_user_country();
 
-		return !empty( $c->names ) ? $c->name : $default;
+		if ( !empty( $c->names ) )
+			return apply_filters( 'geot/shortcodes/country_name', $c->name, $c );
+
+		return  apply_filters( 'geot/shortcodes/country_name_default', $default );
 	}
 
 	/**
@@ -204,7 +207,12 @@ class GeoTarget_Shortcodes {
 		), $atts ) );
 
 		$c = $this->functions->get_user_city();
-		return !empty( $c ) ? $c : $default;
+
+		if ( !empty( $c ) )
+			return apply_filters( 'geot/shortcodes/city_name', $c );
+
+		return  apply_filters( 'geot/shortcodes/city_name_default', $default );
+
 	}
 
 	/**
@@ -219,7 +227,10 @@ class GeoTarget_Shortcodes {
 
 		$state = $this->functions->get_user_state();
 
-		return !empty( $state->names ) ? $state->name : $default;
+		if ( !empty( $state->names ) )
+			return apply_filters( 'geot/shortcodes/state_name', $state->name, $state );
+
+		return  apply_filters( 'geot/shortcodes/state_name_default', $default );
 	}
 
 	/**
@@ -233,6 +244,7 @@ class GeoTarget_Shortcodes {
 		), $atts ) );
 
 		$state = $this->functions->get_user_state();
+
 		return !empty( $state->isoCode ) ? $state->isoCode : $default;
 	}
 
@@ -247,6 +259,7 @@ class GeoTarget_Shortcodes {
 		), $atts ) );
 
 		$zip = $this->functions->get_user_zip();
+
 		return !empty($zip) ? $zip : $default;
 	}
 
