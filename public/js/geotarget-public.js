@@ -101,6 +101,7 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
             'region'    : $(this).data('region') || '',
             'ex_filter' : $(this).data('ex_filter') || '',
             'ex_region' : $(this).data('ex_region') || '',
+            'default'   : $(this).data('default') || '',
         }
     });
     var onSuccess = function( response ) {
