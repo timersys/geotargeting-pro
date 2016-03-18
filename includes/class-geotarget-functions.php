@@ -442,12 +442,12 @@ class GeoTarget_Functions {
 
 			$iso_code = $_COOKIE['geot_country'];
 
-			return array(
+			return apply_filters('geot/user_data/geot_cookie', array(
 				'country' => $this->getCountryByIsoCode( $iso_code ),
 				'city'    => '',
 				'zip'     => '',
 				'state'   => '',
-			);
+			));
 		}
 
 		// If we already calculated on session return (if we are not calling by IP)
@@ -506,6 +506,7 @@ class GeoTarget_Functions {
 				$location = isset( $record->location ) ? $record->location : false;
 			}
 		}
+
 		$_SESSION['geot_country']   = serialize($country);
 		$_SESSION['geot_city']      = serialize($city);
 		$_SESSION['geot_zip']       = serialize($cp);
@@ -522,7 +523,7 @@ class GeoTarget_Functions {
 			'continent' => $continent,
 			'location'  => $location,
 		);
-		$_SESSION['geot_data']  = serialize( $this->calculated_data );
+		$_SESSION['geot_data']  = serialize( apply_filters('geot/user_data/calculated_data', $this->calculated_data ) );
 		return $this->calculated_data;
 	}
 
