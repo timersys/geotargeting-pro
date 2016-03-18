@@ -95,11 +95,13 @@ class GeoTarget_Public {
 		if( ! isset( $this->opts['debug_mode'] ) ) {
 			$src = 'js/min/geotarget-public-min.js';
 		}
+		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
 		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . $src , array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/min/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( $this->GeoTarget, 'geot', array(
-			'ajax_url'  => admin_url( 'admin-ajax.php')
+			'ajax_url'  => admin_url( 'admin-ajax.php'),
+			'ajax'      => isset( $opts['ajax_mode'] ) ? '1' : ''
 		) );
 
 	}

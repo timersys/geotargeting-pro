@@ -2,10 +2,6 @@
 	'use strict';
 
 	  $(document).ready(function() {
-
-
-
-
           $('#geot_dropdown').chosen({
                 no_results_text: "Oops, nothing found!",
                 search_contains: true,
@@ -138,6 +134,7 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
             }
         }
     }
-    GeotRequest( data, onSuccess )
+    if( geot && geot.ajax )
+        GeotRequest( data, onSuccess )
 
 })( jQuery );
