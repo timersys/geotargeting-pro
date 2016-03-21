@@ -156,6 +156,23 @@ class GeoTarget_Ajax {
 	}
 
 	/**
+	 * Get user current regions
+	 * @param $geot
+	 *
+	 * @return string
+	 */
+	private function region( $geot ) {
+
+		$regions = geot_user_country_region( $geot['default'] );
+
+		if( is_array( $regions ) )
+			return implode( ', ', $regions );
+
+		return $regions;
+
+	}
+
+	/**
 	 * Get user country code
 	 * @param $geot
 	 *

@@ -78,6 +78,7 @@ class GeoTarget_Shortcodes {
 		add_shortcode('geot_state_name', array( $this, 'geot_show_state_name') );
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
+		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 	}
 
 	/**
@@ -261,6 +262,24 @@ class GeoTarget_Shortcodes {
 		$zip = $this->functions->get_user_zip();
 
 		return !empty($zip) ? $zip : $default;
+	}
+
+	/**
+	 * Display the regions of current user
+	 * [geot_region]
+	 * @return string city name
+	 */
+	function geot_show_regions($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
+		$regions = geot_user_country_region( $default );
+
+		if( is_array( $regions ) )
+			return implode( ', ', $regions );
+
+		return $regions;
 	}
 
 }	

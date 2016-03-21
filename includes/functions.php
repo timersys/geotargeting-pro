@@ -60,7 +60,7 @@
 
 /**
  * Get current user country
- * @return object Current user country. Values are $country->isoCode $country->country
+ * @return object Current user country. Values are $country->isoCode $country->name
  */
  function geot_user_country( ){
  	global $geot;
@@ -90,7 +90,7 @@ function geot_country_name() {
 
 	$c = $geot->functions->get_user_country();
 
-	return $c->country;
+	return $c->name;
 }
 
 
@@ -203,5 +203,30 @@ function geot_get_cities( $country = 'US')	{
 	}
 
 	return $cities;
+
+}
+
+/**
+ * Check for current user if belong to any regions and return the name of them
+ * or return default
+ * @param string $default
+ *
+ * @return Array/String
+ */
+function geot_user_country_region( $default = '' ) {
+
+	$country_code = geot_country_code();
+	$regions = apply_filters('geot/get_regions', array() );
+
+	if( empty( $regions ) || ! is_array( $regions ) || empty( $country_code ) )
+		return $default;
+
+	$user_regions = array();
+	foreach( $regions as $region )  {
+		if( in_array( $country_code, $region['countries'] ) )
+			$user_regions[] = $region['name'];
+	}
+
+	return empty( $user_regions ) ? $default : $user_regions;
 
 }

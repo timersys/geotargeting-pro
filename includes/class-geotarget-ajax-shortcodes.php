@@ -67,6 +67,7 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot_state_name', array( $this, 'geot_show_state_name') );
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
+		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 	}
 
 	/**
@@ -218,6 +219,19 @@ class GeoTarget_Ajax_Shortcodes {
 		), $atts ) );
 
 		return '<span class="geot-ajax" data-action="zip" data-default="' . do_shortcode( $default ). '"></span>';
+	}
+
+	/**
+	 * Display the Regions of current user
+	 * [geot_region]
+	 * @return string regions names
+	 */
+	function geot_show_regions($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
+		return '<span class="geot-ajax" data-action="region" data-default="' . do_shortcode( $default ). '"></span>';
 	}
 
 }	
