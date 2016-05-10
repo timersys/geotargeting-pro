@@ -106,7 +106,8 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
             var results = response.data,
                 i,
                 remove  = response.posts.remove,
-                hide    = response.posts.hide;
+                hide    = response.posts.hide,
+                debug   = response.debug;
             console.log(response);
             if( results.length ) {
                 for (i = 0; i < results.length; ++i) {
@@ -132,6 +133,9 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
                     var id = hide[i].id;
                     $('#post-' + id + ' .entry-content, .post-' + id +' .entry-content').html( '<p>'+ hide[i].msg +'</p>' );
                 }
+            }
+            if( debug.length ) {
+                $('#geot-debug-info').html(debug);
             }
         }
     }

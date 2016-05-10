@@ -78,7 +78,8 @@ class GeoTarget_Ajax {
 				}
 			}
 		}
-		echo json_encode( array( 'success' => 1, 'data' => $geots, 'posts' => $posts ) );
+		$debug = $this->getDebugInfo();
+		echo json_encode( array( 'success' => 1, 'data' => $geots, 'posts' => $posts, 'debug' => $debug ) );
 		die();
 	}
 
@@ -296,6 +297,37 @@ AND pm.meta_value != ''";
 			'remove' => $posts_to_exclude,
 			'hide'   => $content_to_hide
 		);
+	}
+
+	/**
+	 * Grab debug info to print in footer
+	 * @return string|void
+	 */
+	private function getDebugInfo() {
+		ob_start();
+		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		if( ! defined('GEOT_DEBUG') && empty( $opts['debug_mode'] ) )
+			return;
+		$user_data = $this->functions->getUserDataByIp();
+		if( empty( $user_data['country'] ) )
+			return;
+		ob_start();
+		?>
+		<!--
+		Country: <?php echo @$user_data['country']->name . PHP_EOL;?>
+		Country code: <?php echo @$user_data['country']->isoCode . PHP_EOL;?>
+		State: <?php echo @$user_data['state']->name . PHP_EOL;?>
+		State code: <?php echo @$user_data['state']->isoCode . PHP_EOL;?>
+		City: <?php echo @$user_data['city'] . PHP_EOL;?>
+		Zip: <?php echo @$user_data['zip'] . PHP_EOL;?>
+		Continent: <?php echo @$user_data['continent'] . PHP_EOL;?>
+		-->
+
+		<?php
+		$html = ob_get_contents();
+		ob_end_clean();
+
+		return $html;
 	}
 
 }	

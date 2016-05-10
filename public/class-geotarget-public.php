@@ -405,7 +405,8 @@ AND pm.meta_value != ''";
 		if( empty( $user_data['country'] ) )
 			return;
 		?>
-		<!-- Geotargeting plugin Debug Info
+		<!-- Geotargeting plugin Debug Info START-->
+		<div id="geot-debug-info" style="display: none;"><!--
 		Country: <?php echo @$user_data['country']->name . PHP_EOL;?>
 		Country code: <?php echo @$user_data['country']->isoCode . PHP_EOL;?>
 		State: <?php echo @$user_data['state']->name . PHP_EOL;?>
@@ -414,6 +415,8 @@ AND pm.meta_value != ''";
 		Zip: <?php echo @$user_data['zip'] . PHP_EOL;?>
 		Continent: <?php echo @$user_data['continent'] . PHP_EOL;?>
 		-->
+		</div>
+		<!-- Geotargeting plugin Debug Info END-->
 		<?php
 	}
 }
