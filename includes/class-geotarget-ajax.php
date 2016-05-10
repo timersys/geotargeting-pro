@@ -11,6 +11,11 @@
  */
 class GeoTarget_Ajax {
 	/**
+	 * $_POST data sent on ajax request
+	 * @var Array
+	 */
+	protected $data;
+	/**
 	 * The ID of this plugin.
 	 *
 	 * @since    1.6
@@ -61,8 +66,9 @@ class GeoTarget_Ajax {
 
 		$geots = $posts = array();
 		$posts = $this->get_geotargeted_posts();
-		if( isset( $_POST['geots'] ) ) {
-			foreach( $_POST['geots'] as $id => $geot ) {
+		$this->data = $_POST;
+		if( isset( $this->data['geots'] ) ) {
+			foreach( $this->data['geots'] as $id => $geot ) {
 				if( method_exists( $this, $geot['action'] ) ) {
 					$geots[] = array(
 						'id'        => $id,
@@ -239,6 +245,15 @@ class GeoTarget_Ajax {
 
 		$posts_to_exclude = array();
 		$content_to_hide = array();
+
+		// let users cancel the removal of posts
+		// for example they can check if is_search() and show the post in search results
+		if( apply_filters( 'geot/posts_where', false, $this->data ) )
+			return array(
+				'remove' => $posts_to_exclude,
+				'hide'   => $content_to_hide
+			);;
+
 		// get all posts with geo options set ( ideally would be to retrieve just for the post type queried but I can't get post_type
 		$sql = "SELECT ID, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
 LEFT JOIN $wpdb->postmeta pm ON p.ID = pm.post_id

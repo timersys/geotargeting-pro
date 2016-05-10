@@ -100,8 +100,13 @@ class GeoTarget_Public {
 		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . $src , array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/min/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( $this->GeoTarget, 'geot', array(
-			'ajax_url'  => admin_url( 'admin-ajax.php'),
-			'ajax'      => isset( $opts['ajax_mode'] ) ? '1' : ''
+			'ajax_url'      => admin_url( 'admin-ajax.php'),
+			'ajax'          => isset( $opts['ajax_mode'] ) ? '1' : '',
+			'is_archives'   => is_archive(),
+			'is_search'     => is_search(),
+			'is_singular'   => is_singular(),
+			'is_page'       => is_page(),
+			'is_single'     => is_single(),
 		) );
 
 	}
@@ -298,6 +303,11 @@ class GeoTarget_Public {
 	 */
 	public function handle_geotargeted_posts( $where ){
 		global $wpdb;
+
+		// let users cancel the removal of posts
+		// for example they can check if is_search() and show the post in search results
+		if( apply_filters( 'geot/posts_where', false, $where ) )
+			return $where;
 
 		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
 			return $where;

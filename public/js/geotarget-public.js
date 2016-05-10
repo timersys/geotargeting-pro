@@ -80,7 +80,8 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
 
     var data = {
         'action' : 'geot_ajax',
-        'geots'  : {}
+        'geots'  : {},
+        'vars'   : geot
         },
         uniqueId = null,
         getUniqueName = function(prefix) {
