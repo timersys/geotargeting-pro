@@ -125,7 +125,8 @@
 				<?php 
 
 				if( !empty( $opts['region'] ) ) {
-					foreach ( $opts['region'] as $region ) { @$i++;?>
+					$i = 0;
+					foreach ( $opts['region'] as $region ) { $i++;?>
 			
 						<div class="region-group"  data-id="<?php echo $i;?>" >
 							
@@ -160,7 +161,8 @@
 				<?php
 
 				if( !empty( $opts['city_region'] ) ) {
-					foreach ( $opts['city_region'] as $city_region ) { @$j++;?>
+					$j = 0;
+					foreach ( $opts['city_region'] as $city_region ) { $j++;?>
 
 						<div class="city-region-group"  data-id="<?php echo $j;?>" >
 							<input type="text" placeholder="Enter region name" name="geot_settings[city_region][<?php echo $j;?>][name]" value="<?php echo !empty( $city_region['name'] )? esc_attr($city_region['name']): '' ; ?>"/>
@@ -182,7 +184,7 @@
 									foreach ( $cities as $c ) {
 										?>
 										<option
-											value="<?php echo strtolower( $c->city ) ?>" <?php selected( true, @in_array( strtolower( $c->city), @$city_region['cities'] ) ); ?>> <?php echo $c->city; ?></option>
+											value="<?php echo strtolower( $c->city ) ?>" <?php isset( $city_region['cities'] ) && is_array( $city_region['cities'] ) ? selected( true, @in_array( strtolower( $c->city), @$city_region['cities'] ) ) : ''; ?>> <?php echo $c->city; ?></option>
 									<?php
 									}
 								}
@@ -218,7 +220,7 @@
 									<?php
 									foreach ($countries as $c) {
 										?>
-										<option value="<?php echo $c->iso_code?>" <?php selected(true, @in_array( $c->iso_code, @$redirection['countries']) ); ?>> <?php echo $c->country; ?></option>
+										<option value="<?php echo $c->iso_code?>" <?php isset( $redirection['countries'] ) && is_array( $redirection['countries'] ) ? selected(true, @in_array( $c->iso_code, @$redirection['countries']) ) :''; ?>> <?php echo $c->country; ?></option>
 									<?php
 									}
 									?>
@@ -231,7 +233,7 @@
 										foreach ( $saved_regions as $k => $r ) {
 											?>
 											<option
-												value="<?php echo $r['name'] ?>" <?php selected( true, @in_array( $r['name'], @$redirection['regions'] ) ); ?>> <?php echo $r['name']; ?></option>
+												value="<?php echo $r['name'] ?>" <?php isset( $redirection['regions'] ) && is_array( $redirection['regions'] ) ? selected( true, @in_array( $r['name'], @$redirection['regions'] ) ):''; ?>> <?php echo $r['name']; ?></option>
 										<?php
 										}
 									}
@@ -245,7 +247,7 @@
 										foreach ( $saved_city_regions as $k => $r ) {
 											?>
 											<option
-												value="<?php echo $r['name'] ?>" <?php selected( true, @in_array( $r['name'], @$redirection['city_regions'] ) ); ?>> <?php echo $r['name']; ?></option>
+												value="<?php echo $r['name'] ?>" <?php isset( $redirection['city_regions'] ) && is_array( $redirection['city_regions'] ) ? selected( true, @in_array( $r['name'], @$redirection['city_regions'] ) ):''; ?>> <?php echo $r['name']; ?></option>
 										<?php
 										}
 									}
