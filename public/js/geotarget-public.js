@@ -5,6 +5,7 @@
           $('#geot_dropdown').chosen({
                 no_results_text: "Oops, nothing found!",
                 search_contains: true,
+                disable_search : (geot.dropdown_search || false),
 			}).change( function(e, data){
               var country_code = data.selected;
               GeotCreateCookie('geot_country', country_code,999);

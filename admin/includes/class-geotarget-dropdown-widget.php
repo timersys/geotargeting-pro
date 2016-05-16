@@ -56,11 +56,13 @@ class Geot_Widget extends WP_Widget {
      		}
      	}
 
+		$countries = apply_filters( 'geot/dropdown_widget/countries', $countries );
+
      	$GeoTarget_func = new GeoTarget_Functions();
 
      	$user_country =	$GeoTarget_func->get_user_country();
 
-     	$original_country = geot_country_by_ip();
+     	$original_country = apply_filters( 'geot/dropdown_widget/original_country', geot_country_by_ip() );
 
      	?>
      	<div class="geot_dropdown_container">
@@ -102,6 +104,8 @@ class Geot_Widget extends WP_Widget {
 	 * @see WP_Widget::form()
 	 *
 	 * @param array $instance Previously saved values from database.
+	 *
+	 * @return string|void
 	 */
 	public function form( $instance ) {
 		if ( isset( $instance[ 'regions' ] ) ) {

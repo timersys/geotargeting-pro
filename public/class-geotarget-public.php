@@ -107,6 +107,7 @@ class GeoTarget_Public {
 			'is_singular'   => is_singular(),
 			'is_page'       => is_page(),
 			'is_single'     => is_single(),
+			'dropdown_search' => apply_filters('geot/dropdown_widget/disable_search', false ),
 		) );
 
 	}
