@@ -2,6 +2,9 @@
 	'use strict';
 
 	  $(document).ready(function() {
+          if ( geot && ( /iP(od|hone)/i.test(window.navigator.userAgent) || /IEMobile/i.test(window.navigator.userAgent) || /Windows Phone/i.test(window.navigator.userAgent) || /BlackBerry/i.test(window.navigator.userAgent) || /BB10/i.test(window.navigator.userAgent) || /Android.*Mobile/i.test(window.navigator.userAgent))) {
+              geot.dropdown_search = true;
+          }
           $('#geot_dropdown').chosen({
                 no_results_text: "Oops, nothing found!",
                 search_contains: true,
