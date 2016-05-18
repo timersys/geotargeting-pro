@@ -84,7 +84,7 @@ class Geot_Widget extends WP_Widget {
      					<?php
      				}
      				// if the user country is not in dropdown add it
-     				if( ! $user_country_in_dropdown  ) {
+     				if( ! $user_country_in_dropdown && apply_filters( 'geot/dropdown_widget/original_country_in_dropdown', true ) ) {
      					?>
      					<option value="<?php echo $original_country->isoCode ?>" <?php echo $user_country->isoCode == $original_country->isoCode ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($original_country->isoCode);?>">
      						<?php echo $original_country->name?>
