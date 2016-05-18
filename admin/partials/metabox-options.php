@@ -35,10 +35,13 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 					<?php
 						if( is_array( $regions ) ) {
 							foreach ($regions as $r) {
-								if( ! is_array( $opts ) || ! isset( $opts['region'] ) || ! isset( $r['name'] ) )
+								if( ! is_array( $opts ) || ! isset( $r['name'] ) )
 									continue;
 								?>
-								<option value="<?php echo $r['name'];?>" <?php selected(true, @in_array($r['name'], @$opts['region']) ); ?>> <?php echo $r['name']; ?></option>
+								<option value="<?php echo $r['name'];?>" <?php
+								if( isset( $opts['region'] ) )
+									selected(true, @in_array($r['name'], $opts['region']) );
+								?>> <?php echo $r['name']; ?></option>
 								<?php
 							}
 						}
@@ -61,10 +64,13 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 				<?php
 				if( is_array( $countries ) ) {
 					foreach ($countries as $c) {
-						if( ! is_array( $opts ) || ! isset( $opts['country_code'] ) || ! isset( $c->iso_code ) )
+						if( ! is_array( $opts ) || ! isset( $c->iso_code ) )
 							continue;
 						?>
-						<option value="<?php echo $c->iso_code;?>" <?php selected(true, @in_array($c->iso_code, @(array)$opts['country_code']) ); ?>> <?php echo $c->country; ?></option>
+						<option value="<?php echo $c->iso_code;?>" <?php
+						if( isset( $opts['country_code'] ) )
+							selected(true, @in_array($c->iso_code, @(array)$opts['country_code']) );
+						?>> <?php echo $c->country; ?></option>
 						<?php
 					}
 				}	
