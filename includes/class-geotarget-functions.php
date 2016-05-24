@@ -514,7 +514,7 @@ class GeoTarget_Functions {
 		$_SESSION['geot_continent'] = serialize($continent);
 		$_SESSION['geot_location']  = serialize($location);
 
-		$this->calculated_data = array(
+		$this->calculated_data = apply_filters('geot/user_data/calculated_data', array(
 			'record'    => $record,
 			'country'   => $country,
 			'city'      => $city,
@@ -522,8 +522,8 @@ class GeoTarget_Functions {
 			'state'     => $state,
 			'continent' => $continent,
 			'location'  => $location,
-		);
-		$_SESSION['geot_data']  = serialize( apply_filters('geot/user_data/calculated_data', $this->calculated_data ) );
+		) );
+		$_SESSION['geot_data']  = serialize(  $this->calculated_data );
 		return $this->calculated_data;
 	}
 
