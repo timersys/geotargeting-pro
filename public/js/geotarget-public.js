@@ -113,7 +113,7 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
                 hide    = response.posts.hide,
                 debug   = response.debug;
             console.log(response);
-            if( results.length ) {
+            if( results && results.length ) {
                 for (i = 0; i < results.length; ++i) {
                     if (results[i].action.indexOf('filter') > -1) {
                         if (results[i].value == true) {
@@ -126,19 +126,19 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
                     }
                 }
             }
-            if( remove.length ) {
+            if( remove && remove.length ) {
                 for (i = 0; i < remove.length; ++i) {
                     var id = remove[i];
                     $('#post-' + id + ', .post-' + id).remove();
                 }
             }
-            if( hide.length ) {
+            if( hide && hide.length ) {
                 for (i = 0; i < hide.length; ++i) {
                     var id = hide[i].id;
                     $('#post-' + id + ' .entry-content, .post-' + id +' .entry-content').html( '<p>'+ hide[i].msg +'</p>' );
                 }
             }
-            if( debug.length ) {
+            if( debug && debug.length ) {
                 $('#geot-debug-info').html(debug);
             }
         }
