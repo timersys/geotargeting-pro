@@ -81,13 +81,7 @@ class GeoTarget_VC {
 
 		More info: http://kb.wpbakery.com/index.php?title=Vc_map
 		*/
-		vc_map( array(
-			"name" => __("Geotargeting Container", 'geot'),
-			"description" => __("Geotarget logic here", 'geot'),
-			"base" => "geot",
-			"class" => "",
-			"icon" => plugins_url('assets/asterisk_yellow.png', __FILE__), // or css class name which you can reffer in your css file later. Example: "vc_extend_my_class"
-			"category" => __('Content', 'js_composer'),
+		vc_map_update( 'vc_row', array(
 			"params" => array(
 				array(
 					"type" => "textfield",
@@ -96,7 +90,8 @@ class GeoTarget_VC {
 					"heading" => __("Country", 'geot'),
 					"param_name" => "country",
 					"value" => __("", 'geot'),
-					"description" => __("Type country name or ISO code. Also you can write a comma separated list of countries", 'geot')
+					"description" => __("Type country name or ISO code. Also you can write a comma separated list of countries", 'geot'),
+					'group' => __( 'GeoTargeting', 'geot' ),
 				),
 				array(
 					"type" => "dropdown",
@@ -105,7 +100,8 @@ class GeoTarget_VC {
 					"heading" => __("Region", 'geot'),
 					"param_name" => "region",
 					"value" => $dropdown_values,
-					"description" => __("Choose region name to show content to", 'geot')
+					"description" => __("Choose region name to show content to", 'geot'),
+					'group' => __( 'GeoTargeting', 'geot' ),
 				),
 				array(
 					"type" => "textfield",
@@ -114,7 +110,8 @@ class GeoTarget_VC {
 					"heading" => __("Exclude Country", 'geot'),
 					"param_name" => "exclude_country",
 					"value" => __("", 'geot'),
-					"description" => __("Type country name or ISO code. Also you could write a comma separated list of countries", 'geot')
+					"description" => __("Type country name or ISO code. Also you could write a comma separated list of countries", 'geot'),
+					'group' => __( 'GeoTargeting', 'geot' ),
 				),
 				array(
 					"type" => "dropdown",
@@ -123,7 +120,8 @@ class GeoTarget_VC {
 					"heading" => __("Exclude Region", 'geot'),
 					"param_name" => "exclude_region",
 					"value" => $dropdown_values,
-					"description" => __("Choose region name to exclude content.", 'geot')
+					"description" => __("Choose region name to exclude content.", 'geot'),
+					'group' => __( 'GeoTargeting', 'geot' ),
 				),
 			)
 		) );
