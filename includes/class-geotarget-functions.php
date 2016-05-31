@@ -434,8 +434,8 @@ class GeoTarget_Functions {
 	public function getUserDataByIp( $ip = "", $maxmin_free_db = false ) {
 
 		// if we already calculated it on execution return
-		if( !empty ( $this->calculated_data ) )
-			return $this->calculated_data;
+		if( ! empty ( $this->calculated_data ) )
+			return apply_filters('geot/user_data/calculated_data', $this->calculated_data );
 
 		// If user set cookie use instead
 		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE['geot_country']) ) {
@@ -451,8 +451,8 @@ class GeoTarget_Functions {
 		}
 
 		// If we already calculated on session return (if we are not calling by IP)
-		if( empty( $ip ) && !empty ( $_SESSION['geot_data'] ) && ( empty( $this->opts['debug_mode'] ) && ! defined('GEOT_DEBUG') ) )
-			return unserialize( $_SESSION['geot_data'] );
+		if( empty( $ip ) && !empty ( $_SESSION['geot_data'] ) && ( empty( $this->opts['debug_mode'] ) && ! defined('GEOT_DEBUG') ) && apply_filters( 'geot/use_session_data', true, $_SESSION['geot_data'] ) )
+			return apply_filters('geot/user_data/calculated_data', unserialize(  $_SESSION['geot_data'] ) );
 
 		if( empty( $ip) ) {
 			$ip = $this->getUserIP();
