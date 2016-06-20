@@ -35,6 +35,11 @@ class GeoTarget {
 	public $public;
 
 	/**
+	 * @var GeoTarget_VC $vc
+	 */
+	public $vc;
+
+	/**
 	 * @var GeoTarget_Admin $admin
 	 */
 	public $admin;
@@ -188,6 +193,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax-shortcodes.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-emails.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-vc.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 
@@ -295,7 +301,8 @@ class GeoTarget {
 	 */
 	private function define_public_hooks() {
 
-		$this->public = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$this->public   = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version(), $this->functions );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_scripts' );
@@ -322,8 +329,8 @@ class GeoTarget {
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $this->public, 'popup_city_region_match', 10, 2 );
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_state', $this->public, 'popup_state_match', 10, 2 );
 
-
-
+		// Visual composer
+		$this->loader->add_action( 'init', $this->vc, 'hook_to_visual' );
 	}
 
 	/**
