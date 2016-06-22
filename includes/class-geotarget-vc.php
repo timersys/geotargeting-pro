@@ -71,8 +71,20 @@ class GeoTarget_VC {
 
 		if( !empty( $regions ) ) {
 			foreach ( $regions as $r ) {
-				$values = implode( ',', $r['countries'] );
-				$dropdown_values[$r['name']] = $values;
+				if( isset( $r['name'] ) ) {
+					$dropdown_values[ $r['name'] ] = $r['name'];
+				}
+			}
+		}
+
+		$city_regions = apply_filters('geot/get_city_regions', array());
+		$city_dropdown_values = array( __('Choose one','geot') => '');
+
+		if( !empty( $city_regions ) ) {
+			foreach ( $city_regions as $k => $r ) {
+				if( isset( $r['name'] ) ) {
+					$city_dropdown_values[ $r['name'] ] = $r['name'];
+				}
 			}
 		}
 		/*
@@ -158,7 +170,7 @@ class GeoTarget_VC {
 						"class" => "",
 						"heading" => __("City Region", 'geot'),
 						"param_name" => "region",
-						"value" => $dropdown_values,
+						"value" => $city_dropdown_values,
 						"description" => __("Choose region name to show content to", 'geot'),
 						'group' => __( 'GeoTargeting', 'geot' ),
 					),
@@ -176,7 +188,7 @@ class GeoTarget_VC {
 						"class" => "",
 						"heading" => __("Exclude City Region", 'geot'),
 						"param_name" => "exclude_region",
-						"value" => $dropdown_values,
+						"value" => $city_dropdown_values,
 						"description" => __("Choose region name to exclude content.", 'geot'),
 						'group' => __( 'GeoTargeting', 'geot' ),
 					),

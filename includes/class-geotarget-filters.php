@@ -109,7 +109,7 @@ class GeoTarget_Filters {
 	public function get_city_regions( )	{
 
 		$settings 	= apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
-		$regions 	= $settings['city_region'];
+		$regions 	= isset( $settings['city_region'] ) ? $settings['city_region'] : array();
 
 		return $regions;
 
@@ -122,7 +122,7 @@ class GeoTarget_Filters {
 	public function get_regions()
 	{
 		$settings 	= apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
-		$regions 	= $settings['region'];
+		$regions 	= isset( $settings['region'] ) ? $settings['region'] : array();
 
 		return $regions;
 	}

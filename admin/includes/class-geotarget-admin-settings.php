@@ -59,13 +59,13 @@ class GeoTarget_Settings {
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 		
 		// initialize
-		if( ! is_array( @$opts['region'] ) ) {
+		if( !isset( $opts['region'] ) || ! is_array( $opts['region'] ) ) {
 			$opts['region'][] = array( 'name' , 'countries' );
 		}
-		if( ! is_array( @$opts['city_region'] ) ) {
+		if( ! isset( $opts['city_region'] ) || ! is_array( $opts['city_region'] ) ) {
 			$opts['city_region'][] = array( 'name' , 'cities' );
 		}
-		if( ! is_array( @$opts['redirection'] ) ) {
+		if( ! isset( $opts['redirection'] ) || ! is_array( $opts['redirection'] ) ) {
 			$opts['redirection'][] = array( 'name' , 'countries', 'regions' );
 		}
 		if( empty( $opts['geot_license_key'] ) ) {
