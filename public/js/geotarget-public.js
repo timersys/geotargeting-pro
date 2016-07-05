@@ -12,7 +12,11 @@
 			}).change( function(e, data){
               var country_code = data.selected;
               GeotCreateCookie('geot_country', country_code,999);
-              window.location.reload();
+              if( geot.dropdown_redirect && geot.dropdown_redirect.length ) {
+                  window.location.replace(geot.dropdown_redirect);
+              } else {
+                  window.location.reload();
+              }
             });
 	  });
 	 
