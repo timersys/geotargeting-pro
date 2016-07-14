@@ -6,6 +6,17 @@
               geot.dropdown_search = true;
           }
           $('#geot_dropdown').selectize({
+              render: {
+                  option: function(data, escape) {
+                      return '<div class="option">' +
+                          '<span class="geot-flag flag-' + escape(data.value.toLowerCase()) + '"></span>' +
+                          '<span class="url">' + escape(data.text) + '</span>' +
+                          '</div>';
+                  },
+                  item: function(data, escape) {
+                      return '<div class="item"><span class="geot-flag flag-' + escape(data.value.toLowerCase()) + '"></span>'+ escape(data.text) + '</div>';
+                  }
+              },
               onChange: function(country_code){
                   if( !country_code.length )
                       return;

@@ -6,7 +6,9 @@
 	width: 25px;
 	height: 15px;
 	background:url(flags.png) no-repeat;
-	margin-top: 5px;
+	margin-right: 5px;
+	margin-top: 1px;
+	float: left;
 }
 
 .geot-flag.flag-ad {background-position: -25px 0}
