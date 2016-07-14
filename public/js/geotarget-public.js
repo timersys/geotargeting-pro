@@ -5,19 +5,18 @@
           if ( geot && ( /iP(od|hone)/i.test(window.navigator.userAgent) || /IEMobile/i.test(window.navigator.userAgent) || /Windows Phone/i.test(window.navigator.userAgent) || /BlackBerry/i.test(window.navigator.userAgent) || /BB10/i.test(window.navigator.userAgent) || /Android.*Mobile/i.test(window.navigator.userAgent))) {
               geot.dropdown_search = true;
           }
-          $('#geot_dropdown').chosen({
-                no_results_text: "Oops, nothing found!",
-                search_contains: true,
-                disable_search : (geot.dropdown_search || false),
-			}).change( function(e, data){
-              var country_code = data.selected;
-              GeotCreateCookie('geot_country', country_code,999);
-              if( geot.dropdown_redirect && geot.dropdown_redirect.length ) {
-                  window.location.replace(geot.dropdown_redirect);
-              } else {
-                  window.location.reload();
+          $('#geot_dropdown').selectize({
+              onChange: function(country_code){
+                  if( !country_code.length )
+                      return;
+                  GeotCreateCookie('geot_country', country_code,999);
+                  if( geot.dropdown_redirect && geot.dropdown_redirect.length ) {
+                      window.location.replace(geot.dropdown_redirect);
+                  } else {
+                      window.location.reload();
+                  }
               }
-            });
+          });
 	  });
 	 
 
