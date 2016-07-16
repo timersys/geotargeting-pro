@@ -27,7 +27,8 @@ class Geot_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 	
      	echo $args['before_widget'];
-     	$regions 		= $instance[ 'regions' ];
+     	$regions 		= !empty( $instance[ 'regions' ] ) ? $instance[ 'regions' ] : array() ;
+     	$flags 		    = !empty( $instance[ 'flags' ] ) ? $instance[ 'flags' ] : '';
      	$countries 		= apply_filters('geot/get_countries', array());
      	$saved_regions 	= apply_filters('geot/get_regions', array());
 
@@ -66,7 +67,7 @@ class Geot_Widget extends WP_Widget {
 
      	?>
      	<div class="geot_dropdown_container">
-     		<select class="geot_dropdown geot-ddslick" name="geot_dropdown" id="geot_dropdown">
+     		<select class="geot_dropdown geot-ddslick" name="geot_dropdown" id="geot_dropdown" data-flags="<?php echo $flags;?>">
      			<?php
      				$user_country_in_dropdown = false;
      				foreach ($countries as $c) {
@@ -114,6 +115,8 @@ class Geot_Widget extends WP_Widget {
 			$regions = array(); //empty array
 		}
 
+		$flags = isset( $instance[ 'flags' ] ) ? $instance[ 'flags' ] : 1;
+
 		$saved_regions = apply_filters('geot/get_regions', array());
 		?>
 		<p>
@@ -128,6 +131,16 @@ class Geot_Widget extends WP_Widget {
 
 		</select>	
 		<span style="font-size:12px"><?php _e( 'Select none to show all countries (not recommended)', 'geot' );?></span>
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id( 'flags' ); ?>"><?php _e( 'Display flags ?' ); ?></label>
+			<select class="widefat" id="<?php echo $this->get_field_id( 'flags' ); ?>" name="<?php echo $this->get_field_name( 'flags' ); ?>">
+				<option value="1" <?php selected( $flags , 1);?>><?php _e( 'Yes' ); ?></option>
+				<option value="0" <?php selected( $flags, 0 );?>><?php _e( 'No' ); ?></option>
+			</select>
+		</p>
+
 		</p>
 		<?php 
 	}
@@ -145,6 +158,7 @@ class Geot_Widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['regions'] = ( ! empty( $new_instance['regions'] ) ) ?  $new_instance['regions']  : '';
+		$instance['flags']   = ( ! empty( $new_instance['flags'] ) ) ?  $new_instance['flags']  : '0';
 
 		return $instance;
 	}

@@ -5,18 +5,7 @@
           if ( geot && ( /iP(od|hone)/i.test(window.navigator.userAgent) || /IEMobile/i.test(window.navigator.userAgent) || /Windows Phone/i.test(window.navigator.userAgent) || /BlackBerry/i.test(window.navigator.userAgent) || /BB10/i.test(window.navigator.userAgent) || /Android.*Mobile/i.test(window.navigator.userAgent))) {
               geot.dropdown_search = true;
           }
-          $('#geot_dropdown').selectize({
-              render: {
-                  option: function(data, escape) {
-                      return '<div class="option">' +
-                          '<span class="geot-flag flag-' + escape(data.value.toLowerCase()) + '"></span>' +
-                          '<span class="url">' + escape(data.text) + '</span>' +
-                          '</div>';
-                  },
-                  item: function(data, escape) {
-                      return '<div class="item"><span class="geot-flag flag-' + escape(data.value.toLowerCase()) + '"></span>'+ escape(data.text) + '</div>';
-                  }
-              },
+          var geot_options = {
               onChange: function(country_code){
                   if( !country_code.length )
                       return;
@@ -27,7 +16,21 @@
                       window.location.reload();
                   }
               }
-          });
+          };
+          if( $('.geot_dropdown').data('flags') ){
+              geot_options.render = {
+                  option: function(data, escape) {
+                      return '<div class="option">' +
+                          '<span class="geot-flag flag-' + escape(data.value.toLowerCase()) + '"></span>' +
+                          '<span class="url">' + escape(data.text) + '</span>' +
+                          '</div>';
+                  },
+                  item: function(data, escape) {
+                      return '<div class="item"><span class="geot-flag flag-' + escape(data.value.toLowerCase()) + '"></span>'+ escape(data.text) + '</div>';
+                  }
+              };
+          }
+          $('.geot_dropdown').selectize( geot_options );
 	  });
 	 
 
