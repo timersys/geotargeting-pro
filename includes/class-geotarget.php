@@ -43,6 +43,11 @@ class GeoTarget {
 	 * @var GeoTarget_Admin $admin
 	 */
 	public $admin;
+	
+	/**
+	 * @var GeoTarget_Menus $menus
+	 */
+	public $menus;
 
 	/**
 	 * @var mixed|void Geotarget settings
@@ -196,7 +201,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-vc.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
-
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-menus.php';
 
 
 		$this->loader = new GeoTarget_Loader();
@@ -248,6 +253,7 @@ class GeoTarget {
 		global $pagenow;
 
 		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
+		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
@@ -289,6 +295,11 @@ class GeoTarget {
 
 		// Ajax admin
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
+
+		//Menus
+		$this->loader->add_filter( 'wp_setup_nav_menu_item' , $this->menus, 'add_custom_fields' );
+		$this->loader->add_filter( 'wp_edit_nav_menu_walker' , $this->menus, 'admin_menu_walker', 10, 2 );
+		$this->loader->add_action( 'wp_update_nav_menu_item' , $this->menus, 'save_custom_fields', 10, 3 );
 
 	}
 
