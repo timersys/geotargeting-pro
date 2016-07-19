@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * Custom walker class for admin edit menus screen that will show geotargeting new fields
+ * Class Geot_Admin_Menu_Walker
+ * @since 1.8
+ */
 class Geot_Admin_Menu_Walker extends Walker_Nav_Menu_Edit {
 	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 		global $_wp_nav_menu_max_depth;

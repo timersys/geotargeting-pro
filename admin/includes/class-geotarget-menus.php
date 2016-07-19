@@ -45,7 +45,7 @@ class GeoTarget_Menus {
 	}
 
 	/**
-	 * Add custom fields
+	 * Add custom fields to the menu item
 	 * @param $menu_item
 	 *
 	 * @return mixed
@@ -57,6 +57,12 @@ class GeoTarget_Menus {
 		
 	}
 
+	/**
+	 * Save custom menu fields data into db
+	 * @param $menu_id
+	 * @param $menu_item_db_id
+	 * @param $args
+	 */
 	public function save_custom_fields( $menu_id, $menu_item_db_id, $args ) {
 
 		// Check if element is properly sent
@@ -67,12 +73,26 @@ class GeoTarget_Menus {
 
 	}
 
+	/**
+	 * Change admin menu walker for custom one
+	 * @param $walker
+	 * @param $menu_id
+	 *
+	 * @return string
+	 */
 	public function admin_menu_walker( $walker,$menu_id ) {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geot-admin-menu-walker.php';
 		return 'Geot_Admin_Menu_Walker';
 
 	}
 
+	/**
+	 * Main function that filters wp_nav_menu_objects in frontend and remove menu items accordingly
+	 * @param $sorted_menu_items
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
 	public function geotarget_menus( $sorted_menu_items, $args ){
 
 		if( empty( $sorted_menu_items ) || ! is_array( $sorted_menu_items ) )

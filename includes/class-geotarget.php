@@ -296,10 +296,11 @@ class GeoTarget {
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
 
 		//Menus
-		$this->loader->add_filter( 'wp_setup_nav_menu_item' , $this->menus, 'add_custom_fields' );
-		$this->loader->add_filter( 'wp_edit_nav_menu_walker' , $this->menus, 'admin_menu_walker', 10, 2 );
-		$this->loader->add_action( 'wp_update_nav_menu_item' , $this->menus, 'save_custom_fields', 10, 3 );
-
+		if ( !defined('GEOT_DISABLE_MENUS') ) {
+			$this->loader->add_filter( 'wp_setup_nav_menu_item', $this->menus, 'add_custom_fields' );
+			$this->loader->add_filter( 'wp_edit_nav_menu_walker', $this->menus, 'admin_menu_walker', 10, 2 );
+			$this->loader->add_action( 'wp_update_nav_menu_item', $this->menus, 'save_custom_fields', 10, 3 );
+		}
 	}
 
 	/**
@@ -344,7 +345,8 @@ class GeoTarget {
 		$this->loader->add_action( 'init', $this->vc, 'hook_to_visual' );
 
 		// Menus
-		$this->loader->add_filter( 'wp_nav_menu_objects', $this->menus, 'geotarget_menus', 10, 2 );
+		if ( !defined('GEOT_DISABLE_MENUS') )
+			$this->loader->add_filter( 'wp_nav_menu_objects', $this->menus, 'geotarget_menus', 10, 2 );
 	}
 
 	/**
