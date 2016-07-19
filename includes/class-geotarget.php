@@ -253,7 +253,6 @@ class GeoTarget {
 		global $pagenow;
 
 		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
-		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
@@ -314,6 +313,7 @@ class GeoTarget {
 
 		$this->public   = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version(), $this->functions );
 		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_scripts' );
@@ -342,6 +342,9 @@ class GeoTarget {
 
 		// Visual composer
 		$this->loader->add_action( 'init', $this->vc, 'hook_to_visual' );
+
+		// Menus
+		$this->loader->add_filter( 'wp_nav_menu_objects', $this->menus, 'geotarget_menus', 10, 2 );
 	}
 
 	/**

@@ -72,4 +72,49 @@ class GeoTarget_Menus {
 		return 'Geot_Admin_Menu_Walker';
 
 	}
+
+	public function geotarget_menus( $sorted_menu_items, $args ){
+
+		if( empty( $sorted_menu_items ) || ! is_array( $sorted_menu_items ) )
+			return $sorted_menu_items;
+
+		foreach ( $sorted_menu_items as $k => $menu_item ) {
+			$g = $menu_item->geot;
+			// check at least one condition is filled
+			if( !empty( $g['regions'] ) || !empty( $g['countries'] ) ) {
+
+				$countries  = !empty( $g['countries'] ) ?  $g['countries'] : '';
+				$regions    = !empty( $g['regions'] ) ?  $g['regions'] : '';
+				$target = geot_target( $countries, $regions );
+				if( $g['include_mode'] == 'include' && ! $target )
+					unset( $sorted_menu_items[$k]);
+
+				if( $g['include_mode'] != 'include' && $target )
+					unset( $sorted_menu_items[$k]);
+
+			}
+			if( !empty( $g['cities'] ) ) {
+
+				$cities     = !empty( $g['cities'] ) ?  $g['cities'] : '';
+				$target     = geot_target_city( $cities );
+				if( $g['include_mode'] == 'include' && ! $target )
+					unset( $sorted_menu_items[$k]);
+
+				if( $g['include_mode'] != 'include' && $target )
+					unset( $sorted_menu_items[$k]);
+			}
+
+			if ( !empty( $g['states'] ) ) {
+				$states     = !empty( $g['states'] ) ?  $g['states'] : '';
+				$target     = geot_target_state( $states );
+
+				if( $g['include_mode'] == 'include' && ! $target )
+					unset( $sorted_menu_items[$k]);
+
+				if( $g['include_mode'] != 'include' && $target )
+					unset( $sorted_menu_items[$k]);
+			}
+		}
+		return $sorted_menu_items;
+	}
 }

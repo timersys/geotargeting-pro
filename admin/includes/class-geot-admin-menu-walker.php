@@ -149,8 +149,8 @@ class Geot_Admin_Menu_Walker extends Walker_Nav_Menu_Edit {
 					$item->geot['include_mode'] = isset( $item->geot['include_mode'] ) ? $item->geot['include_mode'] : '';
 ?>
 					<label for="geot_what"><?php _e( 'Choose:', 'geot' ); ?></label><br/>
-					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][include_mode]" value="include" <?php checked( $item->geot['include_mode'], 'include', true ); ?>> <strong>Only show widget in</strong><br />
-					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][include_mode]" value="exclude" <?php checked( $item->geot['include_mode'], 'exclude', true ); ?>> <strong>Never show widget in</strong><br />
+					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][include_mode]" value="include" <?php checked( $item->geot['include_mode'], 'include', true ); ?>> <strong>Only show menu item in</strong><br />
+					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][include_mode]" value="exclude" <?php checked( $item->geot['include_mode'], 'exclude', true ); ?>> <strong>Never show menu item in</strong><br />
 					<br>
 
 					<label for="geot_position"><?php _e( 'Type regions (comma separated):', 'geot' ); ?></label><br />
