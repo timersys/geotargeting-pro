@@ -152,7 +152,11 @@ class Geot_Admin_Menu_Walker extends Walker_Nav_Menu_Edit {
 				<label for="edit-menu-item-geot_country-<?php echo $item_id; ?>">
 					<?php _e( 'Geotargeting' ); ?><br />
 					<?php
-					$item->geot['geot_include_mode'] = isset( $item->geot['geot_include_mode'] ) ? $item->geot['geot_include_mode'] : '';
+					$item->geot['geot_include_mode']    = isset( $item->geot['geot_include_mode'] ) ? $item->geot['geot_include_mode'] : '';
+					$item->geot['region']               = isset( $item->geot['region'] ) ? $item->geot['region'] : '';
+					$item->geot['country_code']         = isset( $item->geot['country_code'] ) ? $item->geot['country_code'] : '';
+					$item->geot['cities']               = isset( $item->geot['cities'] ) ? $item->geot['cities'] : '';
+					$item->geot['states']               = isset( $item->geot['states'] ) ? $item->geot['states'] : '';
 ?>
 					<label for="geot_what"><?php _e( 'Choose:', 'geot' ); ?></label><br/>
 					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][geot_include_mode]" value="include" <?php checked( $item->geot['geot_include_mode'], 'include', true ); ?>> <strong>Only show menu item in</strong><br />

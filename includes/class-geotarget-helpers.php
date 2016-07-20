@@ -67,6 +67,6 @@ AND pm.meta_value != ''";
 			if ( $include_mode != 'include' && $target )
 				self::$_user_is_targeted[$post_id] = true;
 		}
-		return self::$_user_is_targeted[$post_id];
+		return isset( self::$_user_is_targeted[$post_id] ) ? self::$_user_is_targeted[$post_id] : false;
 	}
 }
