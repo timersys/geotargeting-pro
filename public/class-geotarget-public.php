@@ -334,14 +334,7 @@ class GeoTarget_Public {
 
 		$posts_to_exclude = array();
 		// get all posts with geo options set ( ideally would be to retrieve just for the post type queried but I can't get post_type
-		$sql = "SELECT ID, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
-LEFT JOIN $wpdb->postmeta pm ON p.ID = pm.post_id
-LEFT JOIN $wpdb->postmeta pm2 ON p.ID = pm2.post_id
-WHERE p.post_status = 'publish'
-AND pm.meta_key = 'geot_countries'
-AND pm2.meta_key = 'geot_options'
-AND pm.meta_value != ''";
-		$geot_posts = $wpdb->get_results( $sql );
+		$geot_posts = Geot_Helpers::get_geotarget_posts();
 
 		if( $geot_posts ) {
 			foreach( $geot_posts as $p ) {
@@ -375,27 +368,25 @@ AND pm.meta_value != ''";
 		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
 			return $content;
 
-		if( $countries = get_post_meta( $post->ID, 'geot_countries', true) ) {
+		$opts  = get_post_meta( $post->ID, 'geot_options', true );
 
-			$opts = get_post_meta( $post->ID, 'geot_options', true );
-			if ( $opts['geot_include_mode'] == 'include' ) {
-				if ( geot_target( $countries ) ) {
-					return $content;
-				} else {
-					return apply_filters( 'geot/forbidden_text', '<p>' . $opts['forbidden_text'] . '</p>' );
-				}
-			} else {
-				if ( !geot_target( $countries ) ) {
-					return $content;
-				} else {
-					return apply_filters( 'geot/forbidden_text', '<p>' . $opts['forbidden_text'] . '</p>' );
-				}
-			}
-		}
+		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )
+			return apply_filters( 'geot/forbidden_text', '<p>' . $opts['forbidden_text'] . '</p>' );
 
 		return $content;
 	}
 
+	/**
+	 * Check if user is targeted for post and disable woo product
+	 */
+	public function disable_woo_product(){
+		global $post;
+
+		$opts  = get_post_meta( $post->ID, 'geot_options', true );
+
+		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )
+			add_filter('woocommerce_is_purchasable', '__return_false');
+	}
 	/**
 	 * Print current user data in footer
 	 */
@@ -421,4 +412,5 @@ AND pm.meta_value != ''";
 		<!-- Geotargeting plugin Debug Info END-->
 		<?php
 	}
+
 }

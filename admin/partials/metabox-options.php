@@ -80,6 +80,24 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 		<td colspan="2"></td>
 	</tr>
 	<tr valign="top">
+		<th><label for="gcities"><?php _e( 'Cities:', 'geot' ); ?></label></th>
+		<td>
+
+			<input id="gcities" type="text" class="widefat" name="geot[cities]" value="<?php echo ! empty( $opts['cities'] ) ? $opts['cities'] :'';?>" placeholder="<?php _e( 'Or type cities or city regions (comma separated):', 'geot' );?>" />
+
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr valign="top">
+		<th><label for="gstates"><?php _e( 'States:', 'geot' ); ?></label></th>
+		<td>
+
+			<input type="text" id="gstates" class="widefat" name="geot[states]" value="<?php echo ! empty( $opts['states'] ) ? $opts['states'] :'';?>" placeholder="<?php _e( 'Or type states (comma separated):', 'geot' );?>" />
+
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr valign="top">
 		<th><label for="geot_position"><?php _e( 'Remove post from loop:', 'geot' ); ?></label></th>
 		<td>
 

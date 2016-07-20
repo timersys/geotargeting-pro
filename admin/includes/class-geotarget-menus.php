@@ -101,39 +101,8 @@ class GeoTarget_Menus {
 		foreach ( $sorted_menu_items as $k => $menu_item ) {
 			$g = $menu_item->geot;
 			// check at least one condition is filled
-			if( !empty( $g['regions'] ) || !empty( $g['countries'] ) ) {
-
-				$countries  = !empty( $g['countries'] ) ?  $g['countries'] : '';
-				$regions    = !empty( $g['regions'] ) ?  $g['regions'] : '';
-				$target = geot_target( $countries, $regions );
-				if( $g['include_mode'] == 'include' && ! $target )
-					unset( $sorted_menu_items[$k]);
-
-				if( $g['include_mode'] != 'include' && $target )
-					unset( $sorted_menu_items[$k]);
-
-			}
-			if( !empty( $g['cities'] ) ) {
-
-				$cities     = !empty( $g['cities'] ) ?  $g['cities'] : '';
-				$target     = geot_target_city( $cities );
-				if( $g['include_mode'] == 'include' && ! $target )
-					unset( $sorted_menu_items[$k]);
-
-				if( $g['include_mode'] != 'include' && $target )
-					unset( $sorted_menu_items[$k]);
-			}
-
-			if ( !empty( $g['states'] ) ) {
-				$states     = !empty( $g['states'] ) ?  $g['states'] : '';
-				$target     = geot_target_state( $states );
-
-				if( $g['include_mode'] == 'include' && ! $target )
-					unset( $sorted_menu_items[$k]);
-
-				if( $g['include_mode'] != 'include' && $target )
-					unset( $sorted_menu_items[$k]);
-			}
+			if( Geot_Helpers::user_is_targeted($g, $menu_item->ID ) )
+				unset( $sorted_menu_items[$k]);
 		}
 		return $sorted_menu_items;
 	}

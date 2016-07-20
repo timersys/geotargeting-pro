@@ -182,33 +182,15 @@ class GeoTarget_Admin {
 			return $post_id;
 
 		$opts = $_POST['geot'];
-		$country_codes = '';
 		unset( $_POST['geot'] );
-
 
 		// save box settings
 		update_post_meta( $post_id, 'geot_options', apply_filters( 'geot/metaboxes/sanitized_options', $opts ) );
-
-		//convert countries and regions into commas list of country codes
-		if( isset( $opts['country_code'] ) && is_array( $opts['country_code'] ) ){
-			
-			$country_codes = implode(',', $opts['country_code']);
-		}
-		$regions 	= apply_filters('geot/get_regions', array());
-
-		if( isset( $opts['region'] ) && is_array( $opts['region'] ) ) {
-
-			foreach ($opts['region'] as $region) {
-				foreach ($regions as $r) {
-					if( $region == $r['name'] ) {
-
-						$country_codes =  $country_codes . ',' . implode(',', $r['countries']);
-					}
-				}
-			}
-		}
-		update_post_meta( $post_id, 'geot_countries', trim($country_codes, ',') );
-	
+		// add one post meta to let us retrieve only posts that need to be geotarted ( used on helpers class )
+		$geot_post = false;
+		if( !empty( $opts['country_code'] ) || !empty( $opts['region'] ) || !empty( $opts['cities'] ) || !empty( $opts['state'] ) )
+			$geot_post = true;
+		update_post_meta( $post_id, '_geot_post', $geot_post );
 	}
 
 	/**

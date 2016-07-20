@@ -199,6 +199,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-emails.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-vc.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-helpers.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-menus.php';
@@ -323,6 +324,7 @@ class GeoTarget {
 
 		$this->loader->add_filter( 'posts_where', $this->public, 'handle_geotargeted_posts' );
 		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
+		$this->loader->add_filter( 'wp', $this->public, 'disable_woo_product' );
 		// Popups rules
 
 		add_action( 'spu/rules/print_geot_country_field', array( 'Spu_Helper', 'print_select' ), 10, 2 );

@@ -256,40 +256,20 @@ class GeoTarget_Ajax {
 			);;
 
 		// get all posts with geo options set ( ideally would be to retrieve just for the post type queried but I can't get post_type
-		$sql = "SELECT ID, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
-LEFT JOIN $wpdb->postmeta pm ON p.ID = pm.post_id
-LEFT JOIN $wpdb->postmeta pm2 ON p.ID = pm2.post_id
-WHERE p.post_status = 'publish'
-AND pm.meta_key = 'geot_countries'
-AND pm2.meta_key = 'geot_options'
-AND pm.meta_value != ''";
-		$geot_posts = $wpdb->get_results( $sql );
+		$geot_posts = Geot_Helpers::get_geotarget_posts();
 
 		if( $geot_posts ) {
 			foreach( $geot_posts as $p ) {
 				$options = unserialize( $p->geot_options );
-				$mode = $options['geot_include_mode'];
-				if( 'exclude' == $mode ) {
-					if( geot_target( $p->geot_countries ) ){
-						if( ! isset( $options['geot_remove_post']) || '1' != $options['geot_remove_post'] )
-							$content_to_hide[] = array(
-								'id' => $p->ID,
-								'msg'=> apply_filters( 'geot/forbidden_text', $options['forbidden_text'] )
-							);
-						else
-							$posts_to_exclude[] = $p->ID;
-					}
-				} elseif ( 'include' == $mode ) {
-					if( ! geot_target( $p->geot_countries ) ) {
-						if ( ! isset( $options['geot_remove_post'] ) || '1' != $options['geot_remove_post'] ) {
-							$content_to_hide[] = array(
-								'id' => $p->ID,
-								'msg'=> apply_filters( 'geot/forbidden_text', $options['forbidden_text'] )
-							);
-						} else {
-							$posts_to_exclude[] = $p->ID;
-						}
-					}
+				$target  = Geot_Helpers::user_is_targeted( $options, $p->ID );
+				if( $target ){
+					if( ! isset( $options['geot_remove_post']) || '1' != $options['geot_remove_post'] )
+						$content_to_hide[] = array(
+							'id' => $p->ID,
+							'msg'=> apply_filters( 'geot/forbidden_text', $options['forbidden_text'] )
+						);
+					else
+						$posts_to_exclude[] = $p->ID;
 				}
 			}
 		}

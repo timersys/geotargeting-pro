@@ -152,19 +152,19 @@ class Geot_Admin_Menu_Walker extends Walker_Nav_Menu_Edit {
 				<label for="edit-menu-item-geot_country-<?php echo $item_id; ?>">
 					<?php _e( 'Geotargeting' ); ?><br />
 					<?php
-					$item->geot['include_mode'] = isset( $item->geot['include_mode'] ) ? $item->geot['include_mode'] : '';
+					$item->geot['geot_include_mode'] = isset( $item->geot['geot_include_mode'] ) ? $item->geot['geot_include_mode'] : '';
 ?>
 					<label for="geot_what"><?php _e( 'Choose:', 'geot' ); ?></label><br/>
-					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][include_mode]" value="include" <?php checked( $item->geot['include_mode'], 'include', true ); ?>> <strong>Only show menu item in</strong><br />
-					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][include_mode]" value="exclude" <?php checked( $item->geot['include_mode'], 'exclude', true ); ?>> <strong>Never show menu item in</strong><br />
+					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][geot_include_mode]" value="include" <?php checked( $item->geot['geot_include_mode'], 'include', true ); ?>> <strong>Only show menu item in</strong><br />
+					<input type="radio" class="geot_include_mode" name="menu-item-geot[<?php echo $item_id;?>][geot_include_mode]" value="exclude" <?php checked( $item->geot['geot_include_mode'], 'exclude', true ); ?>> <strong>Never show menu item in</strong><br />
 					<br>
 
 					<label for="geot_position"><?php _e( 'Type regions (comma separated):', 'geot' ); ?></label><br />
-					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][regions]" value="<?php echo esc_attr($item->geot['regions']);?>" />
+					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][region]" value="<?php echo esc_attr($item->geot['region']);?>" />
 					<br>
 
 					<label for="geot_position"><?php _e( 'Or type countries or country codes (comma separated):', 'geot' ); ?></label><br />
-					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][countries]" value="<?php echo esc_attr($item->geot['countries']);?>" />
+					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][country_code]" value="<?php echo esc_attr($item->geot['country_code']);?>" />
 					<br>
 
 					<label for="geot_position"><?php _e( 'Or type cities or city regions (comma separated):', 'geot' ); ?></label><br />
