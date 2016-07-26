@@ -74,6 +74,12 @@ class GeoTarget_Settings {
 		if( empty( $opts['debug_mode'] ) ) {
 			$opts['debug_mode'] = '0';
 		}
+		if( empty( $opts['disable_menu_integration'] ) ) {
+			$opts['disable_menu_integration'] = '0';
+		}
+		if( empty( $opts['disable_widget_integration'] ) ) {
+			$opts['disable_widget_integration'] = '0';
+		}
 		if( empty( $opts['cloudflare'] ) ) {
 			$opts['cloudflare'] = '0';
 		}

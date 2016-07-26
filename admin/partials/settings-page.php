@@ -34,6 +34,20 @@
 				</td>
 			</tr>
 			<tr valign="top" class="">
+				<th><label for="menu_integration"><?php _e( 'Disable Menu integration', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="checkbox" id="menu_integration" name="geot_settings[disable_menu_integration]" value="1" <?php checked($opts['disable_menu_integration'],'1');?>/>
+						<p class="help"><?php _e( 'Check this to remove geotargeting options from menus', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="widget_integration"><?php _e( 'Disable Widget Integration', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="checkbox" id="widget_integration" name="geot_settings[disable_widget_integration]" value="1" <?php checked($opts['disable_widget_integration'],'1');?>/>
+						<p class="help"><?php _e( 'Check this to remove geotargeting options from widgets', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
 				<th><label for="region"><?php _e( 'Fallback Country', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 
