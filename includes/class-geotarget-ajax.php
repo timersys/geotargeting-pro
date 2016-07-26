@@ -235,6 +235,22 @@ class GeoTarget_Ajax {
 		return false;
 	}
 
+	/**
+	 * Filter function for menus
+	 * @param $geot
+	 *
+	 * @return boolean
+	 */
+	private function menu_filter( $geot ) {
+
+		$target = unserialize( base64_decode( $geot['filter'] ) );
+
+		if ( Geot_Helpers::user_is_targeted( $target, $geot['ex_filter'] ) )
+			return true;
+
+		return false;
+	}
+
 
 	/**
 	 * Get all post that are geotargeted

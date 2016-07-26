@@ -25,9 +25,12 @@ AND pm.meta_value != ''";
 
 	/**
 	 * Check if user is matched
+	 *
 	 * @param $opts From post metabox
 	 *
-	 * @return boolean
+	 * @param $post_id
+	 *
+	 * @return bool
 	 */
 	public static function user_is_targeted( $opts, $post_id ) {
 		if( isset( self::$_user_is_targeted[$post_id] ) )

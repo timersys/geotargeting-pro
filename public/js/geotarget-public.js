@@ -110,16 +110,19 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
             return prefix + (uniqueId++);
         };
     $('.geot-ajax').each(function(){
+        var _this = $(this);
+        if( _this.hasClass('geot_menu_item') )
+            _this = $(this).find('a').first();
 
         var uniqid = getUniqueName( 'geot' );
-        $(this).attr( 'id', uniqid );
+        _this.attr( 'id', uniqid );
         data.geots[uniqid] = {
-            'action'    : $(this).data('action') || '',
-            'filter'    : $(this).data('filter') || '',
-            'region'    : $(this).data('region') || '',
-            'ex_filter' : $(this).data('ex_filter') || '',
-            'ex_region' : $(this).data('ex_region') || '',
-            'default'   : $(this).data('default') || '',
+            'action'    : _this.data('action') || '',
+            'filter'    : _this.data('filter') || '',
+            'region'    : _this.data('region') || '',
+            'ex_filter' : _this.data('ex_filter') || '',
+            'ex_region' : _this.data('ex_region') || '',
+            'default'   : _this.data('default') || '',
         }
     });
     var onSuccess = function( response ) {
@@ -132,7 +135,10 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
             console.log(response);
             if( results && results.length ) {
                 for (i = 0; i < results.length; ++i) {
-                    if (results[i].action.indexOf('filter') > -1) {
+                    if ( results[i].action == 'menu_filter' ) {
+                        if( results[i].value == true )
+                            $('#' + results[i].id).parent('.menu-item').remove();
+                    } else if (results[i].action.indexOf('filter') > -1) {
                         if (results[i].value == true) {
                             var html = $('#' + results[i].id).html();
                             $('#' + results[i].id).replaceWith(html);

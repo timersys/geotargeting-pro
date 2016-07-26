@@ -101,9 +101,32 @@ class GeoTarget_Menus {
 		foreach ( $sorted_menu_items as $k => $menu_item ) {
 			$g = $menu_item->geot;
 			// check at least one condition is filled
-			if( Geot_Helpers::user_is_targeted($g, $menu_item->ID ) )
-				unset( $sorted_menu_items[$k]);
+			if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' ) {
+				$menu_item->classes[] = 'geot-ajax geot_menu_item';
+				add_filter( 'nav_menu_link_attributes', array( $this, 'add_geot_info'), 10, 2 );
+			} else {
+				if( Geot_Helpers::user_is_targeted($g, $menu_item->ID ) )
+					unset( $sorted_menu_items[ $k ] );
+			}
+
 		}
 		return $sorted_menu_items;
+	}
+
+	/**
+	 * Function to add geot info to the menu items to be later handled with ajax
+	 * @param $atts
+	 * @param $item
+	 *
+	 * @return mixed
+	 */
+	public function add_geot_info( $atts, $item ) {
+
+		if( !empty( $item->geot ) ) {
+			$atts['data-action'] = 'menu_filter';
+			$atts['data-filter'] = base64_encode( serialize( $item->geot ) );
+			$atts['data-ex_filter'] = $item->ID ;
+		}
+		return $atts;
 	}
 }
