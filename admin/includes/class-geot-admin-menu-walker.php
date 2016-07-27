@@ -164,19 +164,19 @@ class Geot_Admin_Menu_Walker extends Walker_Nav_Menu_Edit {
 					<br>
 
 					<label for="geot_position"><?php _e( 'Type regions (comma separated):', 'geot' ); ?></label><br />
-					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][region]" value="<?php echo esc_attr($item->geot['region']);?>" />
+					<input type="text" class="geot_text widefat" name="menu-item-geot[<?php echo $item_id;?>][region]" value="<?php echo esc_attr($item->geot['region']);?>" />
 					<br>
 
 					<label for="geot_position"><?php _e( 'Or type countries or country codes (comma separated):', 'geot' ); ?></label><br />
-					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][country_code]" value="<?php echo esc_attr($item->geot['country_code']);?>" />
+					<input type="text" class="geot_text widefat" name="menu-item-geot[<?php echo $item_id;?>][country_code]" value="<?php echo esc_attr($item->geot['country_code']);?>" />
 					<br>
 
 					<label for="geot_position"><?php _e( 'Or type cities or city regions (comma separated):', 'geot' ); ?></label><br />
-					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][cities]" value="<?php echo esc_attr($item->geot['cities']);?>" />
+					<input type="text" class="geot_text widefat" name="menu-item-geot[<?php echo $item_id;?>][cities]" value="<?php echo esc_attr($item->geot['cities']);?>" />
 					<br>
 
 					<label for="geot_position"><?php _e( 'Or type states (comma separated):', 'geot' ); ?></label><br />
-					<input type="text" class="geot_text" name="menu-item-geot[<?php echo $item_id;?>][states]" value="<?php echo esc_attr($item->geot['states']);?>" />
+					<input type="text" class="geot_text widefat" name="menu-item-geot[<?php echo $item_id;?>][states]" value="<?php echo esc_attr($item->geot['states']);?>" />
 
 				</label>
 			</p>
