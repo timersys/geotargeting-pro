@@ -4,7 +4,7 @@ Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.5.3
-Stable tag: 1.7.1
+Stable tag: 1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,13 +50,23 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 3. Go to the editor and use as many shortcodes as needed
 
 
-
 == Frequently Asked Questions ==
 
 = None yet =
 
 
 == Changelog ==
+
+= 1.8 -  Jul 26 =
+
+* Added Geotargeting to Menus
+* Woocommerce now disable "add to cart" when product is excluded
+* Changed dropdown widget script. Now it's fully mobile compatible
+* Widget now support country flags
+* New filter to custom redirect after widget is used
+* Updated countries database, some were missing
+* Updated Maxmind database
+* Added option in settings page to disable menu/widget integration
 
 = 1.7.1 -  Jun 23 =
 
