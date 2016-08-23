@@ -256,7 +256,7 @@ class GeoTarget_Public {
 	 */
 	function geot_redirections() {
 		global $geot;
-
+	/* TODO : Change to new helper method */
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
 		if( is_admin() || defined('DOING_AJAX') || empty( $opts['redirection'] ) || $geot->functions->isSearchEngine() )
@@ -272,7 +272,9 @@ class GeoTarget_Public {
 			$redirect = false;
 
 			if( !empty( $r['countries'] ) || !empty( $r['regions'] ) ) {
-				if ( geot_target( @$r['countries'], @$r['regions'] ) ) {
+				$countries  = !empty( $r['countries'] ) ? $r['countries'] : '';
+				$regions    = !empty( $r['regions'] ) ? $r['regions'] : '';
+				if ( geot_target( $countries, $regions ) ) {
 					$redirect = true;
 				}
 			} elseif( !empty( $r['city_regions'] ) ) {
@@ -368,6 +370,9 @@ class GeoTarget_Public {
 		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
 			return $content;
 
+		if( !isset( $post->ID ) )
+			return $content;
+
 		$opts  = get_post_meta( $post->ID, 'geot_options', true );
 
 		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )
@@ -381,7 +386,8 @@ class GeoTarget_Public {
 	 */
 	public function disable_woo_product(){
 		global $post;
-
+		if( !isset( $post->ID ) )
+			return;
 		$opts  = get_post_meta( $post->ID, 'geot_options', true );
 
 		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )

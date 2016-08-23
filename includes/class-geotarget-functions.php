@@ -495,6 +495,8 @@ class GeoTarget_Functions {
 				// fallback to free version
 				return $this->getUserDataByIp( $ip, true );
 			} catch ( Exception $e ) {
+				// log error
+				error_log( $e->getMessage() );
 				//for any other exception show fallback country
 				return $this->getFallbackCountry();
 			}
