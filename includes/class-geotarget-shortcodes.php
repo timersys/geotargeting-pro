@@ -191,7 +191,7 @@ class GeoTarget_Shortcodes {
 
 		$c = $this->functions->get_user_country();
 
-		if ( !empty( $c->names ) )
+		if ( !empty( $c->names ) || !empty( $c->name ) )
 			return apply_filters( 'geot/shortcodes/country_name', $c->name, $c );
 
 		return  apply_filters( 'geot/shortcodes/country_name_default', $default );

@@ -93,7 +93,7 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_country();
 
-		if ( !empty( $r->names ) )
+		if ( !empty( $r->names ) || !empty( $r->name ) )
 			return apply_filters( 'geot/shortcodes/country_name', $r->name, $r );
 
 		return  apply_filters( 'geot/shortcodes/country_name_default', $geot['default'] );
