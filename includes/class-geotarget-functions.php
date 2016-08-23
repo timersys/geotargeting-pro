@@ -437,10 +437,12 @@ class GeoTarget_Functions {
 		if( ! empty ( $this->calculated_data ) )
 			return apply_filters('geot/user_data/calculated_data', $this->calculated_data );
 
-		// If user set cookie use instead
-		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE['geot_country']) ) {
+		$cookie_name = apply_filters( 'geot/cookie_name' , 'geot_country');
 
-			$iso_code = $_COOKIE['geot_country'];
+		// If user set cookie use instead
+		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE[$cookie_name]) ) {
+
+			$iso_code = $_COOKIE[$cookie_name];
 
 			return apply_filters('geot/user_data/geot_cookie', array(
 				'country' => $this->getCountryByIsoCode( $iso_code ),
