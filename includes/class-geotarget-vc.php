@@ -104,6 +104,7 @@ class GeoTarget_VC {
 				'category'                  => __( 'Geotargeting', 'geot' ),
 				'description'               => __( 'Place elements inside this geot container', 'geot' ),
 				'html_template'             => GEOT_PLUGIN_DIR . '/includes/vc/vc_geot.php',
+				'js_view'                   => 'VcColumnView',
 				"params"                    => array(
 					array(
 						"type" => "textfield",
@@ -155,6 +156,7 @@ class GeoTarget_VC {
 				'category'                  => __( 'Geotargeting', 'geot' ),
 				'description'               => __( 'Place elements inside this geot container', 'geot' ),
 				'html_template'             => GEOT_PLUGIN_DIR . '/includes/vc/vc_geot_city.php',
+				'js_view'                   => 'VcColumnView',
 				"params"                    => array(
 					array(
 						"type" => "textfield",
@@ -206,6 +208,7 @@ class GeoTarget_VC {
 				'category'                  => __( 'Geotargeting', 'geot' ),
 				'description'               => __( 'Place elements inside this geot container', 'geot' ),
 				'html_template'             => GEOT_PLUGIN_DIR . '/includes/vc/vc_geot_state.php',
+				'js_view'                   => 'VcColumnView',
 				"params"                    => array(
 					array(
 						"type" => "textfield",
