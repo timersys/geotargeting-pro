@@ -87,10 +87,11 @@ class GeoTarget_Ajax_Shortcodes {
 			'country'			=>'',
 			'region'			=>'',
 			'exclude_country'	=>'',
-			'exclude_region'	=>''
+			'exclude_region'	=>'',
+			'html_tag'          => 'div'
 		), $atts ) );
 		
-		return '<div class="geot-ajax geot-filter" data-action="country_filter" data-filter="'.$country.'" data-region="'.$region.'" data-ex_filter="'.$exclude_country.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</div>';
+		return '<'.$html_tag.' class="geot-ajax geot-filter" data-action="country_filter" data-filter="'.$country.'" data-region="'.$region.'" data-ex_filter="'.$exclude_country.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</'.$html_tag.'>';
 
 	}
 
@@ -111,10 +112,11 @@ class GeoTarget_Ajax_Shortcodes {
 			'city'			    =>'',
 			'region'			=>'',
 			'exclude_city'	    =>'',
-			'exclude_region'	=>''
+			'exclude_region'	=>'',
+			'html_tag'          => 'div'
 		), $atts ) );
 
-		return '<div class="geot-ajax geot-filter" data-action="city_filter" data-filter="'.$city.'" data-region="'.$region.'" data-ex_filter="'.$exclude_city.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</div>';
+		return '<'.$html_tag.' class="geot-ajax geot-filter" data-action="city_filter" data-filter="'.$city.'" data-region="'.$region.'" data-ex_filter="'.$exclude_city.'" data-ex_region="'.$exclude_region.'">' . do_shortcode( $content ) . '</'.$html_tag.'>';
 
 	}
 
@@ -133,9 +135,10 @@ class GeoTarget_Ajax_Shortcodes {
 		extract( shortcode_atts( array(
 			'state'			    =>'',
 			'exclude_state'	    =>'',
+			'html_tag'          => 'div'
 		), $atts ) );
 
-		return '<div class="geot-ajax geot-filter" data-action="state_filter" data-filter="'.$state.'" data-ex_filter="'.$exclude_state.'" >' . do_shortcode( $content ) . '</div>';
+		return '<'.$html_tag.' class="geot-ajax geot-filter" data-action="state_filter" data-filter="'.$state.'" data-ex_filter="'.$exclude_state.'" >' . do_shortcode( $content ) . '</'.$html_tag.'>';
 
 	}
 
@@ -148,9 +151,10 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_country_code($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<span class="geot-ajax" data-action="country_code" data-default="' . do_shortcode( $default ). '"></span>';
+		return '<'. $html_tag .' class="geot-ajax" data-action="country_code" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 
@@ -162,9 +166,10 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_country_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<span class="geot-ajax" data-action="country_name" data-default="' . do_shortcode( $default ). '"></span>';
+		return '<'. $html_tag .' class="geot-ajax" data-action="country_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 
 	}
 
@@ -176,9 +181,10 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_city_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<span class="geot-ajax" data-action="city_name" data-default="' . do_shortcode( $default ). '"></span>';
+		return '<'. $html_tag .' class="geot-ajax" data-action="city_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 
 	}
 
@@ -190,9 +196,10 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_state_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<span class="geot-ajax" data-action="state_name" data-default="' . do_shortcode( $default ). '"></span>';
+		return '<'. $html_tag .' class="geot-ajax" data-action="state_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	/**
@@ -203,9 +210,10 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_state_code($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<span class="geot-ajax" data-action="state_code" data-default="' . do_shortcode( $default ). '"></span>';
+		return '<'. $html_tag .' class="geot-ajax" data-action="state_code" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	/**
@@ -216,9 +224,10 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_zip_code($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<span class="geot-ajax" data-action="zip" data-default="' . do_shortcode( $default ). '"></span>';
+		return '<'. $html_tag .' class="geot-ajax" data-action="zip" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	/**
@@ -229,9 +238,10 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_regions($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<span class="geot-ajax" data-action="region" data-default="' . do_shortcode( $default ). '"></span>';
+		return '<'. $html_tag .' class="geot-ajax" data-action="region" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 }	
