@@ -345,14 +345,10 @@ class GeoTarget_Public {
 				if( ! isset( $options['geot_remove_post']) || '1' != $options['geot_remove_post'] )
 					continue;
 
-				$mode = $options['geot_include_mode'];
-				if( 'exclude' == $mode ) {
-					if( geot_target( $p->geot_countries ) )
-						$posts_to_exclude[] = $p->ID;
-				} elseif ( 'include' == $mode ) {
-					if( ! geot_target( $p->geot_countries ) )
-						$posts_to_exclude[] = $p->ID;
-				}
+				$target  = Geot_Helpers::user_is_targeted( $options, $p->ID );
+				if( $target )
+					$posts_to_exclude[] = $p->ID;
+
 			}
 		}
 		return $posts_to_exclude;
