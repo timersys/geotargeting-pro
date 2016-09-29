@@ -4,6 +4,7 @@
 .LSOverride
 Icon
 includes/data/
+.sass-cache/
 
 # Thumbnails
 ._*
