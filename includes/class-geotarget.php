@@ -296,7 +296,9 @@ class GeoTarget {
 		// License and Updates
 		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_license', 1 );
 
+		// Update
 		$this->loader->add_action( 'admin_init' , $updater, 'update_notice' );
+		$this->loader->add_action( 'wp_ajax_geot_updater' , $updater, 'ajax_geot_updater' );
 
 		// Ajax admin
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );

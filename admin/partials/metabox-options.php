@@ -12,8 +12,8 @@
  */
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;?>
-<table class="form-table">
-	
+<table class="form-table geot_table">
+
 	<?php do_action( 'geot/metaboxes/before_display_options', $opts );?>
 	<tr valign="top">
 		<th><label for="geot_position"><?php _e( 'Choose:', 'geot' ); ?></label></th>
@@ -47,12 +47,12 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 						}
 					?>
 				</select>
-			<?php 
+			<?php
 			} else { ?>
-			
+
 				<p> Add some regions first.</p>
-			
-			<?php	
+
+			<?php
 			}	?>
 		</td>
 		<td colspan="2"></td>
@@ -73,7 +73,7 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 						?>> <?php echo $c->country; ?></option>
 						<?php
 					}
-				}	
+				}
 				?>
 			</select>
 		</td>

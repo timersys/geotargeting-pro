@@ -67,4 +67,229 @@ class GeoTarget_Updater {
         printf( '<div class="%1$s">%2$s</div>', $class, $message );
     }
 
+    public function ajax_geot_updater() {
+        $file = WP_CONTENT_DIR . '/uploads/geot_plugin/sd';
+        $dir = WP_CONTENT_DIR . '/uploads/geot_plugin/';
+        if( ! file_exists( $file ) ) {
+            /*
+    		 * Download the package (Note, This just returns the filename
+    		 * of the file if the package is a local file)
+    		 */
+            $download = download_url( 'https://timersys.com/test.zip');
+            if ( is_wp_error($download) ) {
+                echo json_encode( array( 'error' => $download->get_error_message()));
+                wp_die();
+            }
+            $working_dir = $this->unpack_package( $download );
+
+            if ( is_wp_error( $working_dir ) ) {
+                echo json_encode( array( 'error' => $working_dir->get_error_message()));
+                wp_die();
+            }
+            $result = $this->install_package( array(
+                'source' => $working_dir,
+                'destination' => $dir,
+            ) );
+            if ( is_wp_error( $result ) ) {
+                echo json_encode( array( 'error' => $result->get_error_message()));
+                wp_die();
+            }
+        }
+
+        $response = array( 'success' => $result );
+        echo json_encode( $response );
+
+        wp_die();
+    }
+
+    /**
+     * Function to unzip file,
+     * @param  [type]  $package        [description]
+     * @param  boolean $delete_package [description]
+     * @return [type]                  [description]
+     */
+    private function unpack_package( $package, $delete_package = true ) {
+        global $wp_filesystem;
+        if( ! WP_Filesystem() ) {
+            echo json_encode( array( 'error' => __('Could not access filesystem.')));
+            wp_die();
+        }
+
+        $upgrade_folder = $wp_filesystem->wp_content_dir() . 'upgrade/';
+
+		//Clean up contents of upgrade directory beforehand.
+		$upgrade_files = $wp_filesystem->dirlist($upgrade_folder);
+		if ( !empty($upgrade_files) ) {
+			foreach ( $upgrade_files as $file )
+				$wp_filesystem->delete($upgrade_folder . $file['name'], true);
+		}
+
+        // We need a working directory - Strip off any .tmp or .zip suffixes
+		$working_dir = $upgrade_folder . basename( basename( $package, '.tmp' ), '.zip' );
+
+        // Clean up working directory
+		if ( $wp_filesystem->is_dir($working_dir) )
+			$wp_filesystem->delete($working_dir, true);
+
+		// Unzip package to working directory
+		$result = unzip_file( $package, $working_dir );
+
+		// Once extracted, delete the package if required.
+		if ( $delete_package )
+			unlink($package);
+
+        if ( is_wp_error($result) ) {
+			$wp_filesystem->delete($working_dir, true);
+			if ( 'incompatible_archive' == $result->get_error_code() ) {
+				return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], $result->get_error_data() );
+			}
+			return $result;
+		}
+
+		return $working_dir;
+    }
+
+    /**
+     * Move file to correct place
+     * @param  array  $args [description]
+     * @return [type]       [description]
+     */
+    public function install_package( $args = array() ) {
+        global $wp_filesystem;
+
+        $defaults = array(
+            'source' => '', // Please always pass this
+            'destination' => '', // and this
+            'clear_destination' => true,
+            'clear_working' => true,
+            'abort_if_destination_exists' => false
+        );
+
+        $args = wp_parse_args($args, $defaults);
+
+        // These were previously extract()'d.
+        $source = $args['source'];
+        $destination = $args['destination'];
+        $clear_destination = $args['clear_destination'];
+
+        @set_time_limit( 300 );
+
+        if ( empty( $source ) || empty( $destination ) ) {
+            return new WP_Error( 'bad_request', __('Bad Request') );
+        }
+
+        //Retain the Original source and destinations
+        $remote_source = $args['source'];
+        $local_destination = $destination;
+
+        $source_files = array_keys( $wp_filesystem->dirlist( $remote_source ) );
+        $remote_destination = $wp_filesystem->find_folder( $local_destination );
+
+        //Locate which directory to copy to the new folder, This is based on the actual folder holding the files.
+        if ( 1 == count( $source_files ) && $wp_filesystem->is_dir( trailingslashit( $args['source'] ) . $source_files[0] . '/' ) ) { //Only one folder? Then we want its contents.
+            $source = trailingslashit( $args['source'] ) . trailingslashit( $source_files[0] );
+        } elseif ( count( $source_files ) == 0 ) {
+            return new WP_Error( 'incompatible_archive_empty', $this->strings['incompatible_archive'], $this->strings['no_files'] ); // There are no files?
+        } else { // It's only a single file, the upgrader will use the folder name of this file as the destination folder. Folder name is based on zip filename.
+            $source = trailingslashit( $args['source'] );
+        }
+
+        if ( is_wp_error( $source ) ) {
+            return $source;
+        }
+
+
+        if ( $clear_destination ) {
+            // We're going to clear the destination if there's something there.
+            $removed = $this->clear_destination( $remote_destination );
+
+            if ( is_wp_error( $removed ) ) {
+                return $removed;
+            }
+        }
+
+        //Create destination if needed
+        if ( ! $wp_filesystem->exists( $remote_destination ) ) {
+            if ( ! $wp_filesystem->mkdir( $remote_destination, FS_CHMOD_DIR ) ) {
+                return new WP_Error( 'mkdir_failed_destination', __('Failed to create destination dir'), $remote_destination );
+            }
+        }
+        // Copy new version of item into place.
+        $result = copy_dir($source, $remote_destination);
+        if ( is_wp_error($result) ) {
+            if ( $args['clear_working'] ) {
+                $wp_filesystem->delete( $remote_source, true );
+            }
+            return $result;
+        }
+
+        //Clear the Working folder?
+        if ( $args['clear_working'] ) {
+            $wp_filesystem->delete( $remote_source, true );
+        }
+
+        $destination_name = basename( str_replace($local_destination, '', $destination) );
+        if ( '.' == $destination_name ) {
+            $destination_name = '';
+        }
+
+        //Bombard the calling function will all the info which we've just used.
+        $result = compact( 'source', 'source_files', 'destination', 'destination_name', 'local_destination', 'remote_destination', 'clear_destination' );
+
+        return $result;
+    }
+
+    /**
+     * Clear files on destination folder
+     * @param  [type] $remote_destination [description]
+     * @return [type]                     [description]
+     */
+    private function clear_destination( $remote_destination ) {
+		global $wp_filesystem;
+
+		if ( ! $wp_filesystem->exists( $remote_destination ) ) {
+			return true;
+		}
+
+		// Check all files are writable before attempting to clear the destination.
+		$unwritable_files = array();
+
+		$_files = $wp_filesystem->dirlist( $remote_destination, true, true );
+
+		// Flatten the resulting array, iterate using each as we append to the array during iteration.
+		while ( $f = each( $_files ) ) {
+			$file = $f['value'];
+			$name = $f['key'];
+
+			if ( ! isset( $file['files'] ) ) {
+				continue;
+			}
+
+			foreach ( $file['files'] as $filename => $details ) {
+				$_files[ $name . '/' . $filename ] = $details;
+			}
+		}
+
+		// Check writability.
+		foreach ( $_files as $filename => $file_details ) {
+			if ( ! $wp_filesystem->is_writable( $remote_destination . $filename ) ) {
+
+				// Attempt to alter permissions to allow writes and try again.
+				$wp_filesystem->chmod( $remote_destination . $filename, ( 'd' == $file_details['type'] ? FS_CHMOD_DIR : FS_CHMOD_FILE ) );
+				if ( ! $wp_filesystem->is_writable( $remote_destination . $filename ) ) {
+					$unwritable_files[] = $filename;
+				}
+			}
+		}
+
+		if ( ! empty( $unwritable_files ) ) {
+			return new WP_Error( 'files_not_writable', 'Files are not writable', implode( ', ', $unwritable_files ) );
+		}
+
+		if ( ! $wp_filesystem->delete( $remote_destination, true ) ) {
+			return new WP_Error( 'remove_old_failed', 'Failed to remove old files' );
+		}
+
+		return true;
+	}
 }
