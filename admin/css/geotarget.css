@@ -17,7 +17,7 @@ input.geot_license_{
 .geot-settings .city-region-group:last-child
 {
 	margin-bottom: 0;
-}	
+}
 .geot-settings .redirection-group .chosen-container,
 .geot-settings .city-region-group .chosen-container,
 .geot-settings .region-group .chosen-container{
@@ -47,7 +47,7 @@ input.geot_license_{
 .geot-settings .city-region-group:hover .remove-city-region:hover,
 .geot-settings .region-group:hover .remove-region:hover{
 	color: red;
-} 
+}
 .geot-settings .add-redirection,
 .geot-settings .add-region,
 .geot-settings .add-city-region
@@ -66,4 +66,7 @@ input.geot_license_{
 	border: 2px dashed #cdc8c8;
 	padding: 10px;
 	box-sizing: border-box;
+}
+.ui-dialog.ui-front{
+	z-index: 100102;
 }
