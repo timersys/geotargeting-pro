@@ -96,7 +96,7 @@ class GeoTarget_Admin {
 	public function enqueue_scripts() {
 
 		wp_enqueue_script( 'geot-chosen', plugin_dir_url( __FILE__ ) . 'js/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotargeting-admin.js', array( 'jquery','chosen','jquery-ui-dialog'), $this->version, false );
+		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotargeting-admin.js', array( 'jquery','geot-chosen','jquery-ui-dialog'), $this->version, false );
 		wp_localize_script(  $this->GeoTarget, 'geot', array(
 			'ajax_url'  => admin_url('admin-ajax.php')
 		));
