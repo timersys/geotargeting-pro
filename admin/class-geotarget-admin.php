@@ -71,19 +71,19 @@ class GeoTarget_Admin {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-admin-settings.php';
 	}
-		
+
 	/**
 	 * Register the stylesheets for the Dashboard.
 	 *
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-		global $pagenow;		   			        
-   		
+		global $pagenow;
+
 		if( 'post.php' == $pagenow ) {
    			wp_enqueue_style('wp-jquery-ui-dialog');
-   		}	
-		wp_enqueue_style( 'chosen', plugin_dir_url( __FILE__ ) . 'css/chosen.min.css', array(), $this->version, 'all' );
+   		}
+		wp_enqueue_style( 'geot-chosen', plugin_dir_url( __FILE__ ) . 'css/chosen.min.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'css/geotarget.css', array(), $this->version, 'all' );
 
 	}
@@ -95,7 +95,7 @@ class GeoTarget_Admin {
 	 */
 	public function enqueue_scripts() {
 
-		wp_enqueue_script( 'chosen', plugin_dir_url( __FILE__ ) . 'js/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'geot-chosen', plugin_dir_url( __FILE__ ) . 'js/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotargeting-admin.js', array( 'jquery','chosen','jquery-ui-dialog'), $this->version, false );
 		wp_localize_script(  $this->GeoTarget, 'geot', array(
 			'ajax_url'  => admin_url('admin-ajax.php')
@@ -107,11 +107,11 @@ class GeoTarget_Admin {
 	 */
 	public function add_meta_boxes()
 	{
-		
+
 		$post_types = apply_filters( 'geot/get_post_types', array(), array('attachment') );
-		
+
 		foreach ($post_types as $cpt) {
-			
+
 			add_meta_box(
 				'geot-settings',
 				__( 'GeoTargeting Options', 'geot' ),
@@ -147,7 +147,7 @@ class GeoTarget_Admin {
 
 		include 'partials/metabox-options.php';
 	}
-	
+
 	/**
 	 * Add menu for Settings page of the plugin
 	 * @since  1.0.0
@@ -167,7 +167,7 @@ class GeoTarget_Admin {
 	 *
 	 * @return
 	 */
-	public function save_meta_options( $post_id ) {		
+	public function save_meta_options( $post_id ) {
 
 		// Verify that the nonce is set and valid.
 		if ( !isset( $_POST['geot_options_nonce'] ) || ! wp_verify_nonce( $_POST['geot_options_nonce'], 'geot_options' ) ) {
@@ -206,10 +206,10 @@ class GeoTarget_Admin {
 	 * @param [type] $plugin_array [description]
 	 */
 	function add_button( $plugin_array ) {
-    	
+
     	$plugin_array['geot'] = plugins_url( 'js/geot-tinymce.js' , __FILE__ );
    	 	return $plugin_array;
-	
+
 	}
 
 	/**
@@ -228,7 +228,7 @@ class GeoTarget_Admin {
 	function add_editor() {
 
 		include 'partials/tinymce-editor.php';
-		
+
 	}
 
 	/**
@@ -238,7 +238,7 @@ class GeoTarget_Admin {
 	public function register_widgets() {
 
      	register_widget( 'Geot_Widget' );
-		
+
 	}
 
 	/**
@@ -279,7 +279,7 @@ class GeoTarget_Admin {
 		if( !empty( $license ) ) {
 
 			$eddc_license = new Geot_License( GEOT_PLUGIN_FILE, 'GeoTargeting Pro', $this->version	, 'Damian Logghe', $license );
-		
+
 		}
 
 	}
