@@ -67,40 +67,65 @@ class GeoTarget_Updater {
         printf( '<div class="%1$s">%2$s</div>', $class, $message );
     }
 
-    public function ajax_geot_updater() {
-        $file = WP_CONTENT_DIR . '/uploads/geot_plugin/sd';
-        $dir = WP_CONTENT_DIR . '/uploads/geot_plugin/';
-        if( ! file_exists( $file ) ) {
-            /*
-    		 * Download the package (Note, This just returns the filename
-    		 * of the file if the package is a local file)
-    		 */
-            $download = download_url( 'https://timersys.com/test.zip');
-            if ( is_wp_error($download) ) {
-                echo json_encode( array( 'error' => $download->get_error_message()));
-                wp_die();
-            }
-            $working_dir = $this->unpack_package( $download );
 
-            if ( is_wp_error( $working_dir ) ) {
-                echo json_encode( array( 'error' => $working_dir->get_error_message()));
-                wp_die();
-            }
-            $result = $this->install_package( array(
-                'source' => $working_dir,
-                'destination' => $dir,
-            ) );
-            if ( is_wp_error( $result ) ) {
-                echo json_encode( array( 'error' => $result->get_error_message()));
-                wp_die();
-            }
-        }
+	/**
+	 * Download DB Using CURL
+	 * @return [type] [description]
+	 */
+	function ajax_geot_updater(){
+		$url = 'https://s3.amazonaws.com/timersys/GeoLite2-City.mmdb.zip';
+		$ch = curl_init();
+		$dir = WP_CONTENT_DIR . '/uploads/geot_plugin/';
+		$file = WP_CONTENT_DIR . '/uploads/geot_plugin/localfile.tmp';
+		$download = fopen ( $file, 'w+');
+	    curl_setopt($ch, CURLOPT_URL, $url);
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	    curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, array($this,'progress'));
+	    curl_setopt($ch, CURLOPT_NOPROGRESS, false);
+	    curl_setopt($ch, CURLOPT_HEADER, 0);
+	    curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		curl_setopt($ch, CURLOPT_FILE, $download);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	    curl_exec($ch);
+	    curl_close($ch);
+		fclose($download);
 
-        $response = array( 'success' => $result );
-        echo json_encode( $response );
+		$working_dir = $this->unpack_package( $file );
 
-        wp_die();
-    }
+		if ( is_wp_error( $working_dir ) ) {
+			echo json_encode( array( 'error' => $working_dir->get_error_message()));
+			wp_die();
+		}
+		$result = $this->install_package( array(
+			'source' => $working_dir,
+			'destination' => $dir,
+		) );
+		if ( is_wp_error( $result ) ) {
+			echo json_encode( array( 'error' => $result->get_error_message()));
+			wp_die();
+		}
+		die();
+	}
+
+	/**
+	 * Update progress file that will be used to print the bar
+	 * @param  [type] $resource      [description]
+	 * @param  [type] $download_size [description]
+	 * @param  [type] $downloaded    [description]
+	 * @param  [type] $upload_size   [description]
+	 * @param  [type] $uploaded      [description]
+	 * @return [type]                [description]
+	 */
+	function progress($resource,$download_size, $downloaded, $upload_size, $uploaded) {
+		$progress = 0;
+		if ($download_size > 0)
+		        $progress = round($downloaded / $download_size * 100);
+		$progress = array('progress' => $progress);
+		$destination  = WP_CONTENT_DIR . '/uploads/geot_plugin/progress.json';
+		$file = fopen($destination, "w+");
+		fwrite($file, json_encode($progress, JSON_UNESCAPED_UNICODE));
+		fclose($file);
+	}
 
     /**
      * Function to unzip file,
