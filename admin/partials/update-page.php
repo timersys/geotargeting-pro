@@ -127,37 +127,81 @@
 			background-image: none;
 		}
 	</style>
-<p>
-    <?php _e('Downloading Maxmind database, please wait....','geot');?>
-</p>
-<div class="meter" style="width: 320px;">
-	<span style="width: 1%"></span>
+<div class="geot_updater">
+	<p>
+		<?php _e('Downloading Maxmind database, please wait....','geot');?>
+	</p>
+	<div class="meter" style="width: 320px;">
+		<span style="width: 1%"></span>
+	</div>
 </div>
 <script type="text/javascript">
     (function($){
 
-        geot_ajax();
+        geot_update_mmdb();
         geot_progress_check();
         var geot_progress = null,
             progress_url  = '<?php echo content_url('uploads/geot_plugin/progress.json');?>';
 
-        function geot_ajax(){
+        function geot_update_mmdb(){
             $.ajax({
                 method : 'POST',
                 url: ajaxurl,
                 data: {
                     action : 'geot_updater',
                     object: 'mmdb'
-                }
+                },
+				dataType: 'json'
             }).done(function(response) {
-                if( response.error )
+                if( response.error ){
                     $('.meter').replaceWith(response.error);
+					setTimeout(function(){clearTimeout(geot_progress)},1000);
+				}
+				if( response.success) {
+					$('.meter span').animate({
+						width: '100%'
+					}, 500);
+                    clearTimeout(geot_progress);
+					$('.meter').replaceWith('Database Updated');
+					geot_update_csv();
+				}
             }).error(function(response) {
-                if( response.error )
+                if( response.error ) {
                     $('.meter').replaceWith(response.error);
+					setTimeout(function(){clearTimeout(geot_progress)},1000);
+				}
             });
         }
-
+		function geot_update_csv(){
+			$('.geot_updater').append('<p><?php _e("Downloading Cities csv database, please wait....","geot");?></p><div class="meter" style="width: 320px;"><span style="width: 1%"></span></div>');
+			geot_progress_check();
+			$.ajax({
+				method : 'POST',
+				url: ajaxurl,
+				data: {
+					action : 'geot_updater',
+					object: 'csv'
+				},
+				dataType: 'json'
+			}).done(function(response) {
+				if( response.error ){
+					$('.meter').replaceWith(response.error);
+					setTimeout(function(){clearTimeout(geot_progress)},1000);
+				}
+				if( response.success) {
+					$('.meter span').animate({
+						width: '100%'
+					}, 500);
+					clearTimeout(geot_progress);
+					$('.meter').replaceWith('Cities csv database Updated');
+				}
+			}).error(function(response) {
+				if( response.error ) {
+					$('.meter').replaceWith(response.error);
+					setTimeout(function(){clearTimeout(geot_progress)},1000);
+				}
+			});
+		}
         function geot_progress_check(){
             $.ajax({
                 method : 'GET',
@@ -169,12 +213,9 @@
 					}, 500);
                     //clearTimeout(geot_progress);
             }).error(function(response) {
-                    $('.meter span').animate({
-						width: '100%'
-					}, 500);
-                    clearTimeout(geot_progress);
+				clearTimeout(geot_progress);
             });
-            geot_progress = setTimeout( geot_progress_check, 3000);
+            geot_progress = setTimeout( geot_progress_check, 2000);
         }
     })(jQuery)
 </script>

@@ -73,10 +73,30 @@ class GeoTarget_Updater {
 	 * @return [type] [description]
 	 */
 	function ajax_geot_updater(){
-		$url = 'https://s3.amazonaws.com/timersys/GeoLite2-City.mmdb.zip';
+		global $wp_filesystem;
+		if( ! WP_Filesystem() ) {
+			echo json_encode( array( 'error' => __('Could not access filesystem.')));
+			wp_die();
+		}
+
+		@set_time_limit( 300 );
+		if( isset($_POST['object']) && 'mmdb' == $_POST['object'] ) {
+			$url = 'https://s3.amazonaws.com/timersys/GeoLite2-City.mmdb.zip';
+			$file = WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/localfile.tmp';
+		} else {
+			$url = 'https://s3.amazonaws.com/timersys/geot_cities.zip';
+			$file = WP_CONTENT_DIR . '/uploads/geot_plugin/csv/localfile.tmp';
+		}
+		$dir = WP_CONTENT_DIR . '/uploads/';
+
+		$dirs = array('geot_plugin', 'geot_plugin/mmdb/', 'geot_plugin/csv/' );
+		foreach( $dirs as $mkdir ) {
+			if ( ! $wp_filesystem->mkdir( $dir.$mkdir, FS_CHMOD_DIR ) && ! $wp_filesystem->is_dir( $dir.$mkdir ) ) {
+				echo json_encode( array( 'error' => __( 'Could not create directory.' )));
+				wp_die();
+			}
+		}
 		$ch = curl_init();
-		$dir = WP_CONTENT_DIR . '/uploads/geot_plugin/';
-		$file = WP_CONTENT_DIR . '/uploads/geot_plugin/localfile.tmp';
 		$download = fopen ( $file, 'w+');
 	    curl_setopt($ch, CURLOPT_URL, $url);
 	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -93,17 +113,18 @@ class GeoTarget_Updater {
 		$working_dir = $this->unpack_package( $file );
 
 		if ( is_wp_error( $working_dir ) ) {
-			echo json_encode( array( 'error' => $working_dir->get_error_message()));
+			echo json_encode( array( 'error' => 'Failed to download package. '.$working_dir->get_error_message()));
 			wp_die();
 		}
 		$result = $this->install_package( array(
 			'source' => $working_dir,
-			'destination' => $dir,
+			'destination' => $dir.'geot_plugin/mmdb/',
 		) );
 		if ( is_wp_error( $result ) ) {
-			echo json_encode( array( 'error' => $result->get_error_message()));
+			echo json_encode( array( 'error' => 'Failed to unpack package. '.$result->get_error_message()));
 			wp_die();
 		}
+		echo json_encode( array( 'success' => 1));
 		die();
 	}
 
@@ -197,8 +218,6 @@ class GeoTarget_Updater {
         $destination = $args['destination'];
         $clear_destination = $args['clear_destination'];
 
-        @set_time_limit( 300 );
-
         if ( empty( $source ) || empty( $destination ) ) {
             return new WP_Error( 'bad_request', __('Bad Request') );
         }
@@ -222,7 +241,6 @@ class GeoTarget_Updater {
         if ( is_wp_error( $source ) ) {
             return $source;
         }
-
 
         if ( $clear_destination ) {
             // We're going to clear the destination if there's something there.
