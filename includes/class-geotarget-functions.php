@@ -68,60 +68,60 @@ class GeoTarget_Functions {
 
 	/**
 	 * Main function that return is user target the given countries / regions or not
-	 * @param  string $country         
-	 * @param  string $region          
-	 * @param  string $exclude_country 
-	 * @param  string $exclude_region  
-	 * @return bool      
+	 * @param  string $country
+	 * @param  string $region
+	 * @param  string $exclude_country
+	 * @param  string $exclude_region
+	 * @return bool
 	 */
 	public function targetCountry( $country = '', $region = '', $exclude_country = '', $exclude_region  = '')
 	{
 		//Push country list into array
 		$country 			= $this->toArray( $country );
-		
+
 		$exclude_country 	= $this->toArray( $exclude_country );
-				
+
 		$saved_regions 		= apply_filters('geot/get_regions', array());
 
 		//Append any regions
 		if ( !empty( $region ) && ! empty( $saved_regions ) ) {
-			
-			$region = $this->toArray( $region );	
-				
+
+			$region = $this->toArray( $region );
+
 			foreach ($region as $region_name) {
-				
+
 				foreach ($saved_regions as $key => $saved_region) {
-				
+
 					if ( strtolower( $region_name ) == strtolower( $saved_region['name'] ) ) {
-					
+
 						$country = array_merge( (array)$country, (array)$saved_region['countries']);
-					
+
 					}
 				}
 			}
 
-		}	
-		// append exlcluded regions to excluded countries		
+		}
+		// append exlcluded regions to excluded countries
 		if (!empty( $exclude_region ) && ! empty( $saved_regions ) ) {
 
 			$exclude_region = $this->toArray( $exclude_region );
-			
+
 			foreach ($exclude_region as $region_name ) {
 
 				foreach ($saved_regions as $key => $saved_region) {
-				
+
 					if ( strtolower( $region_name ) == strtolower( $saved_region['name'] ) ) {
 
 						$exclude_country = array_merge((array)$exclude_country, (array)$saved_region['countries']);
 
 					}
-				}	
+				}
 			}
-		}	
-			
-		//set target to false	
+		}
+
+		//set target to false
 		$target = false;
-			
+
 		$user_country = $this->get_user_country();
 
 		if ( count( $country ) > 0 ) {
@@ -138,7 +138,7 @@ class GeoTarget_Functions {
 			$target = true;
 
 		}
-		
+
 		if ( count( $exclude_country ) > 0 ) {
 
 			foreach ( $exclude_country as $c ) {
@@ -148,8 +148,8 @@ class GeoTarget_Functions {
 				}
 
 			}
-		}	
-		
+		}
+
 
 		return $target;
 	}
@@ -304,19 +304,19 @@ class GeoTarget_Functions {
 	/**
 	 * Helper function to conver to array
 	 * @param  string $value comma separated countries, etc
-	 * @return array  
+	 * @return array
 	 */
 	private function toArray( $value = "" )
 	{
 		if ( empty( $value ) )
 			return array();
-		
+
 		if ( is_array( $value ) )
 			return array_map('trim', $value );
-	
+
 		if ( stripos($value, ',') > 0)
 			return array_map( 'trim', explode( ',', $value ) );
-	
+
 		return array( trim( $value ) );
 	}
 
@@ -326,7 +326,7 @@ class GeoTarget_Functions {
 	 * @return array Country array object
 	 */
 	public function get_user_country()
-	{	
+	{
 		if( empty( $this->userCountry ) ) {
 			$this->userCountry = $this->calculateUserCountry();
 		}
@@ -481,8 +481,9 @@ class GeoTarget_Functions {
 						$record = $reader->$service_func( $ip );
 					}
 				} else {
-					$reader = new Reader( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/data/GeoLite2-City.mmdb' );
-					$record = $reader->city( $ip );
+					$reader = new Reader( apply_filters( 'geot/mmdb_path', WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/GeoLite2-City.mmdb' ) );
+					$service_func = apply_filters( 'geot/maxmind_service', 'city');
+					$record = $reader->$service_func( $ip );
 				}
 			} catch ( GeoIp2\Exception\OutOfQueriesException $e ) {
 				Geotarget_Emails::OutOfQueriesException();
@@ -503,7 +504,7 @@ class GeoTarget_Functions {
 
 			$country   = $record->country;
 			$continent = isset( $record->continent ) ? $record->continent->name : false;
-			if(  ! $using_api || ( $using_api && $service_func != 'country' ) ) {
+			if(  $service_func != 'country' ) {
 				$city     = isset( $record->city ) ? $record->city->name : false;
 				$cp       = isset( $record->postal ) ? $record->postal->code : false;
 				$state    = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
@@ -620,4 +621,4 @@ class GeoTarget_Functions {
 		return apply_filters( 'geot/user_ip', $ip );
 	}
 
-}	
+}
