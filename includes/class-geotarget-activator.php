@@ -75,6 +75,7 @@ class GeoTarget_Activator {
 
 		// update version number to current one
 		update_option( 'geot_version', GEOT_VERSION);
+		update_option( 'geot_db_version', GEOT_DB_VERSION);
 	}
 
 	protected static function add_countries_to_db() {
