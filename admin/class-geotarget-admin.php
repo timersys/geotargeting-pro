@@ -188,7 +188,7 @@ class GeoTarget_Admin {
 		update_post_meta( $post_id, 'geot_options', apply_filters( 'geot/metaboxes/sanitized_options', $opts ) );
 		// add one post meta to let us retrieve only posts that need to be geotarted ( used on helpers class )
 		$geot_post = false;
-		if( !empty( $opts['country_code'] ) || !empty( $opts['region'] ) || !empty( $opts['cities'] ) || !empty( $opts['state'] ) )
+		if( !empty( $opts['country_code'] ) || !empty( $opts['region'] ) || !empty( $opts['cities'] ) || !empty( $opts['states'] ) )
 			$geot_post = true;
 		update_post_meta( $post_id, '_geot_post', $geot_post );
 	}
