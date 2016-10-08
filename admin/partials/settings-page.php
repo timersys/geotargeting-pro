@@ -1,8 +1,60 @@
-<?php 
+<?php
 /**
  * Settings page template
  * @since  1.0.0
  */
+ if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
+
+
+	 update_option( 'geot_settings' , esc_sql( $_POST['geot_settings'] ) );
+
+ }
+
+ $opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+
+ // initialize
+ if( !isset( $opts['region'] ) || ! is_array( $opts['region'] ) ) {
+	 $opts['region'][] = array( 'name' , 'countries' );
+ }
+ if( ! isset( $opts['city_region'] ) || ! is_array( $opts['city_region'] ) ) {
+	 $opts['city_region'][] = array( 'name' , 'cities' );
+ }
+ if( ! isset( $opts['redirection'] ) || ! is_array( $opts['redirection'] ) ) {
+	 $opts['redirection'][] = array( 'name' , 'countries', 'regions' );
+ }
+ if( empty( $opts['geot_license_key'] ) ) {
+	 $opts['geot_license_key'] = '';
+ }
+ if( empty( $opts['debug_mode'] ) ) {
+	 $opts['debug_mode'] = '0';
+ }
+ if( empty( $opts['disable_menu_integration'] ) ) {
+	 $opts['disable_menu_integration'] = '0';
+ }
+ if( empty( $opts['disable_widget_integration'] ) ) {
+	 $opts['disable_widget_integration'] = '0';
+ }
+ if( empty( $opts['cloudflare'] ) ) {
+	 $opts['cloudflare'] = '0';
+ }
+ if( empty( $opts['maxm_id'] ) ) {
+	 $opts['maxm_id'] = '';
+ }
+ if( empty( $opts['maxm_license'] ) ) {
+	 $opts['maxm_license'] = '';
+ }
+ if( empty( $opts['maxm_service'] ) ) {
+	 $opts['maxm_service'] = 'city';
+ }
+ if( empty( $opts['geot_uninstall'] ) ) {
+	 $opts['geot_uninstall'] = '';
+ }
+ if( empty( $opts['ajax_mode'] ) ) {
+	 $opts['ajax_mode'] = '0';
+ }
+
+ $countries 	= apply_filters('geot/get_countries', array());
+
 ?>
 <div class="wrap geot-settings">
 	<h2>GeoTargeting <?php echo $this->version;?></h2>
@@ -15,7 +67,7 @@
 			<tr valign="top" class="">
 				<th><label for="license"><?php _e( 'Enter your license key', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
-					<label><input type="text" id="license" name="geot_settings[geot_license_key]" value="<?php  echo $opts['geot_license_key'];?>" class="regular-text <?php echo 'geot_license_' . get_option( 'geot_license_active' );?>" /> 
+					<label><input type="text" id="license" name="geot_settings[geot_license_key]" value="<?php  echo $opts['geot_license_key'];?>" class="regular-text <?php echo 'geot_license_' . get_option( 'geot_license_active' );?>" />
 					<p class="help"><?php _e( 'Enter your license key to get automatic updates', $this->GeoTarget ); ?></p>
 				</td>
 			</tr>
@@ -136,15 +188,15 @@
 			<tr valign="top" class="">
 				<th><label for="region"><?php _e( 'Create new region', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
-				<?php 
+				<?php
 
 				if( !empty( $opts['region'] ) ) {
 					$i = 0;
 					foreach ( $opts['region'] as $region ) { $i++;?>
-			
+
 						<div class="region-group"  data-id="<?php echo $i;?>" >
-							
-							<input type="text" placeholder="Enter region name" name="geot_settings[region][<?php echo $i;?>][name]" value="<?php echo !empty( $region['name'] )? esc_attr($region['name']): '' ; ?>"/> 
+
+							<input type="text" placeholder="Enter region name" name="geot_settings[region][<?php echo $i;?>][name]" value="<?php echo !empty( $region['name'] )? esc_attr($region['name']): '' ; ?>"/>
 							<a href="#" class="remove-region"title="<?php _e( 'Remove Region', $this->GeoTarget );?>">-</a>
 							<select name="geot_settings[region][<?php echo $i;?>][countries][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
 								<?php
@@ -156,13 +208,13 @@
 								?>
 							</select>
 
-						</div>	
-					<?php } 
+						</div>
+					<?php }
 				}?>
 					<a href="#" class="add-region button">Add Region</a>
 					<p class="help"><?php _e( 'Add as many countries you need for each region', $this->GeoTarget ); ?></p>
 				</td>
-				
+
 			</tr>
 			<tr valign="top" class="">
 				<th><h3><?php _e( 'Cities:', $this->GeoTarget ); ?></h3></th>

@@ -33,6 +33,7 @@ class GeoTarget_Activator {
 		global $wpdb;
 
 		$current_version = get_option( 'geot_version' );
+		$db_version 	 = get_option( 'geot_db_version' );
 
 		$country_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}geot_countries` (
 		`id`	 		INT(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, -- the id just for numeric
@@ -60,16 +61,17 @@ class GeoTarget_Activator {
 			dbDelta( $country_table );
 			self::add_countries_to_db();
 		}
+
 		$city_table_name = "{$wpdb->base_prefix}geot_cities";
-		if ($wpdb->get_var( "SHOW TABLES LIKE '{$city_table_name}'") != $city_table_name) {
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$city_table_name}'") != $city_table_name )
 			dbDelta( $city_table );
 
-			for ( $i = 1; $i <= 6; $i ++ ) {
-				$csv_file  = dirname( __FILE__ ) . '/data/geot_cities' . $i . '.csv';
-				$load_data = "LOAD DATA LOCAL INFILE '{$csv_file}' INTO TABLE `{$wpdb->base_prefix}geot_cities` CHARACTER SET UTF8 FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `country_code` , `city`);";
-				$wpdb->query( $load_data );
-			}
-		}
+		// check if mmdb file exist or if cities table is empty and show admin notice
+		if( ! file_exists( WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/GeoLite2-City.mmdb')
+			|| ! $wpdb->get_var("SELECT count(id) FROM {$wpdb->base_prefix}geot_cities")
+			|| version_compare( $db_version, GEOT_DB_VERSION, '<' )
+		)
+			update_option( 'geot_db_update', true);
 
 		// update version number to current one
 		update_option( 'geot_version', GEOT_VERSION);

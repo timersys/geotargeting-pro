@@ -47,62 +47,12 @@ class GeoTarget_Settings {
 	/**
 	 * Settings page for plugin
 	 */
-	public function settings_page()
-	{
-		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
-
-
-			update_option( 'geot_settings' , esc_sql( $_POST['geot_settings'] ) );
-		
-		}	
-		
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
-		
-		// initialize
-		if( !isset( $opts['region'] ) || ! is_array( $opts['region'] ) ) {
-			$opts['region'][] = array( 'name' , 'countries' );
-		}
-		if( ! isset( $opts['city_region'] ) || ! is_array( $opts['city_region'] ) ) {
-			$opts['city_region'][] = array( 'name' , 'cities' );
-		}
-		if( ! isset( $opts['redirection'] ) || ! is_array( $opts['redirection'] ) ) {
-			$opts['redirection'][] = array( 'name' , 'countries', 'regions' );
-		}
-		if( empty( $opts['geot_license_key'] ) ) {
-			$opts['geot_license_key'] = '';
-		}
-		if( empty( $opts['debug_mode'] ) ) {
-			$opts['debug_mode'] = '0';
-		}
-		if( empty( $opts['disable_menu_integration'] ) ) {
-			$opts['disable_menu_integration'] = '0';
-		}
-		if( empty( $opts['disable_widget_integration'] ) ) {
-			$opts['disable_widget_integration'] = '0';
-		}
-		if( empty( $opts['cloudflare'] ) ) {
-			$opts['cloudflare'] = '0';
-		}
-		if( empty( $opts['maxm_id'] ) ) {
-			$opts['maxm_id'] = '';
-		}
-		if( empty( $opts['maxm_license'] ) ) {
-			$opts['maxm_license'] = '';
-		}
-		if( empty( $opts['maxm_service'] ) ) {
-			$opts['maxm_service'] = 'city';
-		}
-		if( empty( $opts['geot_uninstall'] ) ) {
-			$opts['geot_uninstall'] = '';
-		}
-		if( empty( $opts['ajax_mode'] ) ) {
-			$opts['ajax_mode'] = '0';
-		}
-
-		$countries 	= apply_filters('geot/get_countries', array());
-
-		include plugin_dir_path( dirname( __FILE__ ) ) . '/partials/settings-page.php';
+	public function settings_page() {
+		if( isset( $_GET['geot_db_update'] ) && 'true' === $_GET['geot_db_update'] )
+			include plugin_dir_path( dirname( __FILE__ ) ) . '/partials/update-page.php';
+		else
+			include plugin_dir_path( dirname( __FILE__ ) ) . '/partials/settings-page.php';	
 	}
 
-	
+
 }

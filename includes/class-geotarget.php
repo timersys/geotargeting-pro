@@ -43,7 +43,7 @@ class GeoTarget {
 	 * @var GeoTarget_Admin $admin
 	 */
 	public $admin;
-	
+
 	/**
 	 * @var GeoTarget_Menus $menus
 	 */
@@ -204,6 +204,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-menus.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-updater.php';
 
 
 		$this->loader = new GeoTarget_Loader();
@@ -255,18 +256,19 @@ class GeoTarget {
 		global $pagenow;
 
 		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
+		$updater 	 = new GeoTarget_Updater( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $this->admin, 'register_tiny_buttons' );
-   		
+
    		// Add html for shortcodes popup
    		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
 
 			$this->loader->add_action( 'in_admin_footer', $this->admin, 'add_editor' );
-   			
+
    		}
-		
+
 		// register dropdown widget
 		$this->loader->add_action( 'widgets_init', $this->admin, 'register_widgets');
 
@@ -277,11 +279,11 @@ class GeoTarget {
 		// Add geot to Advanced custom fields plugin
 		$this->loader->add_action( 'acf/include_field_types', $this->admin, 'add_geot_to_acfv5' );
 		$this->loader->add_action( 'acf/register_fields', $this->admin, 'add_geot_to_acfv4' );
-		
+
 
 		$this->loader->add_action( 'add_meta_boxes', $this->admin, 'add_meta_boxes' );
 		$this->loader->add_action( 'save_post', $this->admin, 'save_meta_options' , 20 );
-		
+
 		$geot_widgets = new Geot_Widgets( $this->get_GeoTarget(), $this->get_version() );
 
 		// give users a way to disable widgets targeting
@@ -291,8 +293,12 @@ class GeoTarget {
 			$this->loader->add_action( 'widget_display_callback', $geot_widgets, 'target_widgets' );
 			$this->loader->add_action( 'widget_update_callback', $geot_widgets, 'save_widgets_data', 5, 3 );
 		}
-		// License and Updates	
+		// License and Updates
 		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_license', 1 );
+
+		// Update
+		$this->loader->add_action( 'admin_init' , $updater, 'update_notice' );
+		$this->loader->add_action( 'wp_ajax_geot_updater' , $updater, 'ajax_geot_updater' );
 
 		// Ajax admin
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
