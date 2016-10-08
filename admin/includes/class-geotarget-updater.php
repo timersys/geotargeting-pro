@@ -73,20 +73,33 @@ class GeoTarget_Updater {
 	 * @return [type] [description]
 	 */
 	function ajax_geot_updater(){
-		global $wp_filesystem;
+		global $wp_filesystem,$wpdb;
+
 		if( ! WP_Filesystem() ) {
 			echo json_encode( array( 'error' => __('Could not access filesystem.')));
 			wp_die();
 		}
 
 		@set_time_limit( 300 );
-		if( isset($_POST['object']) && 'mmdb' == $_POST['object'] ) {
-			$url = 'https://s3.amazonaws.com/timersys/GeoLite2-City.mmdb.zip';
-			$file = WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/localfile.tmp';
-		} else {
+		$object = isset($_POST['object'] ) && 'mmdb' == $_POST['object'] ? 'mmdb' : 'csv';
+
+		$url = 'https://s3.amazonaws.com/timersys/GeoLite2-City.mmdb.zip';
+		$destination = WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/';
+		$file = $destination . 'localfile.tmp';
+
+		if( $object == 'csv' ) {
+			// if we already have city rows, not need to run it again
+			if( $wpdb->get_var("SELECT count(id) FROM {$wpdb->base_prefix}geot_cities") ) {
+				delete_option( 'geot_db_update', true);
+				echo json_encode( array( 'success' => 1, 'refresh' => 1));
+				wp_die();
+			}
+
 			$url = 'https://s3.amazonaws.com/timersys/geot_cities.zip';
-			$file = WP_CONTENT_DIR . '/uploads/geot_plugin/csv/localfile.tmp';
+			$destination = WP_CONTENT_DIR . '/uploads/geot_plugin/csv/';
+			$file = $destination . 'localfile.tmp';
 		}
+
 		$dir = WP_CONTENT_DIR . '/uploads/';
 
 		$dirs = array('geot_plugin', 'geot_plugin/mmdb/', 'geot_plugin/csv/' );
@@ -118,14 +131,30 @@ class GeoTarget_Updater {
 		}
 		$result = $this->install_package( array(
 			'source' => $working_dir,
-			'destination' => $dir.'geot_plugin/mmdb/',
+			'destination' => $destination,
 		) );
+
 		if ( is_wp_error( $result ) ) {
 			echo json_encode( array( 'error' => 'Failed to unpack package. '.$result->get_error_message()));
 			wp_die();
 		}
+
+		if( $object == 'csv' ) {
+			if( function_exists('is_wpe') ) {
+				echo json_encode( array( 'error' => 'Failed to install database. Are you running on WpEngine ? You will need to populate database manually, check https://timersys.com/geotargeting/docs/populating-database/ '));
+				wp_die();
+			}
+			for ( $i = 1; $i <= 6; $i ++ ) {
+				$csv_file  = $destination . 'geot_cities' . $i . '.csv';
+				$load_data = "LOAD DATA LOCAL INFILE '{$csv_file}' INTO TABLE `{$wpdb->base_prefix}geot_cities` CHARACTER SET UTF8 FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `country_code` , `city`);";
+				$wpdb->query( $load_data );
+			}
+			delete_option( 'geot_db_update', true);
+			echo json_encode( array( 'success' => 1, 'refresh' => 1));
+			wp_die();
+		}
 		echo json_encode( array( 'success' => 1));
-		die();
+		wp_die();
 	}
 
 	/**

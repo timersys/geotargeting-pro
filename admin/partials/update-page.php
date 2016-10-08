@@ -195,6 +195,9 @@
 					clearTimeout(geot_progress);
 					$('.meter').replaceWith('Cities csv database Updated');
 				}
+				if( response.refresh ) {
+					location.replace("<?php echo admin_url('admin.php?page=geot-settings');?>");
+				}
 			}).error(function(response) {
 				if( response.error ) {
 					$('.meter').replaceWith(response.error);
