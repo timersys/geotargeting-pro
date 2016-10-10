@@ -36,41 +36,40 @@ AND pm.meta_value != ''";
 		if( isset( self::$_user_is_targeted[$post_id] ) )
 			return self::$_user_is_targeted[$post_id];
 
-		$include_mode = ! empty( $opts['geot_include_mode'] ) ? $opts['geot_include_mode'] : 'include';
-		$country_remove = $state_remove = $city_remove = null;
-
+		$mode = ! empty( $opts['geot_include_mode'] ) ? $opts['geot_include_mode'] : 'include';
+		$country_remove = $state_remove = $city_remove = false;
+		$country_target = $state_target = $city_target = null;
 		if ( ! empty( $opts['country_code'] ) ||  ! empty( $opts['region'] ) ) {
-			$country_remove = false;
 			$countries  = ! empty( $opts['country_code'] ) ? $opts['country_code'] : '';
 			$regions    = ! empty( $opts['region'] ) ? $opts['region'] : '';
-			$target     = geot_target( $countries, $regions );
-			if ( ( $include_mode == 'include' && ! $target ) || ( $include_mode == 'exclude' && $target ) )
+			$country_target     = geot_target( $countries, $regions );
+			if ( $mode == 'exclude' && $country_target )
 				$country_remove = true;
 
 		}
 
 		if ( ! empty( $opts['cities'] ) ) {
-			$city_remove = false;
 			$cities = ! empty( $opts['cities'] ) ? $opts['cities'] : '';
-			$target = geot_target_city( $cities );
-			if ( ( $include_mode == 'include' && ! $target ) || ( $include_mode == 'exclude' && $target ) )
+			$city_target = geot_target_city( $cities );
+			if ( $mode == 'exclude' && $city_target )
 				$city_remove = true;
 		}
 
 		if ( ! empty( $opts['states'] ) ) {
-			$state_remove = false;
 			$states = ! empty( $opts['states'] ) ? $opts['states'] : '';
-			$target = geot_target_state( $states );
+			$state_target = geot_target_state( $states );
 
-			if ( ( $include_mode == 'include' && ! $target ) || ( $include_mode == 'exclude' && $target ) )
+			if ( $mode == 'exclude' && $state_target )
 				$state_remove = true;
 
 		}
-		
-		if( $include_mode == 'include' &&  ( $country_remove !== false && $city_remove !== false && $state_remove !== false ) )
+		if( $mode == 'include' ) {
 			self::$_user_is_targeted[$post_id] = true;
+			if ( ( $country_target || $state_target || $city_target ) || ($country_target === null && $state_target === null && $city_target === null) )
+				self::$_user_is_targeted[$post_id] = false;
+		}
 
-		if( $include_mode == 'exclude' && ( $country_remove || $state_remove || $city_remove ) )
+		if( $mode == 'exclude' && ( $country_remove || $state_remove || $city_remove ) )
 			self::$_user_is_targeted[$post_id] = true;
 
 		return isset( self::$_user_is_targeted[$post_id] ) ? self::$_user_is_targeted[$post_id] : false;
