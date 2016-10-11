@@ -498,8 +498,9 @@ class GeoTarget_Functions {
 			} catch ( Exception $e ) {
 				// log error
 				error_log( $e->getMessage() );
+				$this->calculated_data = $this->getFallbackCountry();
 				//for any other exception show fallback country
-				return $this->getFallbackCountry();
+				return $this->calculated_data;
 			}
 
 			$country   = $record->country;
