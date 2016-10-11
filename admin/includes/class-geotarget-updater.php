@@ -50,7 +50,7 @@ class GeoTarget_Updater {
      */
 	public function update_notice() {
         $update = get_option( 'geot_db_update' );
-        if( $update )
+        if( $update || ! file_exists( WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/GeoLite2-City.mmdb') )
             add_action( 'admin_notices', array( $this, 'show_update_notice') );
     }
 
