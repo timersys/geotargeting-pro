@@ -67,7 +67,7 @@ class GeoTarget_Activator {
 			dbDelta( $city_table );
 
 		// check if mmdb file exist or if cities table is empty and show admin notice
-		if( ! file_exists( WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/GeoLite2-City.mmdb')
+		if( ! file_exists( WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/GeoLite2-City.mmdb' )
 			|| ! $wpdb->get_var("SELECT count(id) FROM {$wpdb->base_prefix}geot_cities")
 			|| version_compare( $db_version, GEOT_DB_VERSION, '<' )
 		)
