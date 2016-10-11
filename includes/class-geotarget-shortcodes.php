@@ -101,11 +101,11 @@ class GeoTarget_Shortcodes {
 			'exclude_country'	=>'',
 			'exclude_region'	=>''
 		), $atts ) );
-		
-				
+
+
 		if ( $this->functions->targetCountry( $country, $region, $exclude_country, $exclude_region ) )
 			return do_shortcode( $content );
-			
+
 		return '';
 	}
 
@@ -163,7 +163,7 @@ class GeoTarget_Shortcodes {
 	}
 
 
-	/** 
+	/**
 	 * Displays the 2 character country for the current user
 	 * [geot_country_code]   [geot_country_code]
 	 * @return  string country CODE
@@ -179,7 +179,7 @@ class GeoTarget_Shortcodes {
 	}
 
 
-	/** 
+	/**
 	 * Displays the country name for the current user
 	 * [geot_country_name]
 	 * @return  string country name
@@ -228,7 +228,7 @@ class GeoTarget_Shortcodes {
 
 		$state = $this->functions->get_user_state();
 
-		if ( !empty( $state->names ) )
+		if ( !empty( $state->names ) || !empty( $state->name ) )
 			return apply_filters( 'geot/shortcodes/state_name', $state->name, $state );
 
 		return  apply_filters( 'geot/shortcodes/state_name_default', $default );
@@ -282,4 +282,4 @@ class GeoTarget_Shortcodes {
 		return $regions;
 	}
 
-}	
+}

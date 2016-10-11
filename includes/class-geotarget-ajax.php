@@ -127,7 +127,7 @@ class GeoTarget_Ajax {
 
 		$r = $this->functions->get_user_state();
 
-		if ( !empty( $r->names ) )
+		if ( !empty( $r->names ) || !empty( $r->name ) )
 			return apply_filters( 'geot/shortcodes/state_name', $r->name, $r );
 
 		return  apply_filters( 'geot/shortcodes/state_name_default', $geot['default'] );
@@ -326,4 +326,4 @@ class GeoTarget_Ajax {
 		return $html;
 	}
 
-}	
+}

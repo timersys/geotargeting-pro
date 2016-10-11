@@ -439,17 +439,38 @@ class GeoTarget_Functions {
 
 		$cookie_name = apply_filters( 'geot/cookie_name' , 'geot_country');
 
+		// Easy debug
+		if( isset( $_GET['geot_debug'] ) ) {
+
+			if( isset( $_GET['geot_state'] ) ) {
+				$state = new stdClass;
+				$state->name = esc_attr( $_GET['geot_state'] );
+				$state->isoCode = isset( $_GET['geot_state_code'] ) ? esc_attr( $_GET['geot_state_code'] ) : '';
+			}
+
+			$this->calculated_data = apply_filters('geot/user_data/geot_debug', array(
+				'country' => $this->getCountryByIsoCode( $_GET['geot_debug'] ),
+				'city'    => isset( $_GET['geot_city'] ) ? esc_attr( $_GET['geot_city'] ) : '',
+				'zip'     => isset( $_GET['geot_zip'] ) ? esc_attr( $_GET['geot_zip'] ) : '',
+				'state'   => isset( $state ) ? $state : '',
+			));
+
+			return $this->calculated_data;
+		}
+
 		// If user set cookie use instead
 		if( ( empty( $this->opts['debug_mode'] ) && !defined('GEOT_DEBUG') ) &&  ! empty( $_COOKIE[$cookie_name]) ) {
 
 			$iso_code = $_COOKIE[$cookie_name];
 
-			return apply_filters('geot/user_data/geot_cookie', array(
+			$this->calculated_data = apply_filters('geot/user_data/geot_cookie', array(
 				'country' => $this->getCountryByIsoCode( $iso_code ),
 				'city'    => '',
 				'zip'     => '',
 				'state'   => '',
 			));
+
+			return $this->calculated_data;
 		}
 
 		// If we already calculated on session return (if we are not calling by IP)
