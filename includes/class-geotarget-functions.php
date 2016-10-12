@@ -434,7 +434,7 @@ class GeoTarget_Functions {
 	public function getUserDataByIp( $ip = "", $maxmin_free_db = false ) {
 
 		// if we already calculated it on execution return
-		if( ! empty ( $this->calculated_data ) )
+		if( ! empty ( $this->calculated_data ) && empty( $ip ) )
 			return apply_filters('geot/user_data/calculated_data', $this->calculated_data );
 
 		$cookie_name = apply_filters( 'geot/cookie_name' , 'geot_country');
