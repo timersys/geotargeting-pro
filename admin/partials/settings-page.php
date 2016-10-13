@@ -4,9 +4,13 @@
  * @since  1.0.0
  */
  if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
+     $settings = esc_sql( $_POST['geot_settings'] );
+     if( isset($_FILES['geot_settings_json']) && 'application/json' == $_FILES['geot_settings_json']['type'] ) {
+         $file = file_get_contents($_FILES['geot_settings_json']['tmp_name']);
+         $settings = json_decode($file,true);
 
-
-	 update_option( 'geot_settings' , esc_sql( $_POST['geot_settings'] ) );
+     }
+	 update_option( 'geot_settings' ,  $settings);
 
  }
 
@@ -58,7 +62,7 @@
 ?>
 <div class="wrap geot-settings">
 	<h2>GeoTargeting <?php echo $this->version;?></h2>
-	<form name="geot-settings" method="post">
+	<form name="geot-settings" method="post" enctype="multipart/form-data">
 		<table class="form-table">
 			<?php do_action( 'geot/settings_page/before' ); ?>
 			<tr valign="top" class="">
@@ -75,7 +79,7 @@
 				<th><label for="maxm_id"><?php _e( 'Debug Mode', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 					<label><input type="checkbox" id="maxm_id" name="geot_settings[debug_mode]" value="1" <?php checked($opts['debug_mode'],'1');?>/>
-						<p class="help"><?php _e( 'If you want to calculate user data on every page load and print in the footer debug info with check this. Not recommended on live sites', $this->GeoTarget ); ?></p>
+						<p class="help"><?php _e( 'If you want to calculate user data on every page load and print in the footer debug info with check this.', $this->GeoTarget ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top" class="">
@@ -135,19 +139,7 @@
 					<p class="help"><?php _e( 'All bots / crawlers will be treated as the are from this country. More info in ', $this->GeoTarget ); ?><a href="https://timersys.com/geotargeting/docs/bots-seo/">Bots in Geotargeting</a></p>
 				</td>
 			</tr>
-			<tr valign="top" class="">
-				<th><h3><?php _e( 'Cloudflare:', $this->GeoTarget ); ?></h3></th>
-				<td colspan="3">
-					<p><?php _e( 'If you want to rely country detection to your cloudflare account check below', $this->GeoTarget ); ?></p>
-				</td>
-			</tr>
-			<tr valign="top" class="">
-				<th><label for="maxm_id"><?php _e( 'Use Cloudflare', $this->GeoTarget ); ?></label></th>
-				<td colspan="3">
-					<label><input type="checkbox" id="maxm_id" name="geot_settings[cloudflare]" value="1" <?php checked($opts['cloudflare'],'1');?>/>
-					<p class="help"><?php _e( 'Use Cloudflare country detection', $this->GeoTarget ); ?></p>
-				</td>
-			</tr>
+
 			<tr valign="top" class="">
 				<th><h3><?php _e( 'Maxmind:', $this->GeoTarget ); ?></h3></th>
 				<td colspan="3">
@@ -341,8 +333,36 @@
 			<tr valign="top" class="">
 				<th><label for="maxm_id"><?php _e( 'Uninstall', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
-					<label><input type="checkbox" id="" name="geot_settings[geot_uninstall]" value="1" <?php checked($opts['geot_uninstall'],'1');?>/>
+				        <input type="checkbox" id="" name="geot_settings[geot_uninstall]" value="1" <?php checked($opts['geot_uninstall'],'1');?>/>
 						<p class="help"><?php _e( 'Will delete all database records and plugin settings when you delete the plugin', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+
+            <tr valign="top" class="">
+				<th><h3><?php _e( 'Export/import:', $this->GeoTarget ); ?></h3></th>
+				<td colspan="3">
+					<p><?php _e( 'Export your setting or import them with a few clicks' , $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="maxm_id"><?php _e( 'Export settings', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+                    <div id="export_href">
+
+                    </div>
+                    <script type="text/javascript">
+                        var geot_settings = '<?php echo json_encode($opts);?>';
+                        var data = "text/json;charset=utf-8," + encodeURIComponent(geot_settings);
+                        jQuery('<a href="data:' + data + '" download="geot_settings.json" class="button">Export Settings</a>').appendTo('#export_href');
+                    </script>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="maxm_id"><?php _e( 'Import settings', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+                        Select image to upload:
+                        <input type="file" name="geot_settings_json" id="fileToUpload"><br />
+                        <input type="submit" value="Import" name="submit">
 				</td>
 			</tr>
 			<?php do_action( 'geot/settings_page/after' ); ?>
