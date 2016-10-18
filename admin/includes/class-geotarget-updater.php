@@ -81,7 +81,13 @@ class GeoTarget_Updater {
 		}
 
 		@set_time_limit( 300 );
-		$object = isset($_POST['object'] ) && 'mmdb' == $_POST['object'] ? 'mmdb' : 'csv';
+		@error_reporting(E_ALL);
+		@ini_set('display_errors', 1);
+		$object = isset($_POST['object'] ) ? $_POST['object'] : 'csv';
+		if( ! in_array($object, array('mmdb', 'safe_mmdb', 'csv')) ) {
+			echo json_encode( array( 'error' => __( 'Cheating eh?' )));
+			wp_die();
+		}
 
 		$url = 'https://s3.amazonaws.com/timersys/GeoLite2-City.mmdb.zip';
 		$destination = WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/';
@@ -98,6 +104,11 @@ class GeoTarget_Updater {
 			$url = 'https://s3.amazonaws.com/timersys/geot_cities.zip';
 			$destination = WP_CONTENT_DIR . '/uploads/geot_plugin/csv/';
 			$file = $destination . 'localfile.tmp';
+		}
+		if( $object == 'safe_mmdb' ) {
+			$this->clear_destination( $destination );
+			$url = 'https://s3.amazonaws.com/timersys/GeoLite2-City.mmdb';
+			$file = $destination . 'GeoLite2-City.mmdb';
 		}
 
 		$dir = WP_CONTENT_DIR . '/uploads/';
@@ -123,21 +134,27 @@ class GeoTarget_Updater {
 	    curl_close($ch);
 		fclose($download);
 
-		$working_dir = $this->unpack_package( $file );
 
-		if ( is_wp_error( $working_dir ) ) {
-			echo json_encode( array( 'error' => 'Failed to download package. '.$working_dir->get_error_message()));
-			wp_die();
-		}
-		$result = $this->install_package( array(
-			'source' => $working_dir,
-			'destination' => $destination,
-		) );
 
-		if ( is_wp_error( $result ) ) {
-			echo json_encode( array( 'error' => 'Failed to unpack package. '.$result->get_error_message()));
-			wp_die();
+		if( $object != 'safe_mmdb' ) {
+
+			$working_dir = $this->unpack_package( $file );
+
+			if ( is_wp_error( $working_dir ) ) {
+				echo json_encode( array( 'error' => 'Failed to download package. '.$working_dir->get_error_message()));
+				wp_die();
+			}
+			$result = $this->install_package( array(
+				'source' => $working_dir,
+				'destination' => $destination,
+			) );
+
+			if ( is_wp_error( $result ) ) {
+				echo json_encode( array( 'error' => 'Failed to unpack package. '.$result->get_error_message()));
+				wp_die();
+			}
 		}
+
 
 		if( $object == 'csv' ) {
 			if( function_exists('is_wpe') ) {
@@ -166,14 +183,22 @@ class GeoTarget_Updater {
 	 * @param  [type] $uploaded      [description]
 	 * @return [type]                [description]
 	 */
-	function progress($resource,$download_size, $downloaded, $upload_size, $uploaded) {
+	function progress() {
+		$arg_list = func_get_args();
 		$progress = 0;
+		$download_size  =   $arg_list[1];
+		$downloaded 	=   $arg_list[2];
+		// hack for old curl
+		if( is_int($arg_list[0]) ){
+			$download_size  =   $arg_list[0];
+			$downloaded 	=   $arg_list[1];
+		}
 		if ($download_size > 0)
 		        $progress = round($downloaded / $download_size * 100);
-		$progress = array('progress' => $progress);
+		$progress = array( 'progress'=> $progress );
 		$destination  = WP_CONTENT_DIR . '/uploads/geot_plugin/progress.json';
 		$file = fopen($destination, "w+");
-		fwrite($file, json_encode($progress, JSON_UNESCAPED_UNICODE));
+		fwrite($file, json_encode($progress));
 		fclose($file);
 	}
 
@@ -216,7 +241,7 @@ class GeoTarget_Updater {
         if ( is_wp_error($result) ) {
 			$wp_filesystem->delete($working_dir, true);
 			if ( 'incompatible_archive' == $result->get_error_code() ) {
-				return new WP_Error( 'incompatible_archive', $this->strings['incompatible_archive'], $result->get_error_data() );
+				return new WP_Error( 'incompatible_archive', 'Incompatible file type', $result->get_error_data() );
 			}
 			return $result;
 		}
@@ -262,7 +287,7 @@ class GeoTarget_Updater {
         if ( 1 == count( $source_files ) && $wp_filesystem->is_dir( trailingslashit( $args['source'] ) . $source_files[0] . '/' ) ) { //Only one folder? Then we want its contents.
             $source = trailingslashit( $args['source'] ) . trailingslashit( $source_files[0] );
         } elseif ( count( $source_files ) == 0 ) {
-            return new WP_Error( 'incompatible_archive_empty', $this->strings['incompatible_archive'], $this->strings['no_files'] ); // There are no files?
+            return new WP_Error( 'incompatible_archive_empty', 'Incompatible file type', 'No files in folder' ); // There are no files?
         } else { // It's only a single file, the upgrader will use the folder name of this file as the destination folder. Folder name is based on zip filename.
             $source = trailingslashit( $args['source'] );
         }

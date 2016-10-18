@@ -143,8 +143,8 @@
         var geot_progress = null,
             progress_url  = '<?php echo content_url('uploads/geot_plugin/progress.json');?>';
 
-        function geot_update_mmdb(){
-            $.ajax({
+        function geot_update_mmdb( backup_mode = false){
+			var opts = {
                 method : 'POST',
                 url: ajaxurl,
                 data: {
@@ -152,7 +152,10 @@
                     object: 'mmdb'
                 },
 				dataType: 'json'
-            }).done(function(response) {
+			};
+			if( backup_mode )
+				opts.data.object = 'safe_mmdb';
+            $.ajax(opts).done(function(response) {
                 if( response.error ){
                     $('.meter').replaceWith(response.error);
 					setTimeout(function(){clearTimeout(geot_progress)},1000);
@@ -170,7 +173,13 @@
                     $('.meter').replaceWith(response.error);
 					setTimeout(function(){clearTimeout(geot_progress)},1000);
 				}
-            });
+            }).fail(function(response){
+				var msg = (response.responseText || 'Something failed, please upload database manually');
+				$('.meter').replaceWith(msg);
+				$('.geot_updater').append('<p><?php _e("Downloading Mmdb in safe mode, please wait....","geot");?></p><div class="meter" style="width: 320px;"><span style="width: 1%"></span></div>');
+				geot_update_mmdb(true);
+				geot_progress_check();
+			});
         }
 		function geot_update_csv(){
 			$('.geot_updater').append('<p><?php _e("Downloading Cities csv database, please wait....","geot");?></p><div class="meter" style="width: 320px;"><span style="width: 1%"></span></div>');
@@ -196,29 +205,34 @@
 					$('.meter').replaceWith('Cities csv database Updated');
 				}
 				if( response.refresh ) {
-					location.replace("<?php echo admin_url('admin.php?page=geot-settings');?>");
+				//	location.replace("<?php echo admin_url('admin.php?page=geot-settings');?>");
 				}
 			}).error(function(response) {
 				if( response.error ) {
 					$('.meter').replaceWith(response.error);
 					setTimeout(function(){clearTimeout(geot_progress)},1000);
 				}
+			}).fail(function(response){
+				var msg = (response.responseText || 'Something failed, please upload database manually');
+				$('.meter').replaceWith(msg);
 			});
 		}
         function geot_progress_check(){
             $.ajax({
                 method : 'GET',
                 url: progress_url,
+				dataType: 'json',
+				cache: false
             }).done(function(response) {
                 if( response.progress )
                     $('.meter span').animate({
 						width: response.progress + '%'
 					}, 500);
-                    //clearTimeout(geot_progress);
+                    clearTimeout(geot_progress);
             }).error(function(response) {
 				clearTimeout(geot_progress);
             });
-            geot_progress = setTimeout( geot_progress_check, 2000);
+            geot_progress = setTimeout( geot_progress_check, 3000);
         }
     })(jQuery)
 </script>
