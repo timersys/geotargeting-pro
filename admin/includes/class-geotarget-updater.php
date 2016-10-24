@@ -104,6 +104,12 @@ class GeoTarget_Updater {
 			$url = 'https://s3.amazonaws.com/timersys/geot_cities.zip';
 			$destination = WP_CONTENT_DIR . '/uploads/geot_plugin/csv/';
 			$file = $destination . 'localfile.tmp';
+			if( isset( $_POST['install_only'] ) ) {
+				$this->install_csv( $destination );
+				echo json_encode( array( 'success' => 1, 'refresh' => 1));
+				wp_die();
+			}
+
 		}
 		if( $object == 'safe_mmdb' ) {
 			$this->clear_destination( $destination );
@@ -161,11 +167,7 @@ class GeoTarget_Updater {
 				echo json_encode( array( 'error' => 'Failed to install database. Are you running on WpEngine ? You will need to populate database manually, check https://timersys.com/geotargeting/docs/populating-database/ '));
 				wp_die();
 			}
-			for ( $i = 1; $i <= 6; $i ++ ) {
-				$csv_file  = $destination . 'geot_cities' . $i . '.csv';
-				$load_data = "LOAD DATA LOCAL INFILE '{$csv_file}' INTO TABLE `{$wpdb->base_prefix}geot_cities` CHARACTER SET UTF8 FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `country_code` , `city`);";
-				$wpdb->query( $load_data );
-			}
+			$this->install_csv( $destination );
 			delete_option( 'geot_db_update', true);
 			echo json_encode( array( 'success' => 1, 'refresh' => 1));
 			wp_die();
@@ -174,6 +176,19 @@ class GeoTarget_Updater {
 		wp_die();
 	}
 
+	/**
+	 * [install_csv description]
+	 * @param  [type] $destination [description]
+	 * @return [type]              [description]
+	 */
+	private function install_csv( $destination ) {
+		global $wpdb;
+		for ( $i = 1; $i <= 6; $i ++ ) {
+			$csv_file  = $destination . 'geot_cities' . $i . '.csv';
+			$load_data = "LOAD DATA LOCAL INFILE '{$csv_file}' INTO TABLE `{$wpdb->base_prefix}geot_cities` CHARACTER SET UTF8 FIELDS TERMINATED BY ',' ENCLOSED BY '\"' ESCAPED BY '\\\' LINES TERMINATED BY '\\n' ( `country_code` , `city`);";
+			$wpdb->query( $load_data );
+		}
+	}
 	/**
 	 * Update progress file that will be used to print the bar
 	 * @param  [type] $resource      [description]

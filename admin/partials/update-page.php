@@ -138,8 +138,14 @@
 <script type="text/javascript">
     (function($){
 
-        geot_update_mmdb();
-        geot_progress_check();
+		<?php if( isset($_GET['csv_only']) ) : ?>
+			geot_update_csv();
+		<?php else: ?>
+        	geot_update_mmdb();
+			geot_progress_check();
+		<?php endif;?>
+
+
         var geot_progress = null,
             progress_url  = '<?php echo content_url('uploads/geot_plugin/progress.json');?>';
 
@@ -155,10 +161,14 @@
 			};
 			if( backup_mode )
 				opts.data.object = 'safe_mmdb';
+
             $.ajax(opts).done(function(response) {
                 if( response.error ){
                     $('.meter').replaceWith(response.error);
-					setTimeout(function(){clearTimeout(geot_progress)},1000);
+					clearTimeout(geot_progress);
+					$('.geot_updater').append('<p><?php _e("Downloading Mmdb in safe mode, please wait....","geot");?></p><div class="meter" style="width: 320px;"><span style="width: 1%"></span></div>');
+					geot_update_mmdb(true);
+					geot_progress_check();
 				}
 				if( response.success) {
 					$('.meter span').animate({
@@ -184,7 +194,7 @@
 		function geot_update_csv(){
 			$('.geot_updater').append('<p><?php _e("Downloading Cities csv database, please wait....","geot");?></p><div class="meter" style="width: 320px;"><span style="width: 1%"></span></div>');
 			geot_progress_check();
-			$.ajax({
+			var opts = {
 				method : 'POST',
 				url: ajaxurl,
 				data: {
@@ -192,7 +202,11 @@
 					object: 'csv'
 				},
 				dataType: 'json'
-			}).done(function(response) {
+			};
+			<?php if( isset($_GET['csv_install_only']) ) : ?>
+				opts.data.install_only = true;
+			<?php endif;?>
+			$.ajax(opts).done(function(response) {
 				if( response.error ){
 					$('.meter').replaceWith(response.error);
 					setTimeout(function(){clearTimeout(geot_progress)},1000);
