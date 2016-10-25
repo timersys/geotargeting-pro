@@ -409,6 +409,7 @@ class GeoTarget_Public {
 		City: <?php echo @$user_data['city'] . PHP_EOL;?>
 		Zip: <?php echo @$user_data['zip'] . PHP_EOL;?>
 		Continent: <?php echo @$user_data['continent'] . PHP_EOL;?>
+		IP: <?php echo $this->functions->getUserIP() . PHP_EOL;?>
 		-->
 		</div>
 		<!-- Geotargeting plugin Debug Info END-->
