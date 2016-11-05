@@ -48,11 +48,20 @@ class GeoTarget_Settings {
 	 * Settings page for plugin
 	 */
 	public function settings_page() {
+		if( isset( $_GET['geot_db_update_finish'] ) && 'true' === $_GET['geot_db_update_finish'] )
+			delete_option( 'geot_db_update', true);
+
 		if( isset( $_GET['geot_db_update'] ) && 'true' === $_GET['geot_db_update'] )
 			include plugin_dir_path( dirname( __FILE__ ) ) . '/partials/update-page.php';
 		else
-			include plugin_dir_path( dirname( __FILE__ ) ) . '/partials/settings-page.php';	
+			include plugin_dir_path( dirname( __FILE__ ) ) . '/partials/settings-page.php';
 	}
-
+	/**
+	 * [ip_test_page description]
+	 * @return [type] [description]
+	 */
+	public function ip_test_page() {
+		include plugin_dir_path( dirname( __FILE__ ) ) . '/partials/ip-test.php';
+	}
 
 }
