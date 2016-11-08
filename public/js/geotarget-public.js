@@ -30,9 +30,13 @@
                   }
               };
           }
-          $('.geot_dropdown').selectize( geot_options );
+          var $geot_select = $('.geot_dropdown').selectize( geot_options );
+		  if( GeotReadCookie('geot_country') ) {
+			  var selectize = $geot_select[0].selectize;
+			  selectize.addItem(GeotReadCookie('geot_country'), true);
+		  }
 	  });
-	 
+
 
 /**
  * Cookie functions
