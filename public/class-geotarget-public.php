@@ -92,7 +92,7 @@ class GeoTarget_Public {
 	public function enqueue_scripts() {
 
 		$src = 'js/geotarget-public.js';
-		if( ! isset( $this->opts['debug_mode'] ) ) {
+		if( ! isset( $this->opts['debug_mode'] ) && !isset( $_GET['geot_debug']) ) {
 			$src = 'js/min/geotarget-public-min.js';
 		}
 		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
