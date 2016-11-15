@@ -157,7 +157,7 @@ class GeoTarget_Admin {
 
 		$settings = new GeoTarget_Settings( $this->GeoTarget, $this->version );
 
-		add_menu_page('GeoTargeting', 'Settings', 'manage_options', 'geot-settings', array($settings, 'settings_page'), 'dashicons-share-alt' );
+		add_menu_page('GeoTargeting', 'GeoTargeting', 'manage_options', 'geot-settings', array($settings, 'settings_page'), 'dashicons-share-alt' );
 		add_submenu_page( 'geot-settings', 'Settings', 'Settings', 'manage_options', 'geot-settings',array($settings, 'settings_page') );
 		add_submenu_page( 'geot-settings', 'Ip test', 'Ip test', 'manage_options', 'geot-ip-test',array($settings, 'ip_test_page') );
 	}
