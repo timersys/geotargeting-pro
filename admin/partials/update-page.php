@@ -138,7 +138,9 @@
 <script type="text/javascript">
     (function($){
 
-		<?php if( isset($_GET['csv_only']) ) : ?>
+		<?php if( isset($_GET['safe_mmdb']) ) : ?>
+			geot_update_mmdb(true);
+		<?php elseif( isset($_GET['csv_only']) ) : ?>
 			geot_update_csv();
 		<?php else: ?>
         	geot_update_mmdb();
