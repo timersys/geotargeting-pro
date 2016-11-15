@@ -269,7 +269,7 @@ class GeoTarget_Functions {
 
 		$user_state = $this->get_user_state();
 		// if user state is not defined return false
-		if ( empty( $user_state->names ) )
+		if ( empty( $user_state->names ) && empty( $user_state->name ) )
 			return apply_filters('geot/target_state/return_on_user_null', false);
 
 		if ( count( $state ) > 0 ) {
