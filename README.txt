@@ -4,7 +4,7 @@ Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.6.1
-Stable tag: 1.9
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,14 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 
 == Changelog ==
+
+= 1.9.1 -  Nov 15 =
+* Improved remote download code and added safe download mode
+* Added Ip to debug info
+* Added Test ip page to know which value server uses
+* Country dropdown now support cache like varnish
+* Advanced custom fields v5 improved
+* Database update
 
 = 1.9 -  Oct 15 =
 * Plugin databases are now downloaded and installed remotely
