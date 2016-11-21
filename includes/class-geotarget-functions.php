@@ -639,6 +639,8 @@ class GeoTarget_Functions {
 		$ip = isset( $_SERVER['True-Client-IP'] ) ? $_SERVER['True-Client-IP'] : $ip;
 		// Clouways
 		$ip = isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $ip;
+		// varnish trash ?
+		$ip = str_replace( array( '::ffff:', ', 127.0.0.1'), '', $ip );
 
 		return apply_filters( 'geot/user_ip', $ip );
 	}
