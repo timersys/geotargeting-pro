@@ -306,7 +306,7 @@ class GeoTarget {
 		//Menus
 		if (  empty( $this->opts['disable_menu_integration'] ) ) {
 			$this->loader->add_filter( 'wp_setup_nav_menu_item', $this->menus, 'add_custom_fields' );
-			$this->loader->add_filter( 'wp_edit_nav_menu_walker', $this->menus, 'admin_menu_walker', 10, 2 );
+			$this->loader->add_filter( 'wp_edit_nav_menu_walker', $this->menus, 'admin_menu_walker', 150, 2 );
 			$this->loader->add_action( 'wp_update_nav_menu_item', $this->menus, 'save_custom_fields', 10, 3 );
 		}
 	}
