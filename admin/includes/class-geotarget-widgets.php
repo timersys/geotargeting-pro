@@ -45,7 +45,7 @@ class Geot_Widgets  {
 	}
 
 	public function add_geot_to_widgets( $t, $return, $instance ) {
-		
+
 		$countries 	= apply_filters('geot/get_countries', array());
 		$regions 	= apply_filters('geot/get_regions', array());
 
@@ -75,7 +75,7 @@ class Geot_Widgets  {
 		      	<input type="radio" class="geot_include_mode" name="<?php echo $t->get_field_name('geot_include_mode');?>" value="exclude" <?php checked( $instance['geot_include_mode'], 'exclude', true ); ?>> <strong>Never show widget in</strong><br />
 		    </p>
 		    <p>
-		    	<label><?php _e( 'Choose regions:', 'geot' ); ?></label>
+		    	<label><?php _e( 'Choose regions( country regions ):', 'geot' ); ?></label>
 				<?php
 				if( is_array( $regions ) ) { ?>
 					<select name="<?php echo $t->get_field_name('geot');?>[region][]" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
@@ -89,18 +89,18 @@ class Geot_Widgets  {
 							}
 						?>
 					</select>
-				<?php 
+				<?php
 				} else { ?>
-				
+
 					<p> Add some regions first.</p>
-				
-				<?php	
+
+				<?php
 				}	?>
 			</p>
-				
+
 			<p>
 				<label for="geot_position"><?php _e( 'Or choose countries:', 'geot' ); ?></label>
-				
+
 				<select name="<?php echo $t->get_field_name('geot');?>[country_code][]" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose country name...', 'geot' );?>" >
 					<?php
 					if( is_array( $countries ) ) {
@@ -109,7 +109,7 @@ class Geot_Widgets  {
 							<option value="<?php echo $c->iso_code;?>" <?php selected( in_array($c->iso_code, $instance['geot']['country_code']), true , true ); ?>> <?php echo $c->country; ?></option>
 							<?php
 						}
-					}	
+					}
 					?>
 				</select>
 			</p>
@@ -122,9 +122,9 @@ class Geot_Widgets  {
 				<input type="text" class="geot_text" name="<?php echo $t->get_field_name('geot_states');?>" value="<?php echo esc_attr($instance['geot_states']);?>" />
 			</p>
 				</table>
-		</div>	
+		</div>
 
-		<?php	
+		<?php
 		return array($t, $return, $instance);
 	}
 
@@ -132,11 +132,11 @@ class Geot_Widgets  {
 	 * Saves widget data
 	 * @param  array $instance     Current widget instance
 	 * @param  array $new_instance Saved instance
-	 * @param  array $old_instance 
-	 * @return array          
+	 * @param  array $old_instance
+	 * @return array
 	 */
 	public function save_widgets_data( $instance, $new_instance, $old_instance ) {
-		
+
 		$instance['geot']  				= isset( $new_instance['geot'] ) ? (array) $new_instance['geot'] : '';
 		$instance['geot_include_mode'] 	= isset( $new_instance['geot_include_mode'] ) ? $new_instance['geot_include_mode'] : '';
 		$instance['geot_cities'] 	    = isset( $new_instance['geot_cities'] ) ? $new_instance['geot_cities'] : '';
