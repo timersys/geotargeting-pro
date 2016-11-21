@@ -151,7 +151,7 @@
         var geot_progress = null,
             progress_url  = '<?php echo content_url('uploads/geot_plugin/progress.json');?>';
 
-        function geot_update_mmdb( backup_mode = false){
+        function geot_update_mmdb( backup_mode ){
 			var opts = {
                 method : 'POST',
                 url: ajaxurl,
