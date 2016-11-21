@@ -50,7 +50,7 @@ AND pm.meta_value != ''";
 
 		if ( ! empty( $opts['cities'] ) ) {
 			$cities = ! empty( $opts['cities'] ) ? $opts['cities'] : '';
-			$city_target = geot_target_city( $cities );
+			$city_target = geot_target_city( $cities, $cities );
 			if ( $mode == 'exclude' && $city_target )
 				$city_remove = true;
 		}
