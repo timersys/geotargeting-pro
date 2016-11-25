@@ -32,8 +32,8 @@ AND pm.meta_value != ''";
 	 *
 	 * @return bool
 	 */
-	public static function user_is_targeted( $opts, $post_id ) {
-		if( isset( self::$_user_is_targeted[$post_id] ) )
+	public static function user_is_targeted( $opts, $post_id, $cache = true ) {
+		if( isset( self::$_user_is_targeted[$post_id] ) && $cache )
 			return self::$_user_is_targeted[$post_id];
 
 		$mode = ! empty( $opts['geot_include_mode'] ) ? $opts['geot_include_mode'] : 'include';
@@ -50,7 +50,7 @@ AND pm.meta_value != ''";
 
 		if ( ! empty( $opts['cities'] ) ) {
 			$cities = ! empty( $opts['cities'] ) ? $opts['cities'] : '';
-			$city_target = geot_target_city( $cities, $cities );
+			$city_target = geot_target_city( $cities );
 			if ( $mode == 'exclude' && $city_target )
 				$city_remove = true;
 		}
