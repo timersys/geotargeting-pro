@@ -2,7 +2,33 @@
 	'use strict';
 
 	$('document').ready( function() {
-		$(".geot-chosen-select").chosen({width:"90%",no_results_text: "Oops, nothing found!"}); 
+		$(".geot-chosen-select").chosen({width:"90%",no_results_text: "Oops, nothing found!"});
+		MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+		var observer = new MutationObserver(function(mutations) {
+		    // fired when a mutation occurs
+
+			for( var i = 0; i < mutations.length ; i++) {
+
+				if( $(mutations[i].target).is(".geot-chosen-select") ) {
+
+					var parent = $(mutations[i].target).parent('.geot-select2');
+					parent.find('.chosen-container').remove()
+					//$(mutations[i].target).chosen('destroy');
+					$(mutations[i].target).chosen({width:"90%",no_results_text: "Oops, nothing found!"});
+				}
+			}
+		});
+		// define what element should be observed by the observer
+		// and what types of mutations trigger the callback
+		$('.acf-table').each(function(){
+
+			observer.observe($(this)[0], {
+				subtree: true,
+				attributes: true
+				//...
+			});
+		});
 
 		$(".add-region").click( function(e){
 			e.preventDefault();
@@ -89,18 +115,17 @@
 		}
 
 		$(document).on('widget-updated', function(){
-			
-			$(".geot-chosen-select").chosen({width:"90%",no_results_text: "Oops, nothing found!"}); 
-							
+
+			$(".geot-chosen-select").chosen({width:"90%",no_results_text: "Oops, nothing found!"});
+
 		});
 
 		$(document).on('widget-added', function(ev, target){
 
 			$(target).find('.chosen-container').remove();
-			$(target).find(".geot-chosen-select").show().chosen({width:"90%",no_results_text: "Oops, nothing found!"}); 
-							
+			$(target).find(".geot-chosen-select").show().chosen({width:"90%",no_results_text: "Oops, nothing found!"});
+
 		});
 	});
- 
-})( jQuery );
 
+})( jQuery );
