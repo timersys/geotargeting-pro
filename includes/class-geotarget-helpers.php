@@ -36,6 +36,8 @@ AND pm.meta_value != ''";
 		if( isset( self::$_user_is_targeted[$post_id] ) && $cache )
 			return self::$_user_is_targeted[$post_id];
 
+		$_user_is_targeted = false;
+
 		$mode = ! empty( $opts['geot_include_mode'] ) ? $opts['geot_include_mode'] : 'include';
 		$country_remove = $state_remove = $city_remove = false;
 		$country_target = $state_target = $city_target = null;
@@ -64,14 +66,15 @@ AND pm.meta_value != ''";
 
 		}
 		if( $mode == 'include' ) {
-			self::$_user_is_targeted[$post_id] = true;
+			$_user_is_targeted = true;
 			if ( ( $country_target || $state_target || $city_target ) || ($country_target === null && $state_target === null && $city_target === null) )
-				self::$_user_is_targeted[$post_id] = false;
+				$_user_is_targeted = false;
 		}
 
 		if( $mode == 'exclude' && ( $country_remove || $state_remove || $city_remove ) )
-			self::$_user_is_targeted[$post_id] = true;
+			$_user_is_targeted = true;
 
-		return isset( self::$_user_is_targeted[$post_id] ) ? self::$_user_is_targeted[$post_id] : false;
+
+		return self::$_user_is_targeted[$post_id] = $_user_is_targeted;
 	}
 }
