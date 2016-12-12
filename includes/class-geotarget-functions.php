@@ -597,12 +597,12 @@ class GeoTarget_Functions {
 	 */
 	private function getBotsCountry() {
 
-		return array(
+		return apply_filters( 'geot/bots_country', array(
 			'country' => $this->getCountryByIsoCode($this->opts['bots_country']),
 			'city'    => '',
 			'zip'     => '',
 			'state'   => '',
-		);
+		));
 
 	}
 
