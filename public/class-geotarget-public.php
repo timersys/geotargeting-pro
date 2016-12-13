@@ -410,6 +410,8 @@ class GeoTarget_Public {
 		Zip: <?php echo @$user_data['zip'] . PHP_EOL;?>
 		Continent: <?php echo @$user_data['continent'] . PHP_EOL;?>
 		IP: <?php echo $this->functions->getUserIP() . PHP_EOL;?>
+		Geot Version: <?php echo GEOT_VERSION . PHP_EOL;?>
+		PHP Version: <?php echo phpversion() . PHP_EOL;?>
 		-->
 		</div>
 		<!-- Geotargeting plugin Debug Info END-->
