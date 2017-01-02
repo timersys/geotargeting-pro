@@ -529,7 +529,7 @@ class GeoTarget_Functions {
 			if(  $service_func != 'country' ) {
 				$city     = isset( $record->city ) ? $record->city->name : false;
 				$cp       = isset( $record->postal ) ? $record->postal->code : false;
-				$state    = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : $record->subdivisions[0];
+				$state    = isset( $record->mostSpecificSubdivision ) ? $record->mostSpecificSubdivision : ( isset( $record->subdivisions[0] ) ? $record->subdivisions[0] : '' );
 				$location = isset( $record->location ) ? $record->location : false;
 			}
 		}
