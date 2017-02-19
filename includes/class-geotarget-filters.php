@@ -135,7 +135,8 @@ class GeoTarget_Filters {
 	public static function get_cpt_options( $post_id ) {
 
 		$opts = get_post_meta( $post_id, 'geot_options', true );
-
+		if( ! $opts )
+			return array();
 		return $opts;
 	
 	}
