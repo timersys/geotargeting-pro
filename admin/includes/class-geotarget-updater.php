@@ -135,7 +135,6 @@ class GeoTarget_Updater {
 	    curl_setopt($ch, CURLOPT_HEADER, 0);
 	    curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 		curl_setopt($ch, CURLOPT_FILE, $download);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 	    curl_exec($ch);
 	    curl_close($ch);
 		fclose($download);
