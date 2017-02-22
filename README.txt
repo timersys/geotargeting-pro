@@ -3,8 +3,8 @@ Contributors: timersys
 Donate link: http://wp.timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
-Tested up to: 4.6.1
-Stable tag: 1.9.1.1
+Tested up to: 4.7.2
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,14 @@ Enhance your site by letting your users send Social Invitations ([http://wp.time
 
 
 == Changelog ==
+
+= 1.9.2 - Feb 22 =
+* Database update
+* City regions not working on menus
+* Fixed error with ACF plugin
+* Old post meta are migrated to new format automatically now
+* Removed curl opt that was making db updates fail
+* Fixed several small bugs, undefined index, problem with cache functions, etc
 
 = 1.9.1.1 - Hotfix Nov 15 =
 
