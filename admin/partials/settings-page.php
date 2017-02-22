@@ -3,16 +3,7 @@
  * Settings page template
  * @since  1.0.0
  */
- if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
-     $settings = esc_sql( $_POST['geot_settings'] );
-     if( isset($_FILES['geot_settings_json']) && 'application/json' == $_FILES['geot_settings_json']['type'] ) {
-         $file = file_get_contents($_FILES['geot_settings_json']['tmp_name']);
-         $settings = json_decode($file,true);
 
-     }
-	 update_option( 'geot_settings' ,  $settings);
-
- }
 
  $opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
@@ -73,6 +64,8 @@
 				<td colspan="3">
 					<label><input type="text" id="license" name="geot_settings[geot_license_key]" value="<?php  echo $opts['geot_license_key'];?>" class="regular-text <?php echo 'geot_license_' . get_option( 'geot_license_active' );?>" />
 					<p class="help"><?php _e( 'Enter your license key to get automatic updates', $this->GeoTarget ); ?></p>
+                    <?php if( isset($_GET['geot_message']) )
+                        echo '<p style="color:red;">'.esc_attr($_GET['geot_message']).'</p>';?>
 				</td>
 			</tr>
 			<tr valign="top" class="">

@@ -205,6 +205,8 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-menus.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-updater.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/EDD_SL_Plugin_Updater.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-license-handler.php';
 
 
 		$this->loader = new GeoTarget_Loader();
@@ -274,6 +276,7 @@ class GeoTarget {
 
 		// settings page
 		$this->loader->add_action( 'admin_menu' , $this->admin, 'add_settings_menu' );
+		$this->loader->add_action( 'admin_init' , $this->admin, 'save_settings' );
 
 
 		// Add geot to Advanced custom fields plugin
@@ -294,7 +297,7 @@ class GeoTarget {
 			$this->loader->add_action( 'widget_update_callback', $geot_widgets, 'save_widgets_data', 5, 3 );
 		}
 		// License and Updates
-		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_license', 1 );
+		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_updates', 0 );
 
 		// Update
 		$this->loader->add_action( 'admin_init' , $updater, 'update_notice' );

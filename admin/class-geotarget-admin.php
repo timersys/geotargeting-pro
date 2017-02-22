@@ -163,6 +163,23 @@ class GeoTarget_Admin {
 	}
 
 	/**
+	 * Save the settings page
+	 * @since 1.9.2
+	 * @return void
+	 */
+	public function save_settings(){
+		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
+			$settings = esc_sql( $_POST['geot_settings'] );
+			if( isset($_FILES['geot_settings_json']) && 'application/json' == $_FILES['geot_settings_json']['type'] ) {
+				$file = file_get_contents($_FILES['geot_settings_json']['tmp_name']);
+				$settings = json_decode($file,true);
+
+			}
+			update_option( 'geot_settings' ,  $settings);
+
+		}
+	}
+	/**
 	 * Saves popup options and rules
 	 *
 	 * @param $post_id
@@ -268,21 +285,15 @@ class GeoTarget_Admin {
 	 * Handle Licences and updates
 	 * @since 1.0.0
 	 */
-	public function handle_license(){
-		// Load our custom updater
-		if( ! class_exists( 'Geot_License' ) ) {
-			require_once(dirname (__FILE__).'/includes/class-license-handler.php' );
-		}
+	public function handle_updates(){
 
 		$opts = get_option( 'geot_settings');
 
 		$license = @$opts['geot_license_key'];
 
-		if( !empty( $license ) ) {
+		$eddc_license = new Geot_License( GEOT_PLUGIN_FILE, 'GeoTargeting Pro', $this->version	, 'Damian Logghe', $license );
 
-			$eddc_license = new Geot_License( GEOT_PLUGIN_FILE, 'GeoTargeting Pro', $this->version	, 'Damian Logghe', $license );
 
-		}
 
 	}
 

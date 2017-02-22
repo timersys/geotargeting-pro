@@ -21,6 +21,7 @@ if ( !class_exists( 'Geot_License' ) ) {
 		private $item_shortname;
 		private $version;
 		private $author;
+		private $license_page;
 
 		/**
 		 * Class constructor
@@ -41,23 +42,13 @@ if ( !class_exists( 'Geot_License' ) ) {
 			$this->version        = $_version;
 			$this->license        = isset( $key ) ? trim( $key ) : '';
 			$this->author         = $_author;
+			$this->license_page   = 'geot-settings';
 
 			// Setup hooks
-			$this->includes();
+			$this->auto_updater();
 			$this->hooks();
 		}
 
-
-		/**
-		 * Include the updater class
-		 *
-		 * @access  private
-		 * @return  void
-		 */
-		private function includes() {
-			if ( !class_exists( 'EDD_SL_Plugin_Updater' ) )
-				require_once 'EDD_SL_Plugin_Updater.php';
-		}
 
 
 		/**
@@ -73,9 +64,6 @@ if ( !class_exists( 'Geot_License' ) ) {
 
 			// Deactivate license key
 			add_action( 'admin_init', array( $this, 'deactivate_license' ) );
-			
-			// Updater
-			add_action( 'admin_init', array( $this, 'auto_updater' ), 2 );
 		}
 
 
@@ -90,11 +78,12 @@ if ( !class_exists( 'Geot_License' ) ) {
 		public function auto_updater() {
 
 			// Setup the updater
-			$edd_updater = new EDD_SL_Plugin_Updater( 'http://wp.timersys.com', $this->file, array(
+			$edd_updater = new EDD_SL_Plugin_Updater( 'https://timersys.com', $this->file, array(
 					'version'   => $this->version,
 					'license'   => $this->license,
 					'item_name' => $this->item_name,
-					'author'    => $this->author
+					'author'    => $this->author,
+					'beta'		=> false
 				)
 			);
 		}
@@ -108,32 +97,100 @@ if ( !class_exists( 'Geot_License' ) ) {
 		 * @return  void
 		 */
 		public function activate_license() {
-
 			if ( !isset( $_POST['geot_settings'] ) ) return;
 			if ( !isset( $_POST['geot_settings'][$this->item_shortname . '_license_key'] ) ) return;
 
-			if ( get_option( $this->item_shortname . '_license_active' ) == 'valid' && $_POST['geot_settings'][$this->item_shortname . '_license_key'] == $this->license ) return;
+			$license = trim( sanitize_text_field( $_POST['geot_settings'][$this->item_shortname . '_license_key'] ) );
+			
+			if ( get_option( $this->item_shortname . '_license_active' ) == 'valid' && $license == $this->license ) return;
 
-			$license = sanitize_text_field( $_POST['geot_settings'][$this->item_shortname . '_license_key'] ) ;
 
 			// Data to send to the API
 			$api_params = array(
 				'edd_action' => 'activate_license',
-				'license'  => $license,
-				'item_name'  => urlencode( $this->item_name )
+				'license'  => trim($license),
+				'item_name'  => urlencode( $this->item_name ),
+				'url'        => home_url()
 			);
 
 			// Call the API
-			$response = wp_remote_get( add_query_arg( $api_params, 'http://wp.timersys.com' ), array( 'timeout' => 15, 'sslverify' => false ) );
+			$response = wp_remote_post( add_query_arg( $api_params, 'https://timersys.com' ), array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
+			// make sure the response came back okay
+			if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 
-			// Make sure there are no errors
-			if ( is_wp_error( $response ) ) return false;
+				if ( is_wp_error( $response ) ) {
+					$message = $response->get_error_message();
+				} else {
+					$message = __( 'An error occurred, please try again.' );
+				}
 
-			// Decode license data
-			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+			} else {
+
+				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+				if ( false === $license_data->success ) {
+
+					switch( $license_data->error ) {
+
+						case 'expired' :
+
+							$message = sprintf(
+								__( 'Your license key expired on %s.' ),
+								date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
+							);
+							break;
+
+						case 'revoked' :
+
+							$message = __( 'Your license key has been disabled.' );
+							break;
+
+						case 'missing' :
+
+							$message = __( 'Invalid license.' );
+							break;
+
+						case 'invalid' :
+						case 'site_inactive' :
+
+							$message = __( 'Your license is not active for this URL.' );
+							break;
+
+						case 'item_name_mismatch' :
+
+							$message = sprintf( __( 'This appears to be an invalid license key for %s.' ), $this->item_name );
+							break;
+
+						case 'no_activations_left':
+
+							$message = __( 'Your license key has reached its activation limit.' );
+							break;
+
+						default :
+
+							$message = __( 'An error occurred, please try again.' );
+							break;
+					}
+
+				}
+			}
 
 			update_option( $this->item_shortname . '_license_active', $license_data->license );
+			$base_url = admin_url( 'admin.php?page=' . $this->license_page );
+
+			// Check if anything passed on a message constituting a failure
+			if ( ! empty( $message ) ) {
+				$redirect = add_query_arg( array( 'sl_activation' => 'false', 'geot_message' => urlencode( $message ) ), $base_url );
+				wp_redirect( $redirect );
+				exit();
+			}
+
+			// $license_data->license will be either "valid" or "invalid"
+
+			wp_redirect( $base_url );
+
+
 		}
 
 
@@ -162,7 +219,7 @@ if ( !class_exists( 'Geot_License' ) ) {
 				);
 
 				// Call the API
-				$response = wp_remote_get( add_query_arg( $api_params, 'http://wp.timersys.com' ), array( 'timeout' => 15, 'sslverify' => false ) );
+				$response = wp_remote_get( add_query_arg( $api_params, 'https://timersys.com' ), array( 'timeout' => 15, 'sslverify' => false ) );
 
 				// Make sure there are no errors
 				if ( is_wp_error( $response ) ) return false;
