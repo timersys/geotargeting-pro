@@ -262,12 +262,13 @@ class GeoTarget {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'init', $this->admin, 'register_tiny_buttons' );
+		$this->loader->add_action( 'admin_init', $this->admin, 'register_tiny_buttons' );
 
    		// Add html for shortcodes popup
    		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
 
 			$this->loader->add_action( 'in_admin_footer', $this->admin, 'add_editor' );
+			$this->loader->add_action( 'admin_init', $this->admin, 'add_editor_scripts' );
 
    		}
 

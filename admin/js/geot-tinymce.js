@@ -10,7 +10,7 @@
                 image : url+'/world.png'
             });
             ed.addCommand('geot_button', function() {
-				
+
                 jQuery('#geot_editor').dialog({
                     height: 500,
                     width: '600px',
@@ -126,12 +126,12 @@
                                 }
 
                             }
-                            
-                            var Editor = tinyMCE.get('content');
-                            Editor.focus();
-                            Editor.selection.setContent(str);
 
-                            
+                        //    var Editor = tinyMCE.get('content');
+                        //    Editor.focus();
+                        //    Editor.selection.setContent(str);
+							ed.execCommand('mceInsertContent', 0, str);
+
                             jQuery( this ).dialog( "close" );
                         },
                         Cancel: function() {
@@ -139,8 +139,8 @@
                         }
                     }
                 }).dialog('open');
-               
-            });	
+
+            });
         },
         createControl : function(n, cm) {
             return null;
@@ -153,8 +153,7 @@
                 infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/example',
                 version : "0.1"
             };
-        }        
+        }
     });
     tinymce.PluginManager.add('geot', tinymce.plugins.Geot);
 })( jQuery );
-
