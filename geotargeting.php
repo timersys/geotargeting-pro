@@ -29,9 +29,6 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-// Start sessions if needed
-if( geot_is_session_started() === FALSE && ! apply_filters( 'geot/disable_sessions', false) )
-	session_start();
 
 define( 'GEOT_PLUGIN_FILE' , __FILE__);
 define( 'GEOT_VERSION' , '1.9.2' );
@@ -68,6 +65,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-geotarget.php';
  */
 global $geot;
 
+require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+
 /**
  * Begins execution of the plugin.
  *
@@ -79,11 +78,13 @@ global $geot;
  */
 
 function run_Geot() {
-
+	// Start sessions if needed
+	if( geot_is_session_started() === FALSE && ! apply_filters( 'geot/disable_sessions', false) )
+		session_start();
 	$plugin = GeoTarget::instance();
 	$plugin->run();
 	return $plugin;
 }
 $GLOBALS['geot'] = run_Geot();
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+
