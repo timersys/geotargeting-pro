@@ -29,7 +29,10 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-@session_start();
+// Start sessions if needed
+if( geot_is_session_started() === FALSE && ! apply_filters( 'geot/disable_sessions', false) )
+	session_start();
+
 define( 'GEOT_PLUGIN_FILE' , __FILE__);
 define( 'GEOT_VERSION' , '1.9.2' );
 define( 'GEOT_DB_VERSION' , '1.2' );

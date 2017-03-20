@@ -474,7 +474,7 @@ class GeoTarget_Functions {
 		}
 
 		// If we already calculated on session return (if we are not calling by IP)
-		if( empty( $ip ) && !empty ( $_SESSION['geot_data'] ) && ( empty( $this->opts['debug_mode'] ) && ! defined('GEOT_DEBUG') ) && apply_filters( 'geot/use_session_data', true, $_SESSION['geot_data'] ) )
+		if( empty( $ip ) && !empty ( $_SESSION['geot_data'] ) && ( empty( $this->opts['debug_mode'] ) && ! defined('GEOT_DEBUG') ) &&  ! apply_filters('geot/disable_sessions', false , $_SESSION['geot_data'] ) )
 			return apply_filters('geot/user_data/calculated_data', unserialize(  $_SESSION['geot_data'] ) );
 
 		if( empty( $ip) ) {
@@ -533,14 +533,6 @@ class GeoTarget_Functions {
 				$location = isset( $record->location ) ? $record->location : false;
 			}
 		}
-
-		$_SESSION['geot_country']   = serialize($country);
-		$_SESSION['geot_city']      = serialize($city);
-		$_SESSION['geot_zip']       = serialize($cp);
-		$_SESSION['geot_state']     = serialize($state);
-		$_SESSION['geot_continent'] = serialize($continent);
-		$_SESSION['geot_location']  = serialize($location);
-
 		$this->calculated_data = apply_filters('geot/user_data/calculated_data', array(
 			'record'    => $record,
 			'country'   => $country,
@@ -550,7 +542,15 @@ class GeoTarget_Functions {
 			'continent' => $continent,
 			'location'  => $location,
 		) );
-		$_SESSION['geot_data']  = serialize(  $this->calculated_data );
+		if( ! apply_filters('geot/disable_sessions', false ) ) {
+			$_SESSION['geot_country']   = serialize( $country );
+			$_SESSION['geot_city']      = serialize( $city );
+			$_SESSION['geot_zip']       = serialize( $cp );
+			$_SESSION['geot_state']     = serialize( $state );
+			$_SESSION['geot_continent'] = serialize( $continent );
+			$_SESSION['geot_location']  = serialize( $location );
+			$_SESSION['geot_data']      = serialize(  $this->calculated_data );
+		}
 		return $this->calculated_data;
 	}
 
