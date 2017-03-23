@@ -437,6 +437,10 @@ class GeoTarget_Functions {
 		if( ! empty ( $this->calculated_data ) && empty( $ip ) )
 			return apply_filters('geot/user_data/calculated_data', $this->calculated_data );
 
+		// Start sessions if needed
+		if( geot_is_session_started() === FALSE && ! apply_filters( 'geot/disable_sessions', false) )
+			session_start();
+
 		$cookie_name = apply_filters( 'geot/cookie_name' , 'geot_country');
 
 		// Easy debug

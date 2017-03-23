@@ -78,9 +78,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
  */
 
 function run_Geot() {
-	// Start sessions if needed
-	if( geot_is_session_started() === FALSE && ! apply_filters( 'geot/disable_sessions', false) )
-		session_start();
+
 	$plugin = GeoTarget::instance();
 	$plugin->run();
 	return $plugin;
