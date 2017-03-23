@@ -641,6 +641,8 @@ class GeoTarget_Functions {
 		$ip = isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $ip;
 		// varnish trash ?
 		$ip = str_replace( array( '::ffff:', ', 127.0.0.1'), '', $ip );
+		// get varnish first ip
+		$ip = strstr( $ip, ',') === false ? $ip : strstr( $ip, ',');
 
 		return apply_filters( 'geot/user_ip', $ip );
 	}
