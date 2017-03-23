@@ -232,6 +232,31 @@ function geot_user_country_region( $default = '' ) {
 }
 
 /**
+ * Check for current user if belong to any city regions and return the name of them
+ * or return default
+ * @param string $default
+ *
+ * @return Array/String
+ */
+function geot_user_city_region( $default = '' ) {
+
+	$city_name = geot_city_name();
+	$regions = apply_filters('geot/get_city_regions', array() );
+
+	if( empty( $regions ) || ! is_array( $regions ) || empty( $city_name ) )
+		return $default;
+
+	$user_regions = array();
+	foreach( $regions as $region )  {
+		if( in_array( $city_name, $region['cities'] ) )
+			$user_regions[] = $region['name'];
+	}
+
+	return empty( $user_regions ) ? $default : $user_regions;
+
+}
+
+/**
  * Check if session is running
  * @return bool
  */
