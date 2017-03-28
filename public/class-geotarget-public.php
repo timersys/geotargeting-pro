@@ -321,6 +321,16 @@ class GeoTarget_Public {
 			$post_to_exclude = $this->get_geotargeted_posts( );
 			if( !empty( $post_to_exclude ) ) {
 				$where .= " AND {$wpdb->posts}.ID NOT IN ('". implode( "','", $post_to_exclude )."')";
+				// Sticky posts needs to be filtered differently
+				add_filter('option_sticky_posts', function( $posts ) use( $post_to_exclude ) {
+					if( !empty($posts) ){
+						foreach ( $posts as $key => $id ) {
+							if( in_array( $id, $post_to_exclude) )
+								unset($posts[$key]);
+						}
+					}
+					return $posts;
+				});
 			}
 		}
 		return $where;
