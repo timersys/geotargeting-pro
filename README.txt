@@ -1,6 +1,6 @@
 === GeoTargeting Pro ===
 Contributors: timersys
-Donate link: http://wp.timersys.com/geotargeting/
+Donate link: https://timersys.com/geotargeting/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.7.2
@@ -12,7 +12,7 @@ GeoTargeting for WordPress will let you country-target your content based on use
 
 == Description ==
 
-Based on Maxmind GeoIP2Lite data Geo Targeting plugin for WordPress will let you create dynamic content based on your users country.
+Geo Targeting plugin for WordPress will let you create dynamic content based on your users country.
 
 With a simple shortcode you will be able to specify which countries are capable of seing the content or which countries are not allowed.
 
@@ -20,14 +20,14 @@ E.g:
 `[geot country="Argentina"] Messi is the best! [/geot]`
 `[geot country="Portugal"] Cristiano ronaldo is the best! [/geot]`
 
-
+More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https://geotargetingwp.com/docs/geotargeting-pro/))
 = Plugin's Official Site =
 
-Geotargeting ([http://wp.timersys.com/free-plugins/geotargeting/](http://wp.timersys.com/free-plugins/geotargeting/))
+Geotargeting ([https://timersys.com/free-plugins/geotargeting/](https://timersys.com/free-plugins/geotargeting/))
 
 = Wordpress Popups  =
 
-Best popups plugin ever ([http://wp.timersys.com/popups/](http://wp.timersys.com/popups/?utm_source=wsi-free-plugin&utm_medium=readme))
+Best popups plugin ever ([https://timersys.com/popups/](https://timersys.com/popups/?utm_source=wsi-free-plugin&utm_medium=readme))
 
 = Install Multiple plugins at once with WpFavs  =
 
@@ -39,7 +39,7 @@ Increase your Twitter followers with Twitter likebox Plugin ([http://wordpress.o
 
 = Wordpress Social Invitations  =
 
-Enhance your site by letting your users send Social Invitations ([http://wp.timersys.com/wordpress-social-invitations/](http://wp.timersys.com/wordpress-social-invitations/?utm_source=social-popup&utm_medium=readme))
+Enhance your site by letting your users send Social Invitations ([https://timersys.com/wordpress-social-invitations/](https://timersys.com/wordpress-social-invitations/?utm_source=social-popup&utm_medium=readme))
 
 == Installation ==
 

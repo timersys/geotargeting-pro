@@ -48,13 +48,11 @@ class GeoTarget_Ajax {
 	 * @since    1.6
 	 * @var      string    $GeoTarget       The name of this plugin.
 	 * @var      string    $version    The version of this plugin.
-	 * @var      class    instance of GeotFunctions
 	 */
-	public function __construct( $GeoTarget, $version, $functions ) {
+	public function __construct( $GeoTarget, $version ) {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
-		$this->functions = $functions;
 	}
 
 	/**
@@ -91,10 +89,10 @@ class GeoTarget_Ajax {
 	 */
 	private function country_name( $geot ) {
 
-		$r = $this->functions->get_user_country();
+		$name = geot_country_name();
 
-		if ( !empty( $r->names ) || !empty( $r->name ) )
-			return apply_filters( 'geot/shortcodes/country_name', $r->name, $r );
+		if ( !empty( $name ) )
+			return apply_filters( 'geot/shortcodes/country_name', $name );
 
 		return  apply_filters( 'geot/shortcodes/country_name_default', $geot['default'] );
 
@@ -108,10 +106,10 @@ class GeoTarget_Ajax {
 	 */
 	private function city_name( $geot ) {
 
-		$r = $this->functions->get_user_city();
+		$name = geot_city_name();
 
-		if ( !empty( $r ) )
-			return apply_filters( 'geot/shortcodes/city_name', $r );
+		if ( !empty( $name ) )
+			return apply_filters( 'geot/shortcodes/city_name', $name );
 
 		return  apply_filters( 'geot/shortcodes/city_name_default', $geot['default'] );
 
@@ -125,10 +123,10 @@ class GeoTarget_Ajax {
 	 */
 	private function state_name( $geot ) {
 
-		$r = $this->functions->get_user_state();
+		$name = geot_state_name();
 
-		if ( !empty( $r->names ) || !empty( $r->name ) )
-			return apply_filters( 'geot/shortcodes/state_name', $r->name, $r );
+		if ( !empty( $name ) )
+			return apply_filters( 'geot/shortcodes/state_name', $name );
 
 		return  apply_filters( 'geot/shortcodes/state_name_default', $geot['default'] );
 
@@ -142,9 +140,9 @@ class GeoTarget_Ajax {
 	 */
 	private function state_code( $geot ) {
 
-		$r = $this->functions->get_user_state();
+		$code = geot_state_code();
 
-		return !empty( $r->isoCode ) ? $r->isoCode : $geot['default'];
+		return !empty( $code ) ? $code : $geot['default'];
 
 	}
 
@@ -156,9 +154,10 @@ class GeoTarget_Ajax {
 	 */
 	private function zip( $geot ) {
 
-		$r = $this->functions->get_user_zip();
+		$code = geot_zip();
 
-		return !empty( $r ) ? $r : $geot['default'];
+		return !empty( $code ) ? $code : $geot['default'];
+
 
 	}
 
@@ -187,9 +186,9 @@ class GeoTarget_Ajax {
 	 */
 	private function country_code( $geot ) {
 
-		$c = $this->functions->get_user_country();
+		$code = geot_country_code();
 
-		return !empty( $c->isoCode ) ? $c->isoCode : $geot['default'];
+		return !empty( $code ) ? $code : $geot['default'];
 
 	}
 
@@ -201,7 +200,7 @@ class GeoTarget_Ajax {
 	 */
 	private function country_filter( $geot ) {
 
-		if ( $this->functions->targetCountry( $geot['filter'], $geot['region'], $geot['ex_filter'], $geot['ex_region'] ) )
+		if ( geot_target( $geot['filter'], $geot['region'], $geot['ex_filter'], $geot['ex_region'] ) )
 			return true;
 
 		return false;
@@ -215,7 +214,7 @@ class GeoTarget_Ajax {
 	 */
 	private function city_filter( $geot ) {
 
-		if ( $this->functions->targetCity( $geot['filter'], $geot['region'], $geot['ex_filter'], $geot['ex_region'] ) )
+		if ( geot_target_city( $geot['filter'], $geot['region'], $geot['ex_filter'], $geot['ex_region'] ) )
 			return true;
 
 		return false;
@@ -229,7 +228,7 @@ class GeoTarget_Ajax {
 	 */
 	private function state_filter( $geot ) {
 
-		if ( $this->functions->targetState( $geot['filter'], $geot['ex_filter'] ) )
+		if ( geot_target_state( $geot['filter'], $geot['ex_filter'] ) )
 			return true;
 
 		return false;
@@ -301,30 +300,10 @@ class GeoTarget_Ajax {
 	 */
 	private function getDebugInfo() {
 		ob_start();
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
-		if( ! defined('GEOT_DEBUG') && empty( $opts['debug_mode'] ) )
+		$opts = geot_settings();
+		if( empty( $opts['debug_mode'] ) )
 			return;
-		$user_data = $this->functions->getUserDataByIp();
-		if( empty( $user_data['country'] ) )
-			return;
-		ob_start();
-		?>
-		<!--
-		Country: <?php echo @$user_data['country']->name . PHP_EOL;?>
-		Country code: <?php echo @$user_data['country']->isoCode . PHP_EOL;?>
-		State: <?php echo @$user_data['state']->name . PHP_EOL;?>
-		State code: <?php echo @$user_data['state']->isoCode . PHP_EOL;?>
-		City: <?php echo @$user_data['city'] . PHP_EOL;?>
-		Zip: <?php echo @$user_data['zip'] . PHP_EOL;?>
-		Continent: <?php echo @$user_data['continent'] . PHP_EOL;?>
-		IP: <?php echo $this->functions->getUserIP() . PHP_EOL;?>
-		-->
-
-		<?php
-		$html = ob_get_contents();
-		ob_end_clean();
-
-		return $html;
+		return '<!--'.geot_debug_data().'-->';
 	}
 
 }

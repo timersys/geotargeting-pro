@@ -1,7 +1,7 @@
 <?php
-$countries 	= apply_filters('geot/get_countries', array());
-$regions 	= apply_filters('geot/get_regions', array());
-$city_regions 	= apply_filters('geot/get_city_regions', array());
+$countries 	= geot_countries();
+$regions 	= geot_country_regions();
+$city_regions 	= geot_city_regions();
 ?>
 <form name="form" autocomplete="off">
 <div id="geot_editor" class="shortcode_editor" title="Country Geo Target Text"  style="display:none;height:500px">

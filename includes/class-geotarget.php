@@ -13,6 +13,7 @@
  * @subpackage GeoTarget/includes
  */
 
+
 /**
  * The core plugin class.
  *
@@ -152,13 +153,12 @@ class GeoTarget {
 	 */
 	public function __construct() {
 
-		$this->GeoTarget = 'geotarget';
-		$this->version = GEOT_VERSION;
-		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
 
 		$this->load_dependencies();
+		$this->GeoTarget = 'geotarget';
+		$this->version = GEOT_VERSION;
+		$this->opts = geot_settings();
 		$this->set_locale();
-		$this->define_helper_hooks();
 		$this->define_public_hooks();
 		$this->register_shortcodes();
 		$this->define_admin_hooks();
@@ -192,26 +192,18 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-loader.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-i18n.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-geotarget-admin.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-functions.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-geotarget-public.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-filters.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-shortcodes.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax-shortcodes.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-emails.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-vc.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-helpers.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-menus.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-updater.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/EDD_SL_Plugin_Updater.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-license-handler.php';
 
 
 		$this->loader = new GeoTarget_Loader();
-
-		$this->functions = new GeoTarget_Functions( $this->get_GeoTarget(), $this->get_version() );
 
 	}
 
@@ -234,19 +226,6 @@ class GeoTarget {
 	}
 
 	/**
-	 * Register all helpers functions
-	 * @since 1.0.0
-	 * @access private
-	 */
-	private function define_helper_hooks() {
-		$helpers = new GeoTarget_Filters( $this->get_GeoTarget(), $this->get_version() );
-
-		$this->loader->add_filter( 'geot/get_post_types', $helpers, 'get_post_types',1,3 );
-		$this->loader->add_filter( 'geot/get_countries', $helpers, 'get_countries',1 );
-		$this->loader->add_filter( 'geot/get_regions', $helpers, 'get_regions',1 );
-		$this->loader->add_filter( 'geot/get_city_regions', $helpers, 'get_city_regions',1 );
-	}
-	/**
 	 * Register all of the hooks related to the dashboard functionality
 	 * of the plugin.
 	 *
@@ -258,7 +237,6 @@ class GeoTarget {
 		global $pagenow;
 
 		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
-		$updater 	 = new GeoTarget_Updater( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
@@ -268,7 +246,6 @@ class GeoTarget {
    		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
 
 			$this->loader->add_action( 'in_admin_footer', $this->admin, 'add_editor' );
-			$this->loader->add_action( 'admin_init', $this->admin, 'add_editor_scripts' );
 
    		}
 
@@ -300,12 +277,9 @@ class GeoTarget {
 		// License and Updates
 		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_updates', 0 );
 
-		// Update
-		$this->loader->add_action( 'admin_init' , $updater, 'update_notice' );
-		$this->loader->add_action( 'wp_ajax_geot_updater' , $updater, 'ajax_geot_updater' );
-
 		// Ajax admin
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
+		$this->loader->add_action( 'wp_ajax_geot_check_license' , $this->admin, 'check_license' );
 
 		//Menus
 		if (  empty( $this->opts['disable_menu_integration'] ) ) {
@@ -324,8 +298,8 @@ class GeoTarget {
 	 */
 	private function define_public_hooks() {
 
-		$this->public   = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version(), $this->functions );
-		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$this->public   = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version() );
+		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version() );
 		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_styles' );
@@ -368,7 +342,7 @@ class GeoTarget {
 	 */
 	private function register_shortcodes()
 	{
-		$shortcodes = new GeoTarget_Shortcodes( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$shortcodes = new GeoTarget_Shortcodes( $this->get_GeoTarget(), $this->get_version() );
 		$ajax_shortcodes = new GeoTarget_Ajax_Shortcodes( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'init', $shortcodes, 'register_shortcodes' );
@@ -418,7 +392,7 @@ class GeoTarget {
 
 	private function register_ajax_calls() {
 
-		$ajax_class = new GeoTarget_Ajax( $this->get_GeoTarget(), $this->get_version(), $this->functions );
+		$ajax_class = new GeoTarget_Ajax( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_ajax_geot_ajax' , $ajax_class, 'geot_ajax' );
 		$this->loader->add_action( 'wp_ajax_nopriv_geot_ajax' , $ajax_class, 'geot_ajax' );

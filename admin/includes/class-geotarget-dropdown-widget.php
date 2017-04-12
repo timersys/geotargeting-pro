@@ -29,8 +29,8 @@ class Geot_Widget extends WP_Widget {
      	echo $args['before_widget'];
      	$regions 		= !empty( $instance[ 'regions' ] ) ? $instance[ 'regions' ] : array() ;
      	$flags 		    = !empty( $instance[ 'flags' ] ) ? $instance[ 'flags' ] : '';
-     	$countries 		= apply_filters('geot/get_countries', array());
-     	$saved_regions 	= apply_filters('geot/get_regions', array());
+     	$countries 		= geot_countries();
+     	$saved_regions 	= geot_country_regions();
 
      	if( !empty( $regions ) ) {
      		$country_codes = array();
@@ -117,7 +117,7 @@ class Geot_Widget extends WP_Widget {
 
 		$flags = isset( $instance[ 'flags' ] ) ? $instance[ 'flags' ] : 1;
 
-		$saved_regions = apply_filters('geot/get_regions', array());
+		$saved_regions = geot_country_regions();
 		?>
 		<p>
 		<label for="<?php echo $this->get_field_id( 'regions' ); ?>"><?php _e( 'Choose regions to display in widget:' ); ?></label> 

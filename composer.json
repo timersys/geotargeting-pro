@@ -1,5 +1,6 @@
 {
     "require": {
-        "timersys/geotargetingwp": "^1.0"
+        "timersys/geot-functions": "@dev",
+        "timersys/geotargetingwp": "@dev"
     }
 }

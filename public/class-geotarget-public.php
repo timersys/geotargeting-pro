@@ -41,15 +41,6 @@ class GeoTarget_Public {
 	private $version;
 
 	/**
-	 * Plugin functions
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      object    Plugin functions
-	 */
-	private $functions;
-
-	/**
 	 * Plugin settings
 	 * @var array
 	 */
@@ -62,15 +53,13 @@ class GeoTarget_Public {
 	 *
 	 * @param string $GeoTarget
 	 * @param string $version
-	 * @param $functions
 	 *
 	 */
-	public function __construct( $GeoTarget, $version, $functions ) {
+	public function __construct( $GeoTarget, $version ) {
 
 		$this->GeoTarget 	= $GeoTarget;
 		$this->version 		= $version;
-		$this->functions 	= $functions;
-		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$this->opts = geot_settings();
 	}
 
 	/**
@@ -95,7 +84,7 @@ class GeoTarget_Public {
 		if( ! isset( $this->opts['debug_mode'] ) && !isset( $_GET['geot_debug']) ) {
 			$src = 'js/min/geotarget-public-min.js';
 		}
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$opts = geot_settings();
 
 		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . $src , array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/min/selectize.min.js', array( 'jquery' ), $this->version, false );
@@ -116,7 +105,10 @@ class GeoTarget_Public {
 
 	/**
 	 * Add rules to Popups plugin
+	 *
 	 * @param $choices
+	 *
+	 * @return mixed
 	 */
 	public function add_popups_rules( $choices ) {
 		$choices['Geotargeting'] = array(
@@ -136,7 +128,7 @@ class GeoTarget_Public {
 	 * @return mixed
 	 */
 	public function add_country_choices($choices) {
-		$countries = apply_filters('geot/get_countries', array());
+		$countries = geot_countries();
 		foreach( $countries as $c ) {
 			$choices[$c->iso_code] = $c->country;
 		}
@@ -151,7 +143,7 @@ class GeoTarget_Public {
 	 * @return mixed
 	 */
 	public function add_country_region_choices($choices) {
-		$regions = apply_filters('geot/get_regions', array());
+		$regions = geot_country_regions();
 		foreach( $regions as $r ) {
 
 			$choices[$r['name']] = $r['name'];
@@ -167,7 +159,7 @@ class GeoTarget_Public {
 	 * @return mixed
 	 */
 	public function add_city_region_choices($choices) {
-		$regions = apply_filters('geot/get_city_regions', array());
+		$regions = geot_city_regions();
 		foreach( $regions as $r ) {
 
 			$choices[$r['name']] = $r['name'];
@@ -257,7 +249,7 @@ class GeoTarget_Public {
 	function geot_redirections() {
 		global $geot;
 	/* TODO : Change to new helper method */
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$opts = geot_settings();
 
 		if( is_admin() || defined('DOING_AJAX') || empty( $opts['redirection'] ) || $geot->functions->isSearchEngine() )
 			return;
@@ -403,27 +395,13 @@ class GeoTarget_Public {
 	 * Print current user data in footer
 	 */
 	public function print_debug_info() {
-		$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$opts = geot_settings();
 		if( !defined('GEOT_DEBUG') && empty( $opts['debug_mode'] ) )
 			return;
-		$user_data = $this->functions->getUserDataByIp();
-		if( empty( $user_data['country'] ) )
-			return;
+
 		?>
 		<!-- Geotargeting plugin Debug Info START-->
-		<div id="geot-debug-info" style="display: none;"><!--
-		Country: <?php echo @$user_data['country']->name . PHP_EOL;?>
-		Country code: <?php echo @$user_data['country']->isoCode . PHP_EOL;?>
-		State: <?php echo @$user_data['state']->name . PHP_EOL;?>
-		State code: <?php echo @$user_data['state']->isoCode . PHP_EOL;?>
-		City: <?php echo @$user_data['city'] . PHP_EOL;?>
-		Zip: <?php echo @$user_data['zip'] . PHP_EOL;?>
-		Continent: <?php echo @$user_data['continent'] . PHP_EOL;?>
-		IP: <?php echo $this->functions->getUserIP() . PHP_EOL;?>
-		Geot Version: <?php echo GEOT_VERSION . PHP_EOL;?>
-		PHP Version: <?php echo phpversion() . PHP_EOL;?>
-		-->
-		</div>
+		<div id="geot-debug-info" style="display: none;"><!--<?php geot_debug_data();?>-></div>
 		<!-- Geotargeting plugin Debug Info END-->
 		<?php
 	}

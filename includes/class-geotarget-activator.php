@@ -43,13 +43,6 @@ class GeoTarget_Activator {
         INDEX (iso_code, country)
 		) DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI AUTO_INCREMENT=1 ;";
 
-		$city_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->base_prefix}geot_cities` (
-		`id`	 		INT(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, -- the id just for numeric
-		`country_code` 		VARCHAR(2) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip start from maxmind data
-		`city` 		VARCHAR(150) COLLATE UTF8_GENERAL_CI NOT NULL, -- the ip end of maxmind data
-		PRIMARY KEY( `id`),
-		INDEX (country_code, city)
-		) DEFAULT CHARSET=UTF8 COLLATE=UTF8_GENERAL_CI AUTO_INCREMENT=1 ;";
 
 		$table_name = "{$wpdb->base_prefix}geot_countries";
 
@@ -62,18 +55,6 @@ class GeoTarget_Activator {
 			self::add_countries_to_db();
 		}
 
-		$city_table_name = "{$wpdb->base_prefix}geot_cities";
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$city_table_name}'") != $city_table_name )
-			dbDelta( $city_table );
-
-		// check if mmdb file exist or if cities table is empty and show admin notice
-		if( ! file_exists( WP_CONTENT_DIR . '/uploads/geot_plugin/mmdb/GeoLite2-City.mmdb' )
-			|| ! $wpdb->get_var("SELECT count(id) FROM {$wpdb->base_prefix}geot_cities")
-			|| version_compare( $db_version, GEOT_DB_VERSION, '<' )
-		)
-			update_option( 'geot_db_update', true);
-
-
 		// Upgrade post database
 		if( $current_version && ! get_option( 'geot_posts_upgrade' ) ){
 			self::posts_upgrade();
@@ -81,7 +62,6 @@ class GeoTarget_Activator {
 
 		// update version number to current one
 		update_option( 'geot_version', GEOT_VERSION);
-		update_option( 'geot_db_version', GEOT_DB_VERSION);
 	}
 
 	protected static function add_countries_to_db() {

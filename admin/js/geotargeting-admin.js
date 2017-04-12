@@ -76,25 +76,7 @@
 			region.remove();
 		});
 
-        $(".add-redirection").click( function(e){
-            e.preventDefault();
-            var redirection 		= $(this).prev('.redirection-group');
-            var new_redirection 	= redirection.clone();
-            var new_id		= parseInt( redirection.data('id') ) + 1;
 
-            new_redirection.find('input[type="text"]').attr('name', 'geot_settings[redirection]['+new_id+'][name]').val('');
-            new_redirection.find('select').eq(0).attr('name', 'geot_settings[redirection]['+new_id+'][countries][]').find("option:selected").removeAttr("selected");
-            new_redirection.find('select').eq(1).attr('name', 'geot_settings[redirection]['+new_id+'][regions][]').find("option:selected").removeAttr("selected");
-            new_redirection.find('.chosen-container').remove();
-            new_redirection.insertAfter(redirection);
-            $(".geot-chosen-select").chosen({width:"90%",no_results_text: "Oops, nothing found!"});
-        });
-
-        $(".geot-settings").on('click','.remove-redirection', function(e){
-            e.preventDefault();
-            var redirection 		= $(this).parent('.redirection-group');
-            redirection.remove();
-        });
 		$(".country_ajax").on('change', function(){
 			load_cities($(this));
 		});
@@ -103,6 +85,7 @@
 			var counter 		= o.data('counter');
 			var cities_select 	= $("#cities"+counter);
 			var cities_choosen  = cities_select.next('.chosen-container');
+			cities_choosen.find('.default').val('loading....');
 			$.post(
 				geot.ajax_url,
 				{ action: 'geot_cities_by_country', country : o.val() },
@@ -110,6 +93,7 @@
 					//cities_choosen.remove();
 					cities_select.html(response);
 					cities_select.trigger("chosen:updated");
+                    cities_choosen.find('.default').val('Choose one');
 				}
 			);
 		}
@@ -126,6 +110,30 @@
 			$(target).find(".geot-chosen-select").show().chosen({width:"90%",no_results_text: "Oops, nothing found!"});
 
 		});
+
+        $('.check-license').on('click', function (e) {
+        	e.preventDefault();
+        	var button = $(this),
+				license = $('#license').val();
+        		button.prop('disabled',true).addClass('btn-spinner');
+			$.ajax({
+				'url' : ajaxurl,
+				'method' : 'POST',
+				'dataType': 'json',
+				'data'	: { action: 'geot_check_license',license : license},
+				'success': function (response) {
+					if( response.error ){
+                        $('<p style="color:red">'+response.error+'</p>').insertAfter(button).hide().fadeIn();
+                        $('#license').removeClass('geot_license_valid')
+                    }
+					if( response.success ){
+                        $('<p style="color:green">'+response.success+'</p>').insertAfter(button).hide().fadeIn();
+						$('#license').addClass('geot_license_valid');
+                    }
+                    button.prop('disabled',false).removeClass('btn-spinner');
+                }
+			});
+        });
 	});
 
 })( jQuery );

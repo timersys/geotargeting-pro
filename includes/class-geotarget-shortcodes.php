@@ -36,15 +36,6 @@ class GeoTarget_Shortcodes {
 	private $version;
 
 	/**
-	 * Plugin functions
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      object    Plugin functions
-	 */
-	private $functions;
-
-	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -52,12 +43,11 @@ class GeoTarget_Shortcodes {
 	 * @var      string    $version    The version of this plugin.
 	 * @var      class    instance of GeotFunctions
 	 */
-	public function __construct( $GeoTarget, $version, $functions ) {
+	public function __construct( $GeoTarget, $version ) {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
-		$this->functions = $functions;
-		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$this->opts = geot_settings();
 	}
 
 	/**
@@ -79,6 +69,7 @@ class GeoTarget_Shortcodes {
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
+		add_shortcode('geot_debug', 'geot_debug_data' );
 	}
 
 	/**
@@ -95,7 +86,7 @@ class GeoTarget_Shortcodes {
 	function geot_filter($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $this->functions->getUserIP(),
+			'ip' 				=> GeotWP\getUserIP(),
 			'country'			=>'',
 			'region'			=>'',
 			'exclude_country'	=>'',
@@ -103,7 +94,7 @@ class GeoTarget_Shortcodes {
 		), $atts ) );
 
 
-		if ( $this->functions->targetCountry( $country, $region, $exclude_country, $exclude_region ) )
+		if ( geot_target( $country, $region, $exclude_country, $exclude_region ) )
 			return do_shortcode( $content );
 
 		return '';
@@ -123,7 +114,7 @@ class GeoTarget_Shortcodes {
 	function geot_filter_cities($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $this->functions->getUserIP(),
+			'ip' 				=> GeotWP\getUserIP(),
 			'city'			    =>'',
 			'region'			=>'',
 			'exclude_city'	    =>'',
@@ -131,7 +122,7 @@ class GeoTarget_Shortcodes {
 		), $atts ) );
 
 
-		if ( $this->functions->targetCity( $city, $region, $exclude_city, $exclude_region ) )
+		if ( geot_target_city( $city, $region, $exclude_city, $exclude_region ) )
 			return do_shortcode( $content );
 
 		return '';
@@ -150,13 +141,13 @@ class GeoTarget_Shortcodes {
 	function geot_filter_states($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> $this->functions->getUserIP(),
+			'ip' 				=> GeotWP\getUserIP(),
 			'state'			    =>'',
 			'exclude_state'	    =>'',
 		), $atts ) );
 
 
-		if ( $this->functions->targetState( $state, $exclude_state ) )
+		if ( geot_target_state( $state, $exclude_state ) )
 			return do_shortcode( $content );
 
 		return '';
@@ -173,9 +164,9 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$c = $this->functions->get_user_country();
+		$code = geot_country_code();
 
-		return !empty($c->isoCode) ? $c->isoCode : $default;
+		return !empty($code) ? $code : $default;
 	}
 
 
@@ -189,10 +180,10 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$c = $this->functions->get_user_country();
+		$name = geot_country_name();
 
-		if ( !empty( $c->names ) || !empty( $c->name ) )
-			return apply_filters( 'geot/shortcodes/country_name', $c->name, $c );
+		if ( !empty( $name ) )
+			return apply_filters( 'geot/shortcodes/country_name', $name );
 
 		return  apply_filters( 'geot/shortcodes/country_name_default', $default );
 	}
@@ -207,10 +198,9 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$c = $this->functions->get_user_city();
-
-		if ( !empty( $c ) )
-			return apply_filters( 'geot/shortcodes/city_name', $c );
+		$name = geot_city_name();
+		if ( !empty( $name ) )
+			return apply_filters( 'geot/shortcodes/city_name', $name );
 
 		return  apply_filters( 'geot/shortcodes/city_name_default', $default );
 
@@ -226,10 +216,10 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$state = $this->functions->get_user_state();
+		$state = geot_state_name();
 
-		if ( !empty( $state->names ) || !empty( $state->name ) )
-			return apply_filters( 'geot/shortcodes/state_name', $state->name, $state );
+		if ( !empty( $state ) )
+			return apply_filters( 'geot/shortcodes/state_name', $state );
 
 		return  apply_filters( 'geot/shortcodes/state_name_default', $default );
 	}
@@ -244,9 +234,9 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$state = $this->functions->get_user_state();
+		$code = geot_state_code();
 
-		return !empty( $state->isoCode ) ? $state->isoCode : $default;
+		return !empty( $code ) ? $code : $default;
 	}
 
 	/**
@@ -259,7 +249,7 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$zip = $this->functions->get_user_zip();
+		$zip = geot_zip();
 
 		return !empty($zip) ? $zip : $default;
 	}

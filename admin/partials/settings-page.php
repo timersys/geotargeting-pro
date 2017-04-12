@@ -5,50 +5,21 @@
  */
 
 
- $opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+$opts = geot_settings();
+$defaults = [
+	'license'                   => '',
+	'region'                    => [['name','countries']],
+	'city_region'               => [['name','cities']],
+	'cache_mode'                => '0',
+	'ajax_mode'                 => '0',
+	'debug_mode'                => '0',
+	'disable_menu_integration'  => '0',
+	'disable_widget_integration'=> '0',
+	'geot_uninstall'            => '',
+];
+$opts = wp_parse_args( $opts, $defaults );
 
- // initialize
- if( !isset( $opts['region'] ) || ! is_array( $opts['region'] ) ) {
-	 $opts['region'][] = array( 'name' , 'countries' );
- }
- if( ! isset( $opts['city_region'] ) || ! is_array( $opts['city_region'] ) ) {
-	 $opts['city_region'][] = array( 'name' , 'cities' );
- }
- if( ! isset( $opts['redirection'] ) || ! is_array( $opts['redirection'] ) ) {
-	 $opts['redirection'][] = array( 'name' , 'countries', 'regions' );
- }
- if( empty( $opts['geot_license_key'] ) ) {
-	 $opts['geot_license_key'] = '';
- }
- if( empty( $opts['debug_mode'] ) ) {
-	 $opts['debug_mode'] = '0';
- }
- if( empty( $opts['disable_menu_integration'] ) ) {
-	 $opts['disable_menu_integration'] = '0';
- }
- if( empty( $opts['disable_widget_integration'] ) ) {
-	 $opts['disable_widget_integration'] = '0';
- }
- if( empty( $opts['cloudflare'] ) ) {
-	 $opts['cloudflare'] = '0';
- }
- if( empty( $opts['maxm_id'] ) ) {
-	 $opts['maxm_id'] = '';
- }
- if( empty( $opts['maxm_license'] ) ) {
-	 $opts['maxm_license'] = '';
- }
- if( empty( $opts['maxm_service'] ) ) {
-	 $opts['maxm_service'] = 'city';
- }
- if( empty( $opts['geot_uninstall'] ) ) {
-	 $opts['geot_uninstall'] = '';
- }
- if( empty( $opts['ajax_mode'] ) ) {
-	 $opts['ajax_mode'] = '0';
- }
-
- $countries 	= apply_filters('geot/get_countries', array());
+$countries 	= geot_countries();
 
 ?>
 <div class="wrap geot-settings">
@@ -62,21 +33,28 @@
 			<tr valign="top" class="">
 				<th><label for="license"><?php _e( 'Enter your license key', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
-					<label><input type="text" id="license" name="geot_settings[geot_license_key]" value="<?php  echo $opts['geot_license_key'];?>" class="regular-text <?php echo 'geot_license_' . get_option( 'geot_license_active' );?>" />
-					<p class="help"><?php _e( 'Enter your license key to get automatic updates', $this->GeoTarget ); ?></p>
+					<label><input type="text" id="license" name="geot_settings[license]" value="<?php  echo $opts['license'];?>" class="<?php echo 'geot_license_' ; echo !empty($opts['license']) && get_option( 'geot_license_active' ) ? get_option( 'geot_license_active' ) :'';?>" /><button class="button-primary check-license">Check license</button>
+					<p class="help"><?php _e( 'Enter your license key in order to connect with the API and also get automatic updates', $this->GeoTarget ); ?></p>
                     <?php if( isset($_GET['geot_message']) )
                         echo '<p style="color:red;">'.esc_attr($_GET['geot_message']).'</p>';?>
 				</td>
 			</tr>
 			<tr valign="top" class="">
-				<th><label for="maxm_id"><?php _e( 'Debug Mode', $this->GeoTarget ); ?></label></th>
+				<th><label for=""><?php _e( 'Cache Mode', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
-					<label><input type="checkbox" id="maxm_id" name="geot_settings[debug_mode]" value="1" <?php checked($opts['debug_mode'],'1');?>/>
-						<p class="help"><?php _e( 'If you want to calculate user data on every page load and print in the footer debug info with check this.', $this->GeoTarget ); ?></p>
+					<label><input type="checkbox" id="" name="geot_settings[cache_mode]" value="1" <?php checked($opts['cache_mode'],'1');?>/>
+						<p class="help"><?php _e( 'Check this if you want to save the user location into PHP Sessions', $this->GeoTarget ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top" class="">
-				<th><label for="ajax_mode"><?php _e( 'Ajax Mode', $this->GeoTarget ); ?>( Beta )</label></th>
+				<th><label for=""><?php _e( 'Debug Mode', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="checkbox" id="" name="geot_settings[debug_mode]" value="1" <?php checked($opts['debug_mode'],'1');?>/>
+						<p class="help"><?php _e( 'Check this if you want to print in the html code some debug info.', $this->GeoTarget ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="ajax_mode"><?php _e( 'Ajax Mode', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 					<label><input type="checkbox" id="ajax_mode" name="geot_settings[ajax_mode]" value="1" <?php checked($opts['ajax_mode'],'1');?>/>
 						<p class="help"><?php _e( 'In Ajax mode, after page load an extra request is made to get all data and everything is updated with javascript. That makes the plugin compatible with any cache plugin. More info on: ', $this->GeoTarget ); ?><a href="https://timersys.com/geotargeting/docs/ajax-mode/">Ajax mode info</a></p>
@@ -130,38 +108,6 @@
 					</select>
 
 					<p class="help"><?php _e( 'All bots / crawlers will be treated as the are from this country. More info in ', $this->GeoTarget ); ?><a href="https://timersys.com/geotargeting/docs/bots-seo/">Bots in Geotargeting</a></p>
-				</td>
-			</tr>
-
-			<tr valign="top" class="">
-				<th><h3><?php _e( 'Maxmind:', $this->GeoTarget ); ?></h3></th>
-				<td colspan="3">
-					<p><?php echo sprintf(__( 'If you have <a href="%s">Maxmind API credentials</a>, enter them below', $this->GeoTarget ), 'https://www.maxmind.com/en/geoip2-precision-city-service?rId=timersys'); ?></p>
-				</td>
-			</tr>
-			<tr valign="top" class="">
-				<th><label for="maxm_service"><?php _e( 'GeoIP2 Precision Service', $this->GeoTarget ); ?></label></th>
-				<td colspan="3">
-					<label><select id="maxm_service" name="geot_settings[maxm_service]">
-								<option value="city" <?php  selected( $opts['maxm_service'], 'city');?>>City</option>
-								<option value="country" <?php  selected( $opts['maxm_service'], 'country');?>>Country</option>
-								<option value="insights" <?php  selected( $opts['maxm_service'], 'insights');?>>Insights</option>
-							</select>
-					<p class="help"><?php _e( 'Choose the precision service you purchased', $this->GeoTarget ); ?></p>
-				</td>
-			</tr>
-			<tr valign="top" class="">
-				<th><label for="maxm_id"><?php _e( 'Maxmind User ID', $this->GeoTarget ); ?></label></th>
-				<td colspan="3">
-					<label><input type="text" id="maxm_id" name="geot_settings[maxm_id]" value="<?php  echo $opts['maxm_id'];?>" class="regular-text" />
-					<p class="help"><?php _e( 'Enter your Maxmind user id', $this->GeoTarget ); ?></p>
-				</td>
-			</tr>
-			<tr valign="top" class="">
-				<th><label for="maxm_license"><?php _e( 'Maxmind license key', $this->GeoTarget ); ?></label></th>
-				<td colspan="3">
-					<label><input type="text" id="maxm_license" name="geot_settings[maxm_license]" value="<?php  echo $opts['maxm_license'];?>" class="regular-text" />
-					<p class="help"><?php _e( 'Enter your Maxmind license key', $this->GeoTarget ); ?></p>
 				</td>
 			</tr>
 
@@ -249,74 +195,6 @@
 				</td>
 
 			</tr>
-
-			<tr valign="top" class="">
-				<th><h3><?php _e( 'Country Redirections:', $this->GeoTarget ); ?></h3></th>
-				<td colspan="3"><p><?php _e( 'If you want to redirect users from certain countries / regions to other sites, use the section below:', $this->GeoTarget ); ?></p>
-				</td>
-			</tr>
-			<tr valign="top" class="">
-				<th><label for="redirection"><?php _e( 'Create new redirection', $this->GeoTarget ); ?></label></th>
-				<td colspan="3">
-					<?php
-
-					if( !empty( $opts['redirection'] ) ) {
-						$i = 0;
-						foreach ( $opts['redirection'] as $redirection ) { $i++;?>
-
-							<div class="redirection-group"  data-id="<?php echo $i;?>" >
-
-								<input type="text" placeholder="http://... Enter destination url" name="geot_settings[redirection][<?php echo $i;?>][name]" value="<?php echo !empty( $redirection['name'] )? esc_attr($redirection['name']): '' ; ?>" class="regular-text"/>
-								<a href="#" class="remove-redirection"title="<?php _e( 'Remove Redirection', $this->GeoTarget );?>">-</a>
-								<select name="geot_settings[redirection][<?php echo $i;?>][countries][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type country name...', $this->GeoTarget );?>" >
-									<?php
-									foreach ($countries as $c) {
-										?>
-										<option value="<?php echo $c->iso_code?>" <?php isset( $redirection['countries'] ) && is_array( $redirection['countries'] ) ? selected(true, in_array( $c->iso_code, $redirection['countries']) ) :''; ?>> <?php echo $c->country; ?></option>
-									<?php
-									}
-									?>
-								</select>
-								<p>or</p>
-								<select name="geot_settings[redirection][<?php echo $i;?>][regions][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type a country region name...', $this->GeoTarget );?>" >
-									<?php
-									$saved_regions 	= apply_filters('geot/get_regions', array());
-									if( !empty( $saved_regions ) ) {
-										foreach ( $saved_regions as $k => $r ) {
-											?>
-											<option
-												value="<?php echo $r['name'] ?>" <?php isset( $redirection['regions'] ) && is_array( $redirection['regions'] ) ? selected( true, in_array( $r['name'], $redirection['regions'] ) ):''; ?>> <?php echo $r['name']; ?></option>
-										<?php
-										}
-									}
-									?>
-								</select>
-								<p>or</p>
-								<select name="geot_settings[redirection][<?php echo $i;?>][city_regions][]" multiple class="geot-chosen-select" data-placeholder="<?php _e('Type a city region name...', $this->GeoTarget );?>" >
-									<?php
-									$saved_city_regions 	= apply_filters('geot/get_city_regions', array());
-									if( !empty( $saved_city_regions ) ) {
-										foreach ( $saved_city_regions as $k => $r ) {
-											?>
-											<option
-												value="<?php echo $r['name'] ?>" <?php isset( $redirection['city_regions'] ) && is_array( $redirection['city_regions'] ) ? selected( true, in_array( $r['name'], $redirection['city_regions'] ) ):''; ?>> <?php echo $r['name']; ?></option>
-										<?php
-										}
-									}
-									?>
-								</select>
-								<p>or</p>
-								<input type="text" placeholder="Type a state" name="geot_settings[redirection][<?php echo $i;?>][state]" value="<?php echo !empty( $redirection['state'] )? esc_attr($redirection['state']): '' ; ?>" class="regular-text"/>
-
-							</div>
-						<?php }
-					}?>
-					<a href="#" class="add-redirection button">Add Redirection</a>
-					<p class="help"><?php _e( 'Add as many countries you need for each redirection', $this->GeoTarget ); ?></p>
-					<p class="help"><?php echo sprintf(__( 'If you need to create internal redirects check <a href="%s">this</a>', $this->GeoTarget ),'https://timersys.com/geotargeting/docs/commons-problems/#3'); ?></p>
-				</td>
-
-			</tr>
 			<tr valign="top" class="">
 				<th><h3><?php _e( 'Uninstall:', $this->GeoTarget ); ?></h3></th>
 				<td colspan="3">
@@ -324,7 +202,7 @@
 				</td>
 			</tr>
 			<tr valign="top" class="">
-				<th><label for="maxm_id"><?php _e( 'Uninstall', $this->GeoTarget ); ?></label></th>
+				<th><label for=""><?php _e( 'Uninstall', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 				        <input type="checkbox" id="" name="geot_settings[geot_uninstall]" value="1" <?php checked($opts['geot_uninstall'],'1');?>/>
 						<p class="help"><?php _e( 'Will delete all database records and plugin settings when you delete the plugin', $this->GeoTarget ); ?></p>
@@ -338,7 +216,7 @@
 				</td>
 			</tr>
 			<tr valign="top" class="">
-				<th><label for="maxm_id"><?php _e( 'Export settings', $this->GeoTarget ); ?></label></th>
+				<th><label for=""><?php _e( 'Export settings', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
                     <div id="export_href">
 
@@ -351,7 +229,7 @@
 				</td>
 			</tr>
 			<tr valign="top" class="">
-				<th><label for="maxm_id"><?php _e( 'Import settings', $this->GeoTarget ); ?></label></th>
+				<th><label for=""><?php _e( 'Import settings', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
                         Select image to upload:
                         <input type="file" name="geot_settings_json" id="fileToUpload"><br />

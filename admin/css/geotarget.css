@@ -1,8 +1,29 @@
-input.geot_license_valid{
-	background: #fff url( ../img/valid-key.png) no-repeat 95% center;
-}
 input.geot_license_{
-	background: #fff url( ../img/invalid-key.png) no-repeat 95% center;
+	background: #fff url( ../img/invalid-key.png) no-repeat 99% center;
+}
+input.geot_license_valid{
+	background: #fff url( ../img/valid-key.png) no-repeat 99% center;
+}
+.btn-spinner {
+	position: relative;
+}
+.btn-spinner:before {
+	content: "";
+	background: url('../img/wpspin_light.gif') no-repeat;
+	background-size: 16px 16px;
+	float: right;
+	opacity: .7;
+	filter: alpha(opacity=70);
+	width: 16px;
+	height: 16px;
+	right: -27px;
+	top: 5px;
+	position: absolute;
+}
+
+input#license{
+	width:42%;
+	margin-right: 5px;
 }
 .geot-settings .region-group,
 .geot-settings .redirection-group,

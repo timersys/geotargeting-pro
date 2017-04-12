@@ -15,7 +15,7 @@ $country = $exclude_country = $region = $exclude_region = '';
 $atts = vc_map_get_attributes( $this->getShortcode(), $atts );
 extract( $atts );
 
-$opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+$opts = geot_settings();
 
 if( isset( $opts['ajax_mode'] ) && $opts['ajax_mode'] == '1' ) {
 	echo '<div class="geot-ajax geot-filter" data-action="country_filter" data-filter="' . $country . '" data-region="' . $region . '" data-ex_filter="' . $exclude_country . '" data-ex_region="' . $exclude_region . '">' . wpb_js_remove_wpautop( $content ) . '</div>';

@@ -41,13 +41,13 @@ class Geot_Widgets  {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
-		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$this->opts = geot_settings();
 	}
 
 	public function add_geot_to_widgets( $t, $return, $instance ) {
 
-		$countries 	= apply_filters('geot/get_countries', array());
-		$regions 	= apply_filters('geot/get_regions', array());
+		$countries 	= geot_countries();
+		$regions 	= geot_country_regions();
 
 		if ( empty( $instance['geot_include_mode'] ) )  {
 			$instance['geot_include_mode'] = '';

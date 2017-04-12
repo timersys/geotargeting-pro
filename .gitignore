@@ -5,7 +5,8 @@
 Icon
 includes/data/
 .sass-cache/
-
+studio.json
+.env
 # Thumbnails
 ._*
 
@@ -16,3 +17,4 @@ includes/data/
 .svn/
 .idea
 .mmdb
+

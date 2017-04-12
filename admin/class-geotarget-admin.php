@@ -9,6 +9,9 @@
  * @package    GeoTarget
  * @subpackage GeoTarget/admin
  */
+use GeotWP\GeotargetingWP;
+use GeotFunctions\GeotUpdates;
+
 
 /**
  * The dashboard-specific functionality of the plugin.
@@ -108,7 +111,7 @@ class GeoTarget_Admin {
 	public function add_meta_boxes()
 	{
 
-		$post_types = apply_filters( 'geot/get_post_types', array(), array('attachment') );
+		$post_types = apply_filters( 'geot/get_post_types', Geot_Helpers::get_post_types() );
 
 		foreach ($post_types as $cpt) {
 
@@ -131,9 +134,9 @@ class GeoTarget_Admin {
 	 */
 	public function geot_options_view( $post, $metabox )
 	{
-		$opts 		= apply_filters('geot/metaboxes/get_cpt_options', GeoTarget_Filters::get_cpt_options( $post->ID ), $post->ID );
-		$countries 	= apply_filters('geot/get_countries', array());
-		$regions 	= apply_filters('geot/get_regions', array());
+		$opts 		= apply_filters('geot/metaboxes/get_cpt_options', Geot_Helpers::get_cpt_options( $post->ID ), $post->ID );
+		$countries 	= geot_countries();
+		$regions 	= geot_country_regions();
 
 		if( !isset( $opts['forbidden_text'] ) )
 			$opts['forbidden_text'] = __( 'This content is restricted in your region', $this->GeoTarget);
@@ -281,20 +284,42 @@ class GeoTarget_Admin {
 	}
 
 	/**
-	 * Handle Licences and updates
+	 * Check license
+	 */
+	public function check_license() {
+		if( empty($_POST['license']) ){
+			echo json_encode( ['error' => 'Please enter the license'] );
+			die();
+		}
+		$license = esc_attr($_POST['license']);
+		$response = GeotargetingWP::checkLicense($license);
+
+		$result = json_decode( $response );
+		$opts = geot_settings();
+		$opts['license'] = $license;
+		// update license
+		if( isset( $result->success ) ) {
+			update_option('geot_license_active', 'valid');
+		} else {
+			delete_option('geot_license_active');
+		}
+		update_option( 'geot_settings', $opts );
+		echo $response; // send result to javascript
+		die();
+	}
+
+	/**
 	 * Handle Licences and updates
 	 * @since 1.0.0
 	 */
 	public function handle_updates(){
-
-		$opts = get_option( 'geot_settings');
-
-		$license = @$opts['geot_license_key'];
-
-		$eddc_license = new Geot_License( GEOT_PLUGIN_FILE, 'GeoTargeting Pro', $this->version	, 'Damian Logghe', $license );
-
-
-
+		$opts = geot_settings();
+		// Setup the updater
+		return new GeotUpdates( GEOT_PLUGIN_FILE, [
+				'version'   => $this->version,
+				'license'   => $opts['license']
+			]
+		);
 	}
 
 	/*
@@ -306,10 +331,10 @@ class GeoTarget_Admin {
 		if( empty($_POST['country']))
 			die();
 
-
-		$cities = $wpdb->get_results( $wpdb->prepare( "SELECT id, city FROM {$wpdb->base_prefix}geot_cities WHERE country_code = %s", array($_POST['country'])));
+		$cities =  GeotargetingWP::getCities($_POST['country']);
 
 		if( !empty( $cities ) ){
+			$cities = json_decode( $cities );
 			foreach( $cities as $c ) {
 				echo '<option value="'.strtolower($c->city).'">'.$c->city.'</option>';
 			}

@@ -11,16 +11,13 @@ class ComposerStaticInit5155d212bc114ac828274569c50def18
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '874c2e99434288a0f58e8d945f6d28f0' => __DIR__ . '/..' . '/timersys/geotargetingwp/src/functions_include.php',
+        '907ed27fb6572f2a5d69b507f4c0d25f' => __DIR__ . '/..' . '/timersys/geot-functions/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
-        ),
-        'M' => 
-        array (
-            'MaxMind\\' => 8,
         ),
         'J' => 
         array (
@@ -32,7 +29,11 @@ class ComposerStaticInit5155d212bc114ac828274569c50def18
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'GeotWP\\' => 7,
-            'GeoIp2\\' => 7,
+            'GeotFunctions\\' => 14,
+        ),
+        'D' => 
+        array (
+            'Dotenv\\' => 7,
         ),
     );
 
@@ -40,10 +41,6 @@ class ComposerStaticInit5155d212bc114ac828274569c50def18
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'MaxMind\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/maxmind/web-service-common/src',
         ),
         'Jaybizzle\\CrawlerDetect\\' => 
         array (
@@ -65,19 +62,13 @@ class ComposerStaticInit5155d212bc114ac828274569c50def18
         array (
             0 => __DIR__ . '/..' . '/timersys/geotargetingwp/src',
         ),
-        'GeoIp2\\' => 
+        'GeotFunctions\\' => 
         array (
-            0 => __DIR__ . '/..' . '/geoip2/geoip2/src',
+            0 => __DIR__ . '/..' . '/timersys/geot-functions/src',
         ),
-    );
-
-    public static $prefixesPsr0 = array (
-        'M' => 
+        'Dotenv\\' => 
         array (
-            'MaxMind' => 
-            array (
-                0 => __DIR__ . '/..' . '/maxmind-db/reader/src',
-            ),
+            0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
         ),
     );
 
@@ -86,7 +77,6 @@ class ComposerStaticInit5155d212bc114ac828274569c50def18
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit5155d212bc114ac828274569c50def18::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit5155d212bc114ac828274569c50def18::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit5155d212bc114ac828274569c50def18::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }

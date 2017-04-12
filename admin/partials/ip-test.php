@@ -43,3 +43,6 @@ echo '$_SERVER[X-FORWARDED-FOR] = '; echo isset( $_SERVER['X-FORWARDED-FOR'] ) ?
 
      ?>
 </p>
+<p>
+	<?php echo geot_debug_data();?>
+</p>

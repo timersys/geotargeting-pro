@@ -46,7 +46,7 @@ class GeoTarget_Ajax_Shortcodes {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
-		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$this->opts = geot_settings();
 	}
 
 	/**
@@ -68,6 +68,7 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
+		add_shortcode('geot_debug', 'geot_debug_data' );
 	}
 
 	/**

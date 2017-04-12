@@ -36,28 +36,17 @@ class GeoTarget_VC {
 	private $version;
 
 	/**
-	 * Plugin functions
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      object    Plugin functions
-	 */
-	private $functions;
-
-	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 * @var      string    $GeoTarget       The name of this plugin.
 	 * @var      string    $version    The version of this plugin.
-	 * @var      class    instance of GeotFunctions
 	 */
-	public function __construct( $GeoTarget, $version, $functions ) {
+	public function __construct( $GeoTarget, $version ) {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
-		$this->functions = $functions;
-		$this->opts = apply_filters('geot/settings_page/opts', get_option( 'geot_settings' ) );
+		$this->opts = geot_settings();
 
 	}
 
@@ -66,7 +55,7 @@ class GeoTarget_VC {
 		if ( ! defined( 'WPB_VC_VERSION' ) )
 			return;
 
-		$regions = apply_filters('geot/get_regions', array());
+		$regions = geot_country_regions();
 		$dropdown_values = array( __('Choose one','geot') => '');
 
 		if( !empty( $regions ) ) {
@@ -77,7 +66,7 @@ class GeoTarget_VC {
 			}
 		}
 
-		$city_regions = apply_filters('geot/get_city_regions', array());
+		$city_regions = geot_city_regions();
 		$city_dropdown_values = array( __('Choose one','geot') => '');
 
 		if( !empty( $city_regions ) ) {

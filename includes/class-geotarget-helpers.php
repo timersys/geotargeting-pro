@@ -30,11 +30,14 @@ AND pm.meta_value != ''";
 	 *
 	 * @param $post_id
 	 *
+	 * @param bool $cache
+	 *
 	 * @return bool
 	 */
 	public static function user_is_targeted( $opts, $post_id, $cache = true ) {
-		if( isset( self::$_user_is_targeted[$post_id] ) && $cache )
-			return self::$_user_is_targeted[$post_id];
+		#if( isset( self::$_user_is_targeted[$post_id] ) && $cache )
+			#return self::$_user_is_targeted[$post_id];
+
 
 		$_user_is_targeted = false;
 
@@ -56,7 +59,6 @@ AND pm.meta_value != ''";
 			if ( $mode == 'exclude' && $city_target )
 				$city_remove = true;
 		}
-
 		if ( ! empty( $opts['states'] ) ) {
 			$states = ! empty( $opts['states'] ) ? $opts['states'] : '';
 			$state_target = geot_target_state( $states );
@@ -74,7 +76,54 @@ AND pm.meta_value != ''";
 		if( $mode == 'exclude' && ( $country_remove || $state_remove || $city_remove ) )
 			$_user_is_targeted = true;
 
-
 		return self::$_user_is_targeted[$post_id] = $_user_is_targeted;
+	}
+
+	/**
+	 * Get post meta option
+	 * @param  int $post_id [description]
+	 * @return array
+	 */
+	public static function get_cpt_options( $post_id ) {
+
+		$opts = get_post_meta( $post_id, 'geot_options', true );
+		if( ! $opts )
+			return array();
+		return $opts;
+
+	}
+
+	/**
+	 * Return available posts types. Used in filters
+	 * @param  array  $exclude    cpt to explude
+	 * @param  array  $include    cpts to include
+	 * @return array  Resulting cpts
+	 */
+	public static function get_post_types( $exclude = array(), $include = array() ) 	{
+
+		// get all custom post types
+		$post_types = get_post_types();
+
+		// core include / exclude
+		$spu_includes = array_merge( array(), $include );
+		$spu_excludes = array_merge( array( 'spucpt', 'acf', 'revision', 'nav_menu_item', 'attachment' ), $exclude );
+
+		// include
+		foreach( $spu_includes as $p )
+		{
+			if( post_type_exists($p) )
+			{
+				$post_types[ $p ] = $p;
+			}
+		}
+
+		// exclude
+		foreach( $spu_excludes as $p )
+		{
+			unset( $post_types[ $p ] );
+		}
+
+		return $post_types;
+
 	}
 }

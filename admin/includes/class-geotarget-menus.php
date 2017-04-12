@@ -100,11 +100,14 @@ class GeoTarget_Menus {
 
 		foreach ( $sorted_menu_items as $k => $menu_item ) {
 			$g = $menu_item->geot;
+			if( empty($menu_item->ID))
+				continue;
 			// check at least one condition is filled
 			if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' ) {
 				$menu_item->classes[] = 'geot-ajax geot_menu_item';
 				add_filter( 'nav_menu_link_attributes', array( $this, 'add_geot_info'), 10, 2 );
-			} else {
+			} else { #error_log(print_r($menu_item->ID,1));
+			#	error_log(Geot_Helpers::user_is_targeted($g, $menu_item->ID ));
 				if( Geot_Helpers::user_is_targeted($g, $menu_item->ID ) )
 					unset( $sorted_menu_items[ $k ] );
 			}

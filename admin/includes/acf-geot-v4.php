@@ -134,7 +134,7 @@ class acf_field_geot_field extends acf_field {
 		
 		if( 'regions' == $field['geot_show']) {
 			
-			$regions 	= apply_filters('geot/get_regions', array());
+			$regions 	= geot_country_regions();
 				
 			if( is_array( $regions ) ) { 
 				
@@ -160,7 +160,7 @@ class acf_field_geot_field extends acf_field {
 			}				
 		} elseif( 'city-regions' == $field['geot_show']) {
 
-			$regions 	= apply_filters('geot/get_city_regions', array());
+			$regions 	= geot_city_regions();
 
 			if( is_array( $regions ) ) {
 
@@ -186,7 +186,7 @@ class acf_field_geot_field extends acf_field {
 			}
 		} else {
 
-			$countries 	= apply_filters('geot/get_countries', array());
+			$countries 	= geot_countries();
 			
 			if( is_array( $countries ) ) { 
 				
