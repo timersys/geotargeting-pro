@@ -1,14 +1,14 @@
 === GeoTargeting Pro ===
 Contributors: timersys
-Donate link: https://timersys.com/geotargeting/
+Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
-Tested up to: 4.7.2
-Stable tag: 1.9.2
+Tested up to: 4.7.9
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-GeoTargeting for WordPress will let you country-target your content based on users IP's and Geocountry Ip database
+GeoTargeting for WordPress will let you country-target your content based on users IP's and GeotargetinWP API
 
 == Description ==
 
@@ -21,25 +21,6 @@ E.g:
 `[geot country="Portugal"] Cristiano ronaldo is the best! [/geot]`
 
 More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https://geotargetingwp.com/docs/geotargeting-pro/))
-= Plugin's Official Site =
-
-Geotargeting ([https://timersys.com/free-plugins/geotargeting/](https://timersys.com/free-plugins/geotargeting/))
-
-= Wordpress Popups  =
-
-Best popups plugin ever ([https://timersys.com/popups/](https://timersys.com/popups/?utm_source=wsi-free-plugin&utm_medium=readme))
-
-= Install Multiple plugins at once with WpFavs  =
-
-Bulk plugin installation tool, import WP favorites and create your own lists ([http://wordpress.org/extend/plugins/wpfavs/](http://wordpress.org/extend/plugins/wpfavs/))
-
-= Increase your twitter followers  =
-
-Increase your Twitter followers with Twitter likebox Plugin ([http://wordpress.org/extend/plugins/twitter-like-box-reloaded/](http://wordpress.org/extend/plugins/twitter-like-box-reloaded/))
-
-= Wordpress Social Invitations  =
-
-Enhance your site by letting your users send Social Invitations ([https://timersys.com/wordpress-social-invitations/](https://timersys.com/wordpress-social-invitations/?utm_source=social-popup&utm_medium=readme))
 
 == Installation ==
 
@@ -57,187 +38,5 @@ Enhance your site by letting your users send Social Invitations ([https://timers
 
 == Changelog ==
 
-= 1.9.2 - Feb 22 =
-* Database update
-* City regions not working on menus
-* Fixed error with ACF plugin
-* Old post meta are migrated to new format automatically now
-* Removed curl opt that was making db updates fail
-* Fixed several small bugs, undefined index, problem with cache functions, etc
-
-= 1.9.1.1 - Hotfix Nov 15 =
-
-* Javascript fatal error when dropdown widget is not being used
-* Fixed states shortcodes not working with debug url
-* Fixed menu name
-
-= 1.9.1 -  Nov 15 =
-* Improved remote download code and added safe download mode
-* Added Ip to debug info
-* Added Test ip page to know which value server uses
-* Country dropdown now support cache like varnish
-* Advanced custom fields v5 improved
-* Database update
-
-= 1.9 -  Oct 15 =
-* Plugin databases are now downloaded and installed remotely
-* Fixed bug when "show in" option is selected
-* Easy debug mode by using url query strings
-* Fixed bug when only states were being used on posts
-* Fixed bug with visual composer child elements
-* Users can specify which tag shortcodes will return div or span
-* Users can now change cookie name to remember location
-* Fixed bug country name not printing on widget
-* Minor bugfixes
-
-= 1.8 -  Jul 26 =
-
-* Added Geotargeting to Menus
-* Woocommerce now disable "add to cart" when product is excluded
-* Changed dropdown widget script. Now it's fully mobile compatible
-* Widget now support country flags
-* New filter to custom redirect after widget is used
-* Updated countries database, some were missing
-* Updated Maxmind database
-* Added option in settings page to disable menu/widget integration
-
-= 1.7.1 -  Jun 23 =
-
-* Fixed bug with regions on new Visual composer modules
-* Fixed some PHP warnings
-
-= 1.7 -  Jun 21 =
-
-* Added visual composer support
-* Updated db
-
-= 1.6.3 - May 26 =
-
-* Fixed bug introduced on previous version that won't let populate country / regions on page metabox
-* Fixed undefined errors on js
-* Added mobile support for dropdown widget
-* Added new filters for developers
-
-= 1.6.2 - May 16 =
-* Updated Database
-* Added region shortcodes and function to see actual region of user
-* Added filters for widget dropdown to remove search / change values
-* Removed some undefined notices
-* Ajax mode now updates debug info on footer
-* Added filters for post removal so users can cancel post removals
-* Ajax request only executes with ajax mode on now
-* More filters everywhere, devs welcome
-
-= 1.6.1 - Mar 2 =
-* fixed bug with ajax mode and content blocks
-* Fixed bug on remove posts from loop with multiple posts
-* Change country dropdown to new system more compatible with themes
-
-
-= 1.6 - Feb 15 =
-
-* New Ajax mode to make compatible with all cache plugins
-* Updated db
-* Improved code, now it's 3 times faster
-* You can redirect cities / states now
-* Improved redirection script
-* Bots/ Crawlers are excluded from redirections now
-* Bots/ Crawlers have a new setting to set country for them
-* Added new API wrapper functions for latitude, longitude, time zone, and full record
-
-= 1.5.2 - 27 Jan =
-* Added CrawlerDetect Class to avoid geotargeting for most crawlers / bots / social sharing tools
-* Ezoic Support
-* Akamai Support
-* Fixed bug with wpml sites
-* Fixed bug with country Insights service
-* Fixed bug with uninstall option not deleting data
-
-= 1.5.1 - 15 Jan =
-* Updated database
-* Remove post from loop now works in more places
-* Added file that will let users to use W3 Total Cache with plugin
-
-= 1.5 = - 10 Dic =
-
-* Updated maxmind db
-* Autodetection of Cloudflare, Sucuri , Reblaze
-* Widgets can be geotargeted by states and cities
-* Posts can be now completely removed from loop
-* Fixed bug with shortcode generator
-* Added cities and states to shortcode generator
-* Fixed bug with plugin activation
-* Added option to delete all data from database on uninstall
-
-= 1.4.2 - 4 Nov =
-* Added debug mode into the settings of plugin
-* Fixed bug with states targeting
-
-= 1.4.1 - 9 Oct =
-* Updated db
-* Fixed some css issues
-
-= 1.4.0.1 - 13 Aug =
-* Hotfix bug breaking site on site redirections feature
-
-= 1.4 - 13 Aug =
-* Update database
-* Improved performance
-* Now posts / pages can be entirely geotargeted
-* Now users can create redirections and redirect users to another websites based on countries
-* Shortcodes can use a fallback in case nothing is detected
-* Advanced custom fields 5 support
-
-= 1.3.3.1 - 8 Jun =
-* Hotfix for states targeting and popups
-
-= 1.3.3 - 8 Jun =
-* Fixed error emails when run out of queries
-* Added support for the three available maxmin webservices (city, country and insigths)
-* Fixed error with state geotargeting
-* API function returns now return more data
-* Updated Maxmind db
-
-= 1.3.2 - 25 May =
-
-* Added better error exception handling
-* If premium maxmind user run out of queries, it will fallback to free version instead of throwing error
-* Added the ability to target by states
-
-= 1.3.1 - 22 May =
-
-* Fixed bug when IP is not found
-* Added falback country in settings page in case IP is not found
-* Minor bugfixes
-
-
-= 1.3 - 27 Apr =
-
-* Added cloudflare geolocation support
-* Updated maxmind API to 1.0.3
-* Updated Maxmind database
-
-= 1.2 - 24 Feb =
-
-* Added multisite support
-* Added Wordpress Popups plugin support to create geotargeted popups
-
-= 1.1 - 11 Feb =
-* Added maxmind queries API Support
-* Change database for Maxmind api database to improve performance and free mysql
-* Added city geolocation
-* Added support for maxmind premium databases
-* Added session to cache country calculation and improve performance
-* removed calculation in backend
-
-
-= 1.0.1 - 9 Dec =
-
-* Fixed error uploading data on activation or certain servers
-* Fixed error in php functions
-* Updated IP database
-* Fixed undefinied notice
-
-= 1.0.0 =
-
-* Plugin launched!
+= 2.0.0 - Apr 14  =
+* Plugin recoded for new API
