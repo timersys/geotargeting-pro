@@ -8,6 +8,7 @@
 $opts = geot_settings();
 $defaults = [
 	'license'                   => '',
+	'api_secret'                => '',
 	'region'                    => [['name','countries']],
 	'city_region'               => [['name','cities']],
 	'cache_mode'                => '0',
@@ -31,12 +32,19 @@ $countries 	= geot_countries();
 				<th><h3><?php _e( 'Main settings:', $this->GeoTarget ); ?></h3></th>
 			</tr>
 			<tr valign="top" class="">
-				<th><label for="license"><?php _e( 'Enter your license key', $this->GeoTarget ); ?></label></th>
+				<th><label for="license"><?php _e( 'Enter your API key', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
-					<label><input type="text" id="license" name="geot_settings[license]" value="<?php  echo $opts['license'];?>" class="<?php echo 'geot_license_' ; echo !empty($opts['license']) && get_option( 'geot_license_active' ) ? get_option( 'geot_license_active' ) :'';?>" /><button class="button-primary check-license">Check license</button>
-					<p class="help"><?php _e( 'Enter your license key in order to connect with the API and also get automatic updates', $this->GeoTarget ); ?></p>
+					<label><input type="text" id="license" name="geot_settings[license]" value="<?php  echo $opts['license'];?>" class="api-keys <?php echo 'geot_license_' ; echo !empty($opts['license']) && get_option( 'geot_license_active' ) ? get_option( 'geot_license_active' ) :'';?>" /><button class="button-primary check-license">Check license</button>
+					<p class="help"><?php _e( 'Enter your api key in order to connect with the API and also get automatic updates', $this->GeoTarget ); ?></p>
                     <?php if( isset($_GET['geot_message']) )
                         echo '<p style="color:red;">'.esc_attr($_GET['geot_message']).'</p>';?>
+				</td>
+			</tr>
+			<tr valign="top" class="">
+				<th><label for="api_secret"><?php _e( 'Enter your API secret', $this->GeoTarget ); ?></label></th>
+				<td colspan="3">
+					<label><input type="password" id="api_secret" name="geot_settings[api_secret]" value="<?php  echo $opts['api_secret'];?>" class="api-keys" />
+					<p class="help"><?php _e( 'Enter your api secret', $this->GeoTarget ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top" class="">

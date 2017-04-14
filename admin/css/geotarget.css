@@ -21,7 +21,7 @@ input.geot_license_valid{
 	position: absolute;
 }
 
-input#license{
+input.api-keys{
 	width:42%;
 	margin-right: 5px;
 }
