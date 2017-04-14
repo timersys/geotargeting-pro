@@ -1,6 +1,26 @@
 {
+    "name": "timersys/geotargeting-pro",
+    "description": "WordPress plugin for geotargeting that works with GeotargetingWP API",
+    "homepage": "https://geotargetingwp.com",
+    "keywords": [
+        "wordpress","geotargeting","geolocation","plugin"
+    ],
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name":"Damian Logghe",
+            "email":"damian@timersys.com",
+            "homepage":"https://timersys.com/"
+        }
+    ],
+    "support"    : {
+        "issues": "https://github.com/timersys/geotargeting-pro/issues",
+        "source": "https://github.com/timersys/geotargeting-pro"
+    },
+    "type": "wordpress-plugin",
     "require": {
         "timersys/geot-functions": "dev-master",
-        "timersys/geotargetingwp": "dev-master"
+        "timersys/geotargetingwp": "dev-master",
+        "composer/installers": "*"
     }
 }
