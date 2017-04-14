@@ -9,7 +9,8 @@ studio.json
 .env
 # Thumbnails
 ._*
-
+vendor/
+composer.lock
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
