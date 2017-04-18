@@ -299,7 +299,6 @@ class GeoTarget_Ajax {
 	 * @return string|void
 	 */
 	private function getDebugInfo() {
-		ob_start();
 		$opts = geot_settings();
 		if( empty( $opts['debug_mode'] ) )
 			return;
