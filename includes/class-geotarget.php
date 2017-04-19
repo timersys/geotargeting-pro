@@ -302,7 +302,7 @@ class GeoTarget {
 		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version() );
 		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 		// if we have cache mode, load geotarget now to set session before content
-		if( $this->opts['cache_mode'] )
+		if( isset( $this->opts['cache_mode'] ) && $this->opts['cache_mode'] )
 			geot();
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->public, 'enqueue_styles' );
