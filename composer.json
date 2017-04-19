@@ -19,7 +19,7 @@
     },
     "type": "wordpress-plugin",
     "require": {
-        "timersys/geot-functions": "1.*",
-        "timersys/geotargetingwp": "1.*"
+        "timersys/geot-functions": "dev-master",
+        "timersys/geotargetingwp": "dev-master"
     }
 }
