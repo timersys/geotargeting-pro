@@ -17,10 +17,11 @@
         "issues": "https://github.com/timersys/geotargeting-pro/issues",
         "source": "https://github.com/timersys/geotargeting-pro"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "type": "wordpress-plugin",
     "require": {
         "timersys/geot-functions": "dev-master",
-        "timersys/geotargetingwp": "dev-master",
-        "composer/installers": "*"
+        "timersys/geotargetingwp": "dev-master"
     }
 }

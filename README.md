@@ -12,4 +12,6 @@ Requirements
 Installation
 --------
 
-Run `composer require geotargeting-pro`
+Run `composer require timersys/geotargeting-pro` from your WordPress root. This will automatically add dependencies to /vendor and plugin to /wp-content/plugins/
+
+Run `composer create-project timersys/geotargeting-pro geotargeting-pro` inside your /wp-content/plugins to directly install plugin and depencies into the same dir.

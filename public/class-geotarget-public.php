@@ -396,12 +396,12 @@ class GeoTarget_Public {
 	 */
 	public function print_debug_info() {
 		$opts = geot_settings();
-		if( !defined('GEOT_DEBUG') && empty( $opts['debug_mode'] ) )
+		if( empty( $opts['debug_mode'] ) )
 			return;
 
 		?>
 		<!-- Geotargeting plugin Debug Info START-->
-		<div id="geot-debug-info" style="display: none;"><!--<?php geot_debug_data();?>-></div>
+		<div id="geot-debug-info" style="display: none;"><!--<?= geot_debug_data();?>--></div>
 		<!-- Geotargeting plugin Debug Info END-->
 		<?php
 	}
