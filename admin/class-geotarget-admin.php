@@ -162,7 +162,7 @@ class GeoTarget_Admin {
 
 		add_menu_page('GeoTargeting', 'GeoTargeting', 'manage_options', 'geot-settings', array($settings, 'settings_page'), 'dashicons-share-alt' );
 		add_submenu_page( 'geot-settings', 'Settings', 'Settings', 'manage_options', 'geot-settings',array($settings, 'settings_page') );
-		add_submenu_page( 'geot-settings', 'Ip test', 'Ip test', 'manage_options', 'geot-ip-test',array($settings, 'ip_test_page') );
+		add_submenu_page( 'geot-settings', 'Debug data', 'Debug data', 'manage_options', 'geot-ip-test',array($settings, 'ip_test_page') );
 	}
 
 	/**
@@ -320,6 +320,13 @@ class GeoTarget_Admin {
 				'license'   => $opts['license']
 			]
 		);
+	}
+	public function license_missing_notice(){
+		?><div class="notice notice-error">
+				<h3>GeotargetingPro</h3>
+				<p><?php __( printf( 'In order to to use the plugin you need to enter the api keys in the <a href="%1$s">settings page</a>.', admin_url('admin.php?page=geot-settings'), 'geot' ) );?></p>
+		</div>
+		<?php
 	}
 
 	/*
