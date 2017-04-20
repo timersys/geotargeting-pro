@@ -185,12 +185,14 @@ $countries 	= geot_countries();
 							<select name="geot_settings[city_region][<?php echo $j;?>][cities][]" multiple class="geot-chosen-select cities_container" id="<?php echo 'cities'.$j;?>" data-placeholder="<?php _e('First choose a country', $this->GeoTarget );?>" >
 								<?php
 								if( !empty($city_region['countries'])) {
-									$cities = geot_get_cities( $city_region['countries'][0] );
-									foreach ( $cities as $c ) {
-										?>
-										<option
-											value="<?php echo strtolower( $c->city ) ?>" <?php isset( $city_region['cities'] ) && is_array( $city_region['cities'] ) ? selected( true, in_array( strtolower( $c->city), $city_region['cities'] ) ) : ''; ?>> <?php echo $c->city; ?></option>
-									<?php
+									$cities = json_decode( geot_get_cities( $city_region['countries'][0] ) );
+									if( $cities ) {
+										foreach ( $cities as $c ) {
+											?>
+											<option
+													value="<?php echo strtolower( $c->city ) ?>" <?php isset( $city_region['cities'] ) && is_array( $city_region['cities'] ) ? selected( true, in_array( strtolower( $c->city ), $city_region['cities'] ) ) : ''; ?>> <?php echo $c->city; ?></option>
+											<?php
+										}
 									}
 								}
 								?>
