@@ -252,11 +252,6 @@ class GeoTarget {
 		// register dropdown widget
 		$this->loader->add_action( 'widgets_init', $this->admin, 'register_widgets');
 
-		// settings page
-		$this->loader->add_action( 'admin_menu' , $this->admin, 'add_settings_menu' );
-		$this->loader->add_action( 'admin_init' , $this->admin, 'save_settings' );
-
-
 		// Add geot to Advanced custom fields plugin
 		$this->loader->add_action( 'acf/include_field_types', $this->admin, 'add_geot_to_acfv5' );
 		$this->loader->add_action( 'acf/register_fields', $this->admin, 'add_geot_to_acfv4' );

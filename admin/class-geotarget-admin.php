@@ -54,25 +54,6 @@ class GeoTarget_Admin {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
-		$this->load_dependencies();
-	}
-
-	/**
-	 * Load the required dependencies for admin area.
-	 *
-	 *
-	 * - GeoTarget_Settings. Settings page and functions
-	 *
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function load_dependencies() {
-
-		/**
-		 * The class responsible for defining all actions that occur in the Dashboard.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-admin-settings.php';
 	}
 
 	/**
@@ -151,37 +132,6 @@ class GeoTarget_Admin {
 		include 'partials/metabox-options.php';
 	}
 
-	/**
-	 * Add menu for Settings page of the plugin
-	 * @since  1.0.0
-	 * @return  void
-	 */
-	public function add_settings_menu() {
-
-		$settings = new GeoTarget_Settings( $this->GeoTarget, $this->version );
-
-		add_menu_page('GeoTargeting', 'GeoTargeting', 'manage_options', 'geot-settings', array($settings, 'settings_page'), 'dashicons-share-alt' );
-		add_submenu_page( 'geot-settings', 'Settings', 'Settings', 'manage_options', 'geot-settings',array($settings, 'settings_page') );
-		add_submenu_page( 'geot-settings', 'Debug data', 'Debug data', 'manage_options', 'geot-ip-test',array($settings, 'ip_test_page') );
-	}
-
-	/**
-	 * Save the settings page
-	 * @since 1.9.2
-	 * @return void
-	 */
-	public function save_settings(){
-		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
-			$settings = esc_sql( $_POST['geot_settings'] );
-			if( isset($_FILES['geot_settings_json']) && 'application/json' == $_FILES['geot_settings_json']['type'] ) {
-				$file = file_get_contents($_FILES['geot_settings_json']['tmp_name']);
-				$settings = json_decode($file,true);
-
-			}
-			update_option( 'geot_settings' ,  $settings);
-
-		}
-	}
 	/**
 	 * Saves popup options and rules
 	 *
