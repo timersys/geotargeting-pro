@@ -268,7 +268,7 @@ class GeoTarget {
 		$geot_widgets = new Geot_Widgets( $this->get_GeoTarget(), $this->get_version() );
 
 		// give users a way to disable widgets targeting
-		if (  empty( $this->opts['disable_widget_integration'] ) && !defined( 'GEOT_WIDGETS' ) ) {
+		if (  empty( $this->opts['disable_widget_integration'] ) && empty( $this->opts['ajax_mode']) ) {
 			// add geot to all widgets
 			$this->loader->add_action( 'in_widget_form', $geot_widgets, 'add_geot_to_widgets', 5, 3 );
 			$this->loader->add_action( 'widget_display_callback', $geot_widgets, 'target_widgets' );
