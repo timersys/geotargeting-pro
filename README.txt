@@ -4,7 +4,7 @@ Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.7.3
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,11 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+
+= 2.0.2 - Apr 25  =
+* Fixed bug with cache mode on certain configurations
+* Debug data not working on Ajax mode
+* Make it clear that widget integration don't work in ajax mode
 
 = 2.0.1 - Apr 19  =
 * Different bugfixes, preparing release

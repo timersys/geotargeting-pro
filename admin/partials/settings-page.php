@@ -79,7 +79,7 @@ $countries 	= geot_countries();
 				<th><label for="widget_integration"><?php _e( 'Disable Widget Integration', $this->GeoTarget ); ?></label></th>
 				<td colspan="3">
 					<label><input type="checkbox" id="widget_integration" name="geot_settings[disable_widget_integration]" value="1" <?php checked($opts['disable_widget_integration'],'1');?>/>
-						<p class="help"><?php _e( 'Check this to remove geotargeting options from widgets', $this->GeoTarget ); ?></p>
+						<p class="help"><?php _e( 'Check this to remove geotargeting options from widgets. Important: Widget integration won\'t work with ajax mode turned on', $this->GeoTarget ); ?></p>
 				</td>
 			</tr>
 			<tr valign="top" class="">
