@@ -153,7 +153,8 @@ class Geot_Widgets  {
 	 */
 	public function target_widgets( $widget_data ) {
 
-
+		if( ! empty( $this->opts['ajax_mode'] ) )
+			return $widget_data;
 		if ( !empty( $widget_data['geot']['region'] ) || !empty( $widget_data['geot']['country_code'] ) || !empty( $widget_data['geot_cities'] ) || !empty( $widget_data['geot_states'] ) ) {
 
 			if ( 'include' == @$widget_data['geot_include_mode'] ) {
