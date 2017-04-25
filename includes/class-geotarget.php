@@ -268,7 +268,7 @@ class GeoTarget {
 		$geot_widgets = new Geot_Widgets( $this->get_GeoTarget(), $this->get_version() );
 
 		// give users a way to disable widgets targeting
-		if (  empty( $this->opts['disable_widget_integration'] ) && !defined( 'GEOT_WIDGETS' ) ) {
+		if (  empty( $this->opts['disable_widget_integration'] ) && empty( $this->opts['ajax_mode']) ) {
 			// add geot to all widgets
 			$this->loader->add_action( 'in_widget_form', $geot_widgets, 'add_geot_to_widgets', 5, 3 );
 			$this->loader->add_action( 'widget_display_callback', $geot_widgets, 'target_widgets' );
@@ -276,7 +276,7 @@ class GeoTarget {
 		}
 		// License and Updates
 		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_updates', 0 );
-		if( empty( $this->opts['license'] ) )
+		if( empty( $this->opts['license'] ) || empty( $this->opts['api_secret'] ) )
 			$this->loader->add_action( 'admin_notices' , $this->admin, 'license_missing_notice', 10 );
 		// Ajax admin
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );

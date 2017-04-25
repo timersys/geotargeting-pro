@@ -381,10 +381,12 @@ class GeoTarget_Public {
 
 	/**
 	 * Check if user is targeted for post and disable woo product
+	 * On ajax mode this function will consume an extra credit to the user
+	 * if cache mode is off
 	 */
 	public function disable_woo_product(){
 		global $post;
-		if( !isset( $post->ID ) )
+		if( ! class_exists( 'WooCommerce' ) || ! isset( $post->ID ) )
 			return;
 		$opts  = get_post_meta( $post->ID, 'geot_options', true );
 
