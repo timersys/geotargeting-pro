@@ -68,7 +68,7 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
-		add_shortcode('geot_debug', 'geot_debug_data' );
+		add_shortcode('geot_debug', array( $this, 'geot_debug_data' ) );
 	}
 
 	/**
@@ -245,4 +245,7 @@ class GeoTarget_Ajax_Shortcodes {
 		return '<'. $html_tag .' class="geot-ajax" data-action="region" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
+	function geot_debug_data() {
+		return '<div class="geot-ajax geot-debug-data"></div>';
+	}
 }	
