@@ -12,6 +12,7 @@
  * @package    GeoTarget
  * @subpackage GeoTarget/includes
  */
+use GeotFunctions\Setting\GeotSettings;
 
 
 /**
@@ -155,6 +156,7 @@ class GeoTarget {
 
 
 		$this->load_dependencies();
+		GeotSettings::init();
 		$this->GeoTarget = 'geotarget';
 		$this->version = GEOT_VERSION;
 		$this->opts = geot_settings();
@@ -189,6 +191,7 @@ class GeoTarget {
 	private function load_dependencies() {
 
 		require plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/autoload.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/functions.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-loader.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-i18n.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-geotarget-admin.php';
@@ -241,6 +244,10 @@ class GeoTarget {
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_init', $this->admin, 'register_tiny_buttons' );
+		$this->loader->add_action( 'admin_menu', $this->admin, 'add_plugin_menu' );
+		$this->loader->add_action( 'admin_init', $this->admin, 'save_settings' );
+
+
 
    		// Add html for shortcodes popup
    		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
@@ -271,8 +278,7 @@ class GeoTarget {
 		}
 		// License and Updates
 		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_updates', 0 );
-		if( empty( $this->opts['license'] ) )
-			$this->loader->add_action( 'admin_notices' , $this->admin, 'license_missing_notice', 10 );
+
 		// Ajax admin
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
 		$this->loader->add_action( 'wp_ajax_geot_check_license' , $this->admin, 'check_license' );

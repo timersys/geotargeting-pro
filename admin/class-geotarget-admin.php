@@ -267,16 +267,9 @@ class GeoTarget_Admin {
 		// Setup the updater
 		return new GeotUpdates( GEOT_PLUGIN_FILE, [
 				'version'   => $this->version,
-				'license'   => $opts['license']
+				'license'   => isset($opts['license']) ?$opts['license'] : ''
 			]
 		);
-	}
-	public function license_missing_notice(){
-		?><div class="notice notice-error">
-				<h3>GeotargetingPro</h3>
-				<p><?php __( printf( 'In order to to use the plugin you need to enter the api keys in the <a href="%1$s">settings page</a>.', admin_url('admin.php?page=geot-settings'), 'geot' ) );?></p>
-		</div>
-		<?php
 	}
 
 	/*
@@ -299,4 +292,28 @@ class GeoTarget_Admin {
 
 		die();
 	}
+
+	function add_plugin_menu() {
+		add_submenu_page( 'geot-settings', 'Geotargeting Pro', 'Geotargeting Pro', 'manage_options', 'geot-pro-settings',array($this, 'render_settings') );
+	}
+
+	function render_settings(){
+		$defaults = [
+			'ajax_mode'                 => '0',
+			'disable_menu_integration'  => '0',
+			'disable_widget_integration'=> '0',
+		];
+		$opts = geot_pro_settings();
+		$opts = wp_parse_args( $opts,  $defaults );
+		include dirname( __FILE__ ) .'/partials/settings-page.php';
+	}
+
+	function save_settings(){
+		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
+			$settings = esc_sql( $_POST['geot_settings'] );
+
+			update_option( 'geotpro_settings' ,  $settings);
+		}
+	}
+
 }
