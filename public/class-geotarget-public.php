@@ -45,6 +45,7 @@ class GeoTarget_Public {
 	 * @var array
 	 */
 	protected $opts;
+	protected $geot_opts;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -60,6 +61,7 @@ class GeoTarget_Public {
 		$this->GeoTarget 	= $GeoTarget;
 		$this->version 		= $version;
 		$this->opts = geot_settings();
+		$this->geot_opts = geot_pro_settings();
 	}
 
 	/**
@@ -84,13 +86,12 @@ class GeoTarget_Public {
 		if( ! isset( $this->opts['debug_mode'] ) && !isset( $_GET['geot_debug']) ) {
 			$src = 'js/min/geotarget-public-min.js';
 		}
-		$opts = geot_settings();
 
 		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . $src , array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/min/selectize.min.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( $this->GeoTarget, 'geot', array(
 			'ajax_url'      => admin_url( 'admin-ajax.php'),
-			'ajax'          => isset( $opts['ajax_mode'] ) ? '1' : '',
+			'ajax'          => isset( $this->geot_geot_opts['ajax_mode'] ) ? '1' : '',
 			'is_archives'   => is_archive(),
 			'is_search'     => is_search(),
 			'is_singular'   => is_singular(),
@@ -305,7 +306,7 @@ class GeoTarget_Public {
 		if( apply_filters( 'geot/posts_where', false, $where ) )
 			return $where;
 
-		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
+		if( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' )
 			return $where;
 
 		if ( ! is_admin()  ) {
@@ -365,7 +366,7 @@ class GeoTarget_Public {
 	public function check_if_geotargeted_content( $content ) {
 		global $post;
 
-		if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' )
+		if( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' )
 			return $content;
 
 		if( !isset( $post->ID ) )
@@ -403,7 +404,7 @@ class GeoTarget_Public {
 
 		?>
 		<!-- Geotargeting plugin Debug Info START-->
-		<div id="geot-debug-info" style="display: none;"><!--<?php if( empty( $this->opts['ajax_mode']) ) echo geot_debug_data();?>--></div>
+		<div id="geot-debug-info" style="display: none;"><!--<?php if( empty( $this->geot_opts['ajax_mode']) ) echo geot_debug_data();?>--></div>
 		<!-- Geotargeting plugin Debug Info END-->
 		<?php
 	}

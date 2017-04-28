@@ -312,7 +312,7 @@ class GeoTarget_Admin {
 		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
 			$settings = esc_sql( $_POST['geot_settings'] );
 
-			update_option( 'geotpro_settings' ,  $settings);
+			update_option( 'geot_pro_settings' ,  $settings);
 		}
 	}
 
