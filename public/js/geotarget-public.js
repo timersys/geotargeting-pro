@@ -169,6 +169,7 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
             }
             if( debug && debug.length ) {
                 $('#geot-debug-info').html(debug);
+                $('.geot-debug-data').html(debug.replace(/<!--|-->/gi,''));
             }
         }
     }

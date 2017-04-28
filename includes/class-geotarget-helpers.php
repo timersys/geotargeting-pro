@@ -35,8 +35,8 @@ AND pm.meta_value != ''";
 	 * @return bool
 	 */
 	public static function user_is_targeted( $opts, $post_id, $cache = true ) {
-		#if( isset( self::$_user_is_targeted[$post_id] ) && $cache )
-			#return self::$_user_is_targeted[$post_id];
+		if( isset( self::$_user_is_targeted[$post_id] ) && $cache )
+			return self::$_user_is_targeted[$post_id];
 
 
 		$_user_is_targeted = false;

@@ -381,10 +381,12 @@ class GeoTarget_Public {
 
 	/**
 	 * Check if user is targeted for post and disable woo product
+	 * On ajax mode this function will consume an extra credit to the user
+	 * if cache mode is off
 	 */
 	public function disable_woo_product(){
 		global $post;
-		if( !isset( $post->ID ) )
+		if( ! class_exists( 'WooCommerce' ) || ! isset( $post->ID ) )
 			return;
 		$opts  = get_post_meta( $post->ID, 'geot_options', true );
 
@@ -396,12 +398,12 @@ class GeoTarget_Public {
 	 */
 	public function print_debug_info() {
 		$opts = geot_settings();
-		if( empty( $opts['debug_mode'] ) )
+		if( empty( $opts['debug_mode'] )  )
 			return;
 
 		?>
 		<!-- Geotargeting plugin Debug Info START-->
-		<div id="geot-debug-info" style="display: none;"><!--<?= geot_debug_data();?>--></div>
+		<div id="geot-debug-info" style="display: none;"><!--<?php if( empty( $this->opts['ajax_mode']) ) echo geot_debug_data();?>--></div>
 		<!-- Geotargeting plugin Debug Info END-->
 		<?php
 	}

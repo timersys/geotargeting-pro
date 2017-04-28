@@ -244,9 +244,6 @@ class GeoTarget {
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_init', $this->admin, 'register_tiny_buttons' );
-		$this->loader->add_action( 'admin_menu', $this->admin, 'add_plugin_menu' );
-		$this->loader->add_action( 'admin_init', $this->admin, 'save_settings' );
-
 
 
    		// Add html for shortcodes popup
@@ -259,6 +256,11 @@ class GeoTarget {
 		// register dropdown widget
 		$this->loader->add_action( 'widgets_init', $this->admin, 'register_widgets');
 
+		// settings page
+		$this->loader->add_action( 'admin_menu', $this->admin, 'add_plugin_menu' );
+		$this->loader->add_action( 'admin_init', $this->admin, 'save_settings' );
+
+
 		// Add geot to Advanced custom fields plugin
 		$this->loader->add_action( 'acf/include_field_types', $this->admin, 'add_geot_to_acfv5' );
 		$this->loader->add_action( 'acf/register_fields', $this->admin, 'add_geot_to_acfv4' );
@@ -270,7 +272,7 @@ class GeoTarget {
 		$geot_widgets = new Geot_Widgets( $this->get_GeoTarget(), $this->get_version() );
 
 		// give users a way to disable widgets targeting
-		if (  empty( $this->opts['disable_widget_integration'] ) && !defined( 'GEOT_WIDGETS' ) ) {
+		if (  empty( $this->opts['disable_widget_integration'] ) && empty( $this->opts['ajax_mode']) ) {
 			// add geot to all widgets
 			$this->loader->add_action( 'in_widget_form', $geot_widgets, 'add_geot_to_widgets', 5, 3 );
 			$this->loader->add_action( 'widget_display_callback', $geot_widgets, 'target_widgets' );
@@ -278,7 +280,6 @@ class GeoTarget {
 		}
 		// License and Updates
 		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_updates', 0 );
-
 		// Ajax admin
 		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
 		$this->loader->add_action( 'wp_ajax_geot_check_license' , $this->admin, 'check_license' );
