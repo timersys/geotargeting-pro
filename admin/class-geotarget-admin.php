@@ -95,7 +95,8 @@ class GeoTarget_Admin {
 		$post_types = apply_filters( 'geot/get_post_types', Geot_Helpers::get_post_types() );
 
 		foreach ($post_types as $cpt) {
-
+			if( in_array( $cpt, apply_filters('geot/excluded_post_types', ['geotr_cpt'] ) ) )
+				continue;
 			add_meta_box(
 				'geot-settings',
 				__( 'GeoTargeting Options', 'geot' ),
@@ -309,7 +310,7 @@ class GeoTarget_Admin {
 	}
 
 	function save_settings(){
-		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_save_settings' ) ) {
+		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_pro_save_settings' ) ) {
 			$settings = esc_sql( $_POST['geot_settings'] );
 
 			update_option( 'geot_pro_settings' ,  $settings);

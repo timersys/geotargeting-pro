@@ -1,5 +1,5 @@
 <div class="wrap geot-settings">
-	<h2>GeoTargetingWP</h2>
+	<h2>GeoTargetingWP v <?= GEOT_VERSION;?></h2>
 	<form name="geot-settings" method="post" enctype="multipart/form-data">
 		<table class="form-table">
 			<tr valign="top" class="">
@@ -30,7 +30,7 @@
 			</tr>
 
 			<tr><td><input type="submit" class="button-primary" value="<?php _e( 'Save settings', 'geot' );?>"/></td>
-				<?php wp_nonce_field('geot_save_settings','geot_nonce'); ?>
+				<?php wp_nonce_field('geot_pro_save_settings','geot_nonce'); ?>
 		</table>
 	</form>
 </div>
