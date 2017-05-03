@@ -116,6 +116,9 @@ class GeoTarget_Public {
 			'geot_country'          => 'Country',
 			'geot_country_region'   => 'Country Region',
 			'geot_city_region'      => 'City Region',
+			'geot_state'            => 'State',			'geot_country'          => 'Country',
+			'geot_country_region'   => 'Country Region',
+			'geot_city_region'      => 'City Region',
 			'geot_state'            => 'State',
 		);
 		return $choices;
