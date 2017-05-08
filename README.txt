@@ -4,7 +4,7 @@ Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.7.4
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,13 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+
+= 2.0.4 - Apr 26  =
+* Changed how settings work
+* Reordered admin for upcoming GeoRedirects plugin
+* Improved how cache mode works to save more credits
+* Updated core files
+* Fixed bug with check license admin
 
 = 2.0.3 - Apr 26  =
 * Hotfix, dropdown widget was not working
