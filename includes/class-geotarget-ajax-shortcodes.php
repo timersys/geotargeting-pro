@@ -34,6 +34,7 @@ class GeoTarget_Ajax_Shortcodes {
 	 * @var     Array of plugin settings
 	 */
 	private $opts;
+	private $geot_opts;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -47,6 +48,7 @@ class GeoTarget_Ajax_Shortcodes {
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
 		$this->opts = geot_settings();
+		$this->geot_opts = geot_pro_settings();
 	}
 
 	/**
@@ -55,7 +57,7 @@ class GeoTarget_Ajax_Shortcodes {
 	 */
 	public function register_shortcodes() {
 
-		if( ! isset( $this->opts['ajax_mode'] ) || $this->opts['ajax_mode'] != '1' )
+		if( ! isset( $this->geot_opts['ajax_mode'] ) || $this->geot_opts['ajax_mode'] != '1' )
 			return;
 
 		add_shortcode('geot', array( $this, 'geot_filter') );

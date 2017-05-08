@@ -29,6 +29,7 @@ class Geot_Widgets  {
 	 * @var     Array of plugin settings
 	 */
 	private $opts;
+	private $geot_opts;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -42,6 +43,7 @@ class Geot_Widgets  {
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
 		$this->opts = geot_settings();
+		$this->geot_opts = geot_pro_settings();
 	}
 
 	public function add_geot_to_widgets( $t, $return, $instance ) {
@@ -153,7 +155,7 @@ class Geot_Widgets  {
 	 */
 	public function target_widgets( $widget_data ) {
 
-		if( ! empty( $this->opts['ajax_mode'] ) )
+		if( ! empty( $this->geot_opts['ajax_mode'] ) )
 			return $widget_data;
 		if ( !empty( $widget_data['geot']['region'] ) || !empty( $widget_data['geot']['country_code'] ) || !empty( $widget_data['geot_cities'] ) || !empty( $widget_data['geot_states'] ) ) {
 

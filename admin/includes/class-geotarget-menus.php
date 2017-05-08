@@ -42,6 +42,7 @@ class GeoTarget_Menus {
 		$this->GeoTarget = $GeoTarget;
 		$this->version   = $version;
 		$this->opts      = geot_settings();
+		$this->geot_opts      = geot_pro_settings();
 	}
 
 	/**
@@ -103,7 +104,7 @@ class GeoTarget_Menus {
 			if( empty($menu_item->ID))
 				continue;
 			// check at least one condition is filled
-			if( isset( $this->opts['ajax_mode'] ) && $this->opts['ajax_mode'] == '1' ) {
+			if( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' ) {
 				$menu_item->classes[] = 'geot-ajax geot_menu_item';
 				add_filter( 'nav_menu_link_attributes', array( $this, 'add_geot_info'), 10, 2 );
 			} else { #error_log(print_r($menu_item->ID,1));
