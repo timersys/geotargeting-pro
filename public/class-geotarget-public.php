@@ -91,7 +91,7 @@ class GeoTarget_Public {
 		wp_enqueue_script( 'geot-slick', plugin_dir_url( __FILE__ ) . 'js/min/selectize.min.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( $this->GeoTarget, 'geot', array(
 			'ajax_url'      => admin_url( 'admin-ajax.php'),
-			'ajax'          => isset( $this->geot_geot_opts['ajax_mode'] ) ? '1' : '',
+			'ajax'          => isset( $this->geot_opts['ajax_mode'] ) ? '1' : '',
 			'is_archives'   => is_archive(),
 			'is_search'     => is_search(),
 			'is_singular'   => is_singular(),
