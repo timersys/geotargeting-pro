@@ -248,54 +248,6 @@ class GeoTarget_Public {
 	}
 
 	/**
-	 * If redirections are added redirect users
-	 */
-	function geot_redirections() {
-		global $geot;
-	/* TODO : Change to new helper method */
-		$opts = geot_settings();
-
-		if( is_admin() || defined('DOING_AJAX') || empty( $opts['redirection'] ) || $geot->functions->isSearchEngine() )
-			return;
-
-		if( strpos( $_SERVER['REQUEST_URI'], apply_filters( 'geot/login_page_string', 'wp-login' ) ) !== false )
-			return;
-
-		foreach( $opts['redirection'] as $r ) {
-			if( empty($r['name']) || !filter_var($r['name'], FILTER_VALIDATE_URL))
-				continue;
-
-			$redirect = false;
-
-			if( !empty( $r['countries'] ) || !empty( $r['regions'] ) ) {
-				$countries  = !empty( $r['countries'] ) ? $r['countries'] : '';
-				$regions    = !empty( $r['regions'] ) ? $r['regions'] : '';
-				if ( geot_target( $countries, $regions ) ) {
-					$redirect = true;
-				}
-			} elseif( !empty( $r['city_regions'] ) ) {
-				if ( geot_target_city( '', $r['city_regions'] ) ) {
-					$redirect = true;
-				}
-			} elseif( !empty( $r['state'] ) ) {
-				if ( geot_target_state( $r['state'] ) ) {
-					$redirect = true;
-				}
-			}
-
-			if( $redirect ) {
-				// one extra chance to let users cancel redirection
-				if ( apply_filters( 'geot/perform_redirect', true, $r, $opts ) ) {
-					wp_redirect( apply_filters( 'geot/redirection_url', $r['name'] ), apply_filters( 'geot/redirection_status', '301' ) );
-					exit;
-				}
-			}
-		}
-
-	}
-
-
-	/**
 	 * Filter where argument of main query to exclude geotargeted posts
 	 * @param $where
 	 *
