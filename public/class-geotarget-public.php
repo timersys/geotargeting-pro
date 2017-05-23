@@ -248,54 +248,6 @@ class GeoTarget_Public {
 	}
 
 	/**
-	 * If redirections are added redirect users
-	 */
-	function geot_redirections() {
-		global $geot;
-	/* TODO : Change to new helper method */
-		$opts = geot_settings();
-
-		if( is_admin() || defined('DOING_AJAX') || empty( $opts['redirection'] ) || $geot->functions->isSearchEngine() )
-			return;
-
-		if( strpos( $_SERVER['REQUEST_URI'], apply_filters( 'geot/login_page_string', 'wp-login' ) ) !== false )
-			return;
-
-		foreach( $opts['redirection'] as $r ) {
-			if( empty($r['name']) || !filter_var($r['name'], FILTER_VALIDATE_URL))
-				continue;
-
-			$redirect = false;
-
-			if( !empty( $r['countries'] ) || !empty( $r['regions'] ) ) {
-				$countries  = !empty( $r['countries'] ) ? $r['countries'] : '';
-				$regions    = !empty( $r['regions'] ) ? $r['regions'] : '';
-				if ( geot_target( $countries, $regions ) ) {
-					$redirect = true;
-				}
-			} elseif( !empty( $r['city_regions'] ) ) {
-				if ( geot_target_city( '', $r['city_regions'] ) ) {
-					$redirect = true;
-				}
-			} elseif( !empty( $r['state'] ) ) {
-				if ( geot_target_state( $r['state'] ) ) {
-					$redirect = true;
-				}
-			}
-
-			if( $redirect ) {
-				// one extra chance to let users cancel redirection
-				if ( apply_filters( 'geot/perform_redirect', true, $r, $opts ) ) {
-					wp_redirect( apply_filters( 'geot/redirection_url', $r['name'] ), apply_filters( 'geot/redirection_status', '301' ) );
-					exit;
-				}
-			}
-		}
-
-	}
-
-
-	/**
 	 * Filter where argument of main query to exclude geotargeted posts
 	 * @param $where
 	 *
@@ -309,7 +261,7 @@ class GeoTarget_Public {
 		if( apply_filters( 'geot/posts_where', false, $where ) )
 			return $where;
 
-		if( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' )
+		if( ( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' ) ||  defined('GEOT_GRABBING_POST_ID') )
 			return $where;
 
 		if ( ! is_admin()  ) {
@@ -344,12 +296,17 @@ class GeoTarget_Public {
 		// get all posts with geo options set ( ideally would be to retrieve just for the post type queried but I can't get post_type
 		$geot_posts = Geot_Helpers::get_geotarget_posts();
 
+		$current_post_id = \GeotFunctions\grab_post_id();
 		if( $geot_posts ) {
 			foreach( $geot_posts as $p ) {
 				$options = unserialize( $p->geot_options );
 				// if remove for loop is off continue
-				if( ! isset( $options['geot_remove_post']) || '1' != $options['geot_remove_post'] )
+				if( ! isset( $options['geot_remove_post'])
+				    || '1' != $options['geot_remove_post']
+				    || ( $current_post_id && $p->ID != $current_post_id )
+				)
 					continue;
+
 
 				$target  = Geot_Helpers::user_is_targeted( $options, $p->ID );
 				if( $target )

@@ -68,6 +68,8 @@ class GeoTarget_Activator {
 
 		// update version number to current one
 		update_option( 'geot_version', GEOT_VERSION);
+
+		do_action('geotWP/activated');
 	}
 
 	protected static function add_countries_to_db() {

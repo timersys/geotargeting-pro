@@ -41,6 +41,7 @@ class GeoTarget_Deactivator {
 
 			$wpdb->query( $drop_table );
 		}
+		do_action('geotWP/deactivated');
 	}
 
 }
