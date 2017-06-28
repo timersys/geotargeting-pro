@@ -56,35 +56,6 @@ class GeoTarget_Admin {
 		$this->version = $version;
 	}
 
-	/**
-	 * Register the stylesheets for the Dashboard.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_styles() {
-		global $pagenow;
-
-		if( 'post.php' == $pagenow ) {
-   			wp_enqueue_style('wp-jquery-ui-dialog');
-   		}
-		wp_enqueue_style( 'geot-chosen', plugin_dir_url( __FILE__ ) . 'css/chosen.min.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'css/geotarget.css', array(), $this->version, 'all' );
-
-	}
-
-	/**
-	 * Register the JavaScript for the dashboard.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
-
-		wp_enqueue_script( 'geot-chosen', plugin_dir_url( __FILE__ ) . 'js/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->GeoTarget, plugin_dir_url( __FILE__ ) . 'js/geotargeting-admin.js', array( 'jquery','geot-chosen','jquery-ui-dialog'), $this->version, false );
-		wp_localize_script(  $this->GeoTarget, 'geot', array(
-			'ajax_url'  => admin_url('admin-ajax.php')
-		));
-	}
 
 	/**
 	 * Register the metaboxes on all posts types

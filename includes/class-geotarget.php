@@ -243,8 +243,6 @@ class GeoTarget {
 
 		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_init', $this->admin, 'register_tiny_buttons' );
 
 

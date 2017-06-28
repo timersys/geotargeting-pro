@@ -36,7 +36,8 @@ define( 'GEOT_DB_VERSION' , '1.2' );
 define( 'GEOT_PLUGIN_DIR' , plugin_dir_path(__FILE__) );
 define( 'GEOT_PLUGIN_URL' , plugin_dir_url(__FILE__) );
 define( 'GEOT_PLUGIN_HOOK' , basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ ) );
-
+if( !defined('GEOTROOT_PLUGIN_FILE'))
+	define( 'GEOTROOT_PLUGIN_FILE', GEOT_PLUGIN_FILE );
 
 /**
  * The code that runs during plugin activation.
