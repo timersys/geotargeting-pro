@@ -21,7 +21,6 @@
     "prefer-stable": true,
     "type": "wordpress-plugin",
     "require": {
-        "timersys/geot-functions": "dev-master",
-        "timersys/geotargetingwp": "dev-master"
+        "timersys/geot-functions": "dev-master"
     }
 }

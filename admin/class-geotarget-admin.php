@@ -206,31 +206,6 @@ class GeoTarget_Admin {
 	}
 
 	/**
-	 * Check license
-	 */
-	public function check_license() {
-		if( empty($_POST['license']) ){
-			echo json_encode( ['error' => 'Please enter the license'] );
-			die();
-		}
-		$license = esc_attr($_POST['license']);
-		$response = GeotargetingWP::checkLicense($license);
-
-		$result = json_decode( $response );
-		$opts = geot_settings();
-		$opts['license'] = $license;
-		// update license
-		if( isset( $result->success ) ) {
-			update_option('geot_license_active', 'valid');
-		} else {
-			delete_option('geot_license_active');
-		}
-		update_option( 'geot_settings', $opts );
-		echo $response; // send result to javascript
-		die();
-	}
-
-	/**
 	 * Handle Licences and updates
 	 * @since 1.0.0
 	 */
@@ -242,27 +217,6 @@ class GeoTarget_Admin {
 				'license'   => isset($opts['license']) ?$opts['license'] : ''
 			]
 		);
-	}
-
-	/*
-	 * Get a country code and return cities
-	 */
-	public function geot_cities_by_country(){
-		global $wpdb;
-
-		if( empty($_POST['country']))
-			die();
-
-		$cities =  GeotargetingWP::getCities($_POST['country']);
-
-		if( !empty( $cities ) ){
-			$cities = json_decode( $cities );
-			foreach( $cities as $c ) {
-				echo '<option value="'.strtolower($c->city).'">'.$c->city.'</option>';
-			}
-		}
-
-		die();
 	}
 
 	function add_plugin_menu() {
