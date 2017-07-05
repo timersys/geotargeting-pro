@@ -243,8 +243,6 @@ class GeoTarget {
 
 		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $this->admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_init', $this->admin, 'register_tiny_buttons' );
 
 
@@ -282,9 +280,6 @@ class GeoTarget {
 		}
 		// License and Updates
 		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_updates', 0 );
-		// Ajax admin
-		$this->loader->add_action( 'wp_ajax_geot_cities_by_country' , $this->admin, 'geot_cities_by_country' );
-		$this->loader->add_action( 'wp_ajax_geot_check_license' , $this->admin, 'check_license' );
 
 		//Menus
 		if (  empty( $this->geot_opts['disable_menu_integration'] ) ) {
