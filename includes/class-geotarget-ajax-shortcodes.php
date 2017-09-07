@@ -63,6 +63,12 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot', array( $this, 'geot_filter') );
 		add_shortcode('geot_city', array( $this, 'geot_filter_cities') );
 		add_shortcode('geot_state', array( $this, 'geot_filter_states') );
+
+		add_shortcode('geot_filter', array( $this, 'geot_filter') );
+		add_shortcode('geot_filter_city', array( $this, 'geot_filter_cities') );
+		add_shortcode('geot_filter_state', array( $this, 'geot_filter_states') );
+		add_shortcode('geot_filter_zip', array( $this, 'geot_filter_zips') );
+
 		add_shortcode('geot_country_code', array( $this, 'geot_show_country_code') );
 		add_shortcode('geot_country_name', array( $this, 'geot_show_country_name') );
 		add_shortcode('geot_city_name', array( $this, 'geot_show_city_name') );
@@ -142,6 +148,28 @@ class GeoTarget_Ajax_Shortcodes {
 		), $atts ) );
 
 		return '<'.$html_tag.' class="geot-ajax geot-filter" data-action="state_filter" data-filter="'.$state.'" data-ex_filter="'.$exclude_state.'" >' . do_shortcode( $content ) . '</'.$html_tag.'>';
+
+	}
+
+	/**
+	 * Shows provided content only if the location
+	 * criteria are met.
+	 * [geot_filter_zip zip="1212"]content[/geot_zip]
+	 *
+	 * @param $atts
+	 * @param $content
+	 *
+	 * @return string
+	 */
+	function geot_filter_zips($atts, $content)
+	{
+		extract( shortcode_atts( array(
+			'zip'			    =>'',
+			'exclude_zip'	    =>'',
+			'html_tag'          => 'div'
+		), $atts ) );
+
+		return '<'.$html_tag.' class="geot-ajax geot-filter" data-action="zip_filter" data-filter="'.$zip.'" data-ex_filter="'.$exclude_zip.'" >' . do_shortcode( $content ) . '</'.$html_tag.'>';
 
 	}
 

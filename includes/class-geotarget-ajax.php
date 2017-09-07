@@ -235,6 +235,20 @@ class GeoTarget_Ajax {
 	}
 
 	/**
+	 * Filter function for zip
+	 * @param $geot
+	 *
+	 * @return boolean
+	 */
+	private function zip_filter( $geot ) {
+
+		if ( geot_target_zip( $geot['filter'], $geot['ex_filter'] ) )
+			return true;
+
+		return false;
+	}
+
+	/**
 	 * Filter function for menus
 	 * @param $geot
 	 *
