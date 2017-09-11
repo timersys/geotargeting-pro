@@ -60,7 +60,7 @@ class Geot_Widget extends WP_Widget {
 		$countries = apply_filters( 'geot/dropdown_widget/countries', $countries );
 
      	$user_country =	geot_user_country();
-		$original_country = apply_filters( 'geot/dropdown_widget/original_country', geot_country_by_ip() );
+		$original_country = apply_filters( 'geot/dropdown_widget/original_country', geot_country_by_ip(\GeotWP\getUserIP(), false) );
 
      	?>
      	<div class="geot_dropdown_container">
@@ -70,7 +70,7 @@ class Geot_Widget extends WP_Widget {
      				foreach ($countries as $c) {
 
 						$selected = '';
-						if ( $original_country->iso_code == $c->iso_code ){
+						if ( $original_country && $original_country->iso_code == $c->iso_code ){
 
 							$user_country_in_dropdown = true;
 						} 
@@ -82,9 +82,9 @@ class Geot_Widget extends WP_Widget {
      					<?php
      				}
      				// if the user country is not in dropdown add it
-     				if( ! $user_country_in_dropdown && apply_filters( 'geot/dropdown_widget/original_country_in_dropdown', true ) ) {
+     				if( ! $user_country_in_dropdown && apply_filters( 'geot/dropdown_widget/original_country_in_dropdown', false ) ) {
      					?>
-     					<option value="<?php echo $original_country->isoCode ?>" <?php echo $user_country->iso_code == $original_country->iso_code ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($original_country->iso_code);?>"><?php
+     					<option value="<?php echo $original_country->iso_code ?>" <?php echo $user_country->iso_code == $original_country->iso_code ? 'selected="selected"' : '';?> data-imagesrc="geot-flag flag-<?php echo strtolower($original_country->iso_code);?>"><?php
 					        echo $original_country->name
 					    ?></option>
      					<?php				
