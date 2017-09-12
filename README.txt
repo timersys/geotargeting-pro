@@ -3,8 +3,8 @@ Contributors: timersys
 Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
-Tested up to: 4.8
-Stable tag: 2.0.4.5
+Tested up to: 4.8.1
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,13 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+
+= 2.1 - Sept 12 =
+* Filter by zip function and shortcodes
+* Time zone, lat and lng shortcodes
+* Admin access roles can be edited now
+* Updated core files
+* Minor bugfixes
 
 = 2.0.4.5 - August 30 =
 * Updated core files
