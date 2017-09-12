@@ -157,8 +157,44 @@ class GeoTarget_Ajax {
 		$code = geot_zip();
 
 		return !empty( $code ) ? $code : $geot['default'];
+	}
 
+	/**
+	 * Get user timezone
+	 * @param $geot
+	 *
+	 * @return string
+	 */
+	private function time_zone( $geot ) {
 
+		$code = geot_timezone();
+
+		return !empty( $code ) ? $code : $geot['default'];
+	}
+
+	/**
+	 * Get user latitude
+	 * @param $geot
+	 *
+	 * @return string
+	 */
+	private function latitude( $geot ) {
+
+		$code = geot_lat();
+
+		return !empty( $code ) ? $code : $geot['default'];
+	}
+	/**
+	 * Get user longitude
+	 * @param $geot
+	 *
+	 * @return string
+	 */
+	private function longitude( $geot ) {
+
+		$code = geot_lng();
+
+		return !empty( $code ) ? $code : $geot['default'];
 	}
 
 	/**

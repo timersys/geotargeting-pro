@@ -77,6 +77,9 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 		add_shortcode('geot_debug', array( $this, 'geot_debug_data' ) );
+		add_shortcode('geot_time_zone', array( $this, 'geot_show_time_zone') );
+		add_shortcode('geot_lat', array( $this, 'geot_show_lat') );
+		add_shortcode('geot_lng', array( $this, 'geot_show_lng') );
 	}
 
 	/**
@@ -264,7 +267,7 @@ class GeoTarget_Ajax_Shortcodes {
 	/**
 	 * Display the Regions of current user
 	 * [geot_region]
-	 * @return string regions names
+	 * @return string
 	 */
 	function geot_show_regions($atts) {
 		extract( shortcode_atts( array(
@@ -273,6 +276,48 @@ class GeoTarget_Ajax_Shortcodes {
 		), $atts ) );
 
 		return '<'. $html_tag .' class="geot-ajax" data-action="region" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+	}
+
+	/**
+	 * Display the Timezone of current user
+	 * [geot_time_zone]
+	 * @return string
+	 */
+	function geot_show_time_zone($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+			'html_tag'          => 'span'
+		), $atts ) );
+
+		return '<'. $html_tag .' class="geot-ajax" data-action="time_zone" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+	}
+
+	/**
+	 * Display the latitude of current user
+	 * [geot_lat]
+	 * @return string
+	 */
+	function geot_show_lat($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+			'html_tag'          => 'span'
+		), $atts ) );
+
+		return '<'. $html_tag .' class="geot-ajax" data-action="latitude" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+	}
+
+	/**
+	 * Display the longitude of current user
+	 * [geot_lng]
+	 * @return string
+	 */
+	function geot_show_lng($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+			'html_tag'          => 'span'
+		), $atts ) );
+
+		return '<'. $html_tag .' class="geot-ajax" data-action="longitude" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	function geot_debug_data() {
