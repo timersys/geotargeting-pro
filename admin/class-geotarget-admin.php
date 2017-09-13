@@ -220,7 +220,7 @@ class GeoTarget_Admin {
 	}
 
 	function add_plugin_menu() {
-		add_submenu_page( 'geot-settings', 'Geotargeting Pro', 'Geotargeting Pro', 'manage_options', 'geot-pro-settings',array($this, 'render_settings') );
+		add_submenu_page( 'geot-settings', 'Geotargeting Pro', 'Geotargeting Pro', apply_filters( 'geot/settings_page_role', 'manage_options'), 'geot-pro-settings',array($this, 'render_settings') );
 	}
 
 	function render_settings(){

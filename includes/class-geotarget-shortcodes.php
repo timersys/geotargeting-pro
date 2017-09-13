@@ -60,10 +60,15 @@ class GeoTarget_Shortcodes {
 
 		if( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' )
 			return;
-
+		// leave for backward compatibility
 		add_shortcode('geot', array( $this, 'geot_filter') );
 		add_shortcode('geot_city', array( $this, 'geot_filter_cities') );
 		add_shortcode('geot_state', array( $this, 'geot_filter_states') );
+
+		add_shortcode('geot_filter', array( $this, 'geot_filter') );
+		add_shortcode('geot_filter_city', array( $this, 'geot_filter_cities') );
+		add_shortcode('geot_filter_state', array( $this, 'geot_filter_states') );
+		add_shortcode('geot_filter_zip', array( $this, 'geot_filter_zips') );
 		add_shortcode('geot_country_code', array( $this, 'geot_show_country_code') );
 		add_shortcode('geot_country_name', array( $this, 'geot_show_country_name') );
 		add_shortcode('geot_city_name', array( $this, 'geot_show_city_name') );
@@ -72,6 +77,9 @@ class GeoTarget_Shortcodes {
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 		add_shortcode('geot_debug', 'geot_debug_data' );
+		add_shortcode('geot_time_zone', array( $this, 'geot_show_time_zone') );
+		add_shortcode('geot_lat', array( $this, 'geot_show_lat') );
+		add_shortcode('geot_lng', array( $this, 'geot_show_lng') );
 	}
 
 	/**
@@ -88,7 +96,6 @@ class GeoTarget_Shortcodes {
 	function geot_filter($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> GeotWP\getUserIP(),
 			'country'			=>'',
 			'region'			=>'',
 			'exclude_country'	=>'',
@@ -116,7 +123,6 @@ class GeoTarget_Shortcodes {
 	function geot_filter_cities($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> GeotWP\getUserIP(),
 			'city'			    =>'',
 			'region'			=>'',
 			'exclude_city'	    =>'',
@@ -143,7 +149,6 @@ class GeoTarget_Shortcodes {
 	function geot_filter_states($atts, $content)
 	{
 		extract( shortcode_atts( array(
-			'ip' 				=> GeotWP\getUserIP(),
 			'state'			    =>'',
 			'exclude_state'	    =>'',
 		), $atts ) );
@@ -155,7 +160,28 @@ class GeoTarget_Shortcodes {
 		return '';
 	}
 
+	/**
+	 * Shows provided content only if the location
+	 * criteria are met.
+	 * [geot_filter_zip zip="33166"]content[/geot_filter_zip]
+	 *
+	 * @param $atts
+	 * @param $content
+	 *
+	 * @return string
+	 */
+	function geot_filter_zips($atts, $content) {
+		extract( shortcode_atts( array(
+			'zip'			    =>'',
+			'exclude_zip'	    =>'',
+		), $atts ) );
 
+
+		if ( geot_target_zip( $zip, $exclude_zip ) )
+			return do_shortcode( $content );
+
+		return '';
+	}
 	/**
 	 * Displays the 2 character country for the current user
 	 * [geot_country_code]   [geot_country_code]
@@ -272,6 +298,51 @@ class GeoTarget_Shortcodes {
 			return implode( ', ', $regions );
 
 		return $regions;
+	}
+
+	/**
+	 * Display the Timezone of current user
+	 * [geot_time_zone]
+	 * @return string
+	 */
+	function geot_show_time_zone($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
+		$timezone = geot_timezone();
+
+		return !empty($timezone) ? $timezone : $default;
+	}
+
+	/**
+	 * Display the latitude of current user
+	 * [geot_lat]
+	 * @return string
+	 */
+	function geot_show_lat($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
+		$lat = geot_lat();
+
+		return !empty($lat) ? $lat : $default;
+	}
+
+	/**
+	 * Display the longitude of current user
+	 * [geot_lng]
+	 * @return string
+	 */
+	function geot_show_lng($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
+		$lng= geot_lng();
+
+		return !empty($lng) ? $lng : $default;
 	}
 
 }

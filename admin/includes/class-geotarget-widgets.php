@@ -60,6 +60,9 @@ class Geot_Widgets  {
 		if ( empty( $instance['geot_cities'] ) )  {
 			$instance['geot_cities'] = '';
 		}
+		if ( empty( $instance['geot'] ) )  {
+			$instance['geot'] = array();
+		}
 		if ( empty( $instance['geot']['region'] ) )  {
 			$instance['geot']['region'] = array();
 		}

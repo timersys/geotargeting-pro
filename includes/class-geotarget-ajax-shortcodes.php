@@ -63,6 +63,12 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot', array( $this, 'geot_filter') );
 		add_shortcode('geot_city', array( $this, 'geot_filter_cities') );
 		add_shortcode('geot_state', array( $this, 'geot_filter_states') );
+
+		add_shortcode('geot_filter', array( $this, 'geot_filter') );
+		add_shortcode('geot_filter_city', array( $this, 'geot_filter_cities') );
+		add_shortcode('geot_filter_state', array( $this, 'geot_filter_states') );
+		add_shortcode('geot_filter_zip', array( $this, 'geot_filter_zips') );
+
 		add_shortcode('geot_country_code', array( $this, 'geot_show_country_code') );
 		add_shortcode('geot_country_name', array( $this, 'geot_show_country_name') );
 		add_shortcode('geot_city_name', array( $this, 'geot_show_city_name') );
@@ -71,6 +77,9 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 		add_shortcode('geot_debug', array( $this, 'geot_debug_data' ) );
+		add_shortcode('geot_time_zone', array( $this, 'geot_show_time_zone') );
+		add_shortcode('geot_lat', array( $this, 'geot_show_lat') );
+		add_shortcode('geot_lng', array( $this, 'geot_show_lng') );
 	}
 
 	/**
@@ -142,6 +151,28 @@ class GeoTarget_Ajax_Shortcodes {
 		), $atts ) );
 
 		return '<'.$html_tag.' class="geot-ajax geot-filter" data-action="state_filter" data-filter="'.$state.'" data-ex_filter="'.$exclude_state.'" >' . do_shortcode( $content ) . '</'.$html_tag.'>';
+
+	}
+
+	/**
+	 * Shows provided content only if the location
+	 * criteria are met.
+	 * [geot_filter_zip zip="1212"]content[/geot_zip]
+	 *
+	 * @param $atts
+	 * @param $content
+	 *
+	 * @return string
+	 */
+	function geot_filter_zips($atts, $content)
+	{
+		extract( shortcode_atts( array(
+			'zip'			    =>'',
+			'exclude_zip'	    =>'',
+			'html_tag'          => 'div'
+		), $atts ) );
+
+		return '<'.$html_tag.' class="geot-ajax geot-filter" data-action="zip_filter" data-filter="'.$zip.'" data-ex_filter="'.$exclude_zip.'" >' . do_shortcode( $content ) . '</'.$html_tag.'>';
 
 	}
 
@@ -236,7 +267,7 @@ class GeoTarget_Ajax_Shortcodes {
 	/**
 	 * Display the Regions of current user
 	 * [geot_region]
-	 * @return string regions names
+	 * @return string
 	 */
 	function geot_show_regions($atts) {
 		extract( shortcode_atts( array(
@@ -245,6 +276,48 @@ class GeoTarget_Ajax_Shortcodes {
 		), $atts ) );
 
 		return '<'. $html_tag .' class="geot-ajax" data-action="region" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+	}
+
+	/**
+	 * Display the Timezone of current user
+	 * [geot_time_zone]
+	 * @return string
+	 */
+	function geot_show_time_zone($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+			'html_tag'          => 'span'
+		), $atts ) );
+
+		return '<'. $html_tag .' class="geot-ajax" data-action="time_zone" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+	}
+
+	/**
+	 * Display the latitude of current user
+	 * [geot_lat]
+	 * @return string
+	 */
+	function geot_show_lat($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+			'html_tag'          => 'span'
+		), $atts ) );
+
+		return '<'. $html_tag .' class="geot-ajax" data-action="latitude" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+	}
+
+	/**
+	 * Display the longitude of current user
+	 * [geot_lng]
+	 * @return string
+	 */
+	function geot_show_lng($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+			'html_tag'          => 'span'
+		), $atts ) );
+
+		return '<'. $html_tag .' class="geot-ajax" data-action="longitude" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	function geot_debug_data() {
