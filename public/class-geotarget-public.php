@@ -218,12 +218,11 @@ class GeoTarget_Public {
 	function popup_city_region_match( $match, $rule ) {
 
 		if ( $rule['operator'] == "==" ) {
-
-			return geot_target('',$rule['value'],'','','cities');
+			return geot_target_city('',$rule['value'],'','');
 
 		} else {
 
-			return !geot_target('',$rule['value'],'','','cities');
+			return !geot_target_city('',$rule['value'],'','');
 
 		}
 
