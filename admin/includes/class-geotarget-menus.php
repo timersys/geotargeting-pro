@@ -107,8 +107,7 @@ class GeoTarget_Menus {
 			if( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' ) {
 				$menu_item->classes[] = 'geot-ajax geot_menu_item';
 				add_filter( 'nav_menu_link_attributes', array( $this, 'add_geot_info'), 10, 2 );
-			} else { #error_log(print_r($menu_item->ID,1));
-			#	error_log(Geot_Helpers::user_is_targeted($g, $menu_item->ID ));
+			} else {
 				if( Geot_Helpers::user_is_targeted($g, $menu_item->ID ) )
 					unset( $sorted_menu_items[ $k ] );
 			}
