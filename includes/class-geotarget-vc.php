@@ -55,6 +55,7 @@ class GeoTarget_VC {
 		if ( ! defined( 'WPB_VC_VERSION' ) )
 			return;
 
+		vc_add_shortcode_param( 'geot_dropdown', [$this,'dropdown_field'] );
 		$regions = geot_country_regions();
 		$dropdown_values = array( __('Choose one','geot') => '');
 
@@ -105,10 +106,11 @@ class GeoTarget_VC {
 						'group' => __( 'GeoTargeting', 'geot' ),
 					),
 					array(
-						"type" => "dropdown",
+						"type" => "geot_dropdown",
 						"class" => "",
 						"heading" => __("Region", 'geot'),
 						"param_name" => "region",
+						"multiple"   => true,
 						"value" => $dropdown_values,
 						"description" => __("Choose region name to show content to", 'geot'),
 						'group' => __( 'GeoTargeting', 'geot' ),
@@ -123,7 +125,7 @@ class GeoTarget_VC {
 						'group' => __( 'GeoTargeting', 'geot' ),
 					),
 					array(
-						"type" => "dropdown",
+						"type" => "geot_dropdown",
 						"class" => "",
 						"heading" => __("Exclude Region", 'geot'),
 						"param_name" => "exclude_region",
@@ -157,7 +159,7 @@ class GeoTarget_VC {
 						'group' => __( 'GeoTargeting', 'geot' ),
 					),
 					array(
-						"type" => "dropdown",
+						"type" => "geot_dropdown",
 						"class" => "",
 						"heading" => __("City Region", 'geot'),
 						"param_name" => "region",
@@ -175,7 +177,7 @@ class GeoTarget_VC {
 						'group' => __( 'GeoTargeting', 'geot' ),
 					),
 					array(
-						"type" => "dropdown",
+						"type" => "geot_dropdown",
 						"class" => "",
 						"heading" => __("Exclude City Region", 'geot'),
 						"param_name" => "exclude_region",
@@ -221,6 +223,45 @@ class GeoTarget_VC {
 			)
 		);
 
+	}
+
+	function dropdown_field( $settings, $value ) {
+		$output = '';
+		$css_option = str_replace( '#', 'hash-', vc_get_dropdown_option( $settings, $value ) );
+		$output .= '<select name="'
+		           . $settings['param_name']
+		           . '" class="wpb_vc_param_value wpb-input wpb-select '
+		           . $settings['param_name']
+		           . ' ' . $settings['type']
+		           . ' ' . $css_option
+		           . '" data-option="' . $css_option . '" multiple>';
+
+		$value = is_array($value)? $value : explode(',',$value);
+		if ( ! empty( $settings['value'] ) ) {
+			foreach ( $settings['value'] as $index => $data ) {
+				if ( is_numeric( $index ) && ( is_string( $data ) || is_numeric( $data ) ) ) {
+					$option_label = $data;
+					$option_value = $data;
+				} elseif ( is_numeric( $index ) && is_array( $data ) ) {
+					$option_label = isset( $data['label'] ) ? $data['label'] : array_pop( $data );
+					$option_value = isset( $data['value'] ) ? $data['value'] : array_pop( $data );
+				} else {
+					$option_value = $data;
+					$option_label = $index;
+				}
+				$selected = '';
+				$option_value_string = (string) $option_value;
+				if ( in_array($option_value_string,$value )) {
+					$selected = ' selected="selected"';
+				}
+				$option_class = str_replace( '#', 'hash-', $option_value );
+				$output .= '<option class="' . esc_attr( $option_class ) . '" value="' . esc_attr( $option_value ) . '"' . $selected . '>'
+				           . htmlspecialchars( $option_label ) . '</option>';
+			}
+		}
+		$output .= '</select>';
+
+		return $output;
 	}
 }
 add_action('init',function(){
