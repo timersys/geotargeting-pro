@@ -4,7 +4,7 @@ Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.8.1
-Stable tag: 2.1.0.1
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,11 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+
+= 2.1.1 =
+* Updated core files
+* Visual composer components updated
+* WpEngine Support of Geoip (enterprise and business accounts)
 
 = 2.1.0.1 =
 * Plugin didn't pack core updates
