@@ -8,17 +8,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://wp.timersys.com/geotargeting/
+ * @link              https://geotargetingwp.com/geotargeting-pro
  * @since             1.0.1
  * @package           GeoTarget
  *
  * @wordpress-plugin
  * Plugin Name:       GeoTargeting Pro
- * Plugin URI:        http://wp.timersys.com/geotargeting/
+ * Plugin URI:        https://geotargetingwp.com/geotargeting-pro
  * Description:       Geo Targeting for WordPress will let you country-target your content based on users IP's and Geocountry Ip database
- * Version:           2.1.1
+ * Version:           2.1.2
  * Author:            Timersys
- * Author URI:        http://wp.timersys.com/geotargeting/
+ * Author URI:        https://geotargetingwp.com/geotargeting-pro
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       geotarget
@@ -31,7 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 define( 'GEOT_PLUGIN_FILE' , __FILE__);
-define( 'GEOT_VERSION' , '2.1.1' );
+define( 'GEOT_VERSION' , '2.1.2' );
 define( 'GEOT_DB_VERSION' , '1.2' );
 define( 'GEOT_PLUGIN_DIR' , plugin_dir_path(__FILE__) );
 define( 'GEOT_PLUGIN_URL' , plugin_dir_url(__FILE__) );

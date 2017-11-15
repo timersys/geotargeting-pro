@@ -2,7 +2,7 @@
 /**
  * Ajax callbacks
  *
- * @link       http://wp.timersys.com/geotargeting/
+ * @link       https://geotargetingwp.com/geotargeting-pro
  * @since      1.6
  *
  * @package    GeoTarget
