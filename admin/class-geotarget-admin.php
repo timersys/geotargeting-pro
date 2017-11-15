@@ -3,7 +3,7 @@
 /**
  * The dashboard-specific functionality of the plugin.
  *
- * @link       http://wp.timersys.com/geotargeting/
+ * @link       https://geotargetingwp.com/geotargeting-pro
  * @since      1.0.0
  *
  * @package    GeoTarget
@@ -236,7 +236,7 @@ class GeoTarget_Admin {
 
 	function save_settings(){
 		if (  isset( $_POST['geot_nonce'] ) && wp_verify_nonce( $_POST['geot_nonce'], 'geot_pro_save_settings' ) ) {
-			$settings = esc_sql( $_POST['geot_settings'] );
+			$settings = isset($_POST['geot_settings']) ? esc_sql( $_POST['geot_settings'] ) : '';
 
 			update_option( 'geot_pro_settings' ,  $settings);
 		}

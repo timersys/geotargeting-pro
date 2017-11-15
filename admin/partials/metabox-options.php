@@ -4,7 +4,7 @@
  * Metabox settings
  *
  *
- * @link       http://wp.timersys.com/geotargeting/
+ * @link       https://geotargetingwp.com/geotargeting-pro
  * @since      1.0.0
  *
  * @package    GeoTarget

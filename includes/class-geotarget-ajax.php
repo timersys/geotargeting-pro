@@ -2,7 +2,7 @@
 /**
  * Ajax callbacks
  *
- * @link       http://wp.timersys.com/geotargeting/
+ * @link       https://geotargetingwp.com/geotargeting-pro
  * @since      1.6
  *
  * @package    GeoTarget
@@ -344,6 +344,21 @@ class GeoTarget_Ajax {
 		);
 	}
 
+	/**
+	 * Print geot flag
+	 * @param $geot
+	 *
+	 * @return string
+	 */
+	private function geo_flag($geot) {
+		$country_code = !empty($geot['filter']) ? $geot['filter'] : geot_country_code();
+
+		$squared = $geot['default'] ?:'';
+		$size = $geot['region'] ?:'30px';
+		$html = esc_attr($geot['html_tag']) ?: 'span';
+		return '<'.$html.' style="font-size:'.esc_attr($size).'" class="flag-icon flag-icon-'.strtolower(esc_attr($country_code)).' '.$squared.'"></'.$html.'>';
+
+	}
 	/**
 	 * Grab debug info to print in footer
 	 * @return string|void
