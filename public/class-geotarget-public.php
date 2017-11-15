@@ -3,7 +3,7 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       http://wp.timersys.com/geotargeting/
+ * @link       https://geotargetingwp.com/geotargeting-pro
  * @since      1.0.0
  *
  * @package    GeoTarget
