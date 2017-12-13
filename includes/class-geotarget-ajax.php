@@ -355,7 +355,7 @@ class GeoTarget_Ajax {
 
 		$squared = $geot['default'] ?:'';
 		$size = $geot['region'] ?:'30px';
-		$html = esc_attr($geot['html_tag']) ?: 'span';
+		$html = isset($geot['html_tag']) ? esc_attr($geot['html_tag']) : 'span';
 		return '<'.$html.' style="font-size:'.esc_attr($size).'" class="flag-icon flag-icon-'.strtolower(esc_attr($country_code)).' '.$squared.'"></'.$html.'>';
 
 	}
