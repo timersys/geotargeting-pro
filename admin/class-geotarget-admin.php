@@ -66,7 +66,7 @@ class GeoTarget_Admin {
 		$post_types = apply_filters( 'geot/get_post_types', Geot_Helpers::get_post_types() );
 
 		foreach ($post_types as $cpt) {
-			if( in_array( $cpt, apply_filters('geot/excluded_post_types', ['geotr_cpt'] ) ) )
+			if( in_array( $cpt, apply_filters('geot/excluded_post_types', ['geotr_cpt','geobl_cpt'] ) ) )
 				continue;
 			add_meta_box(
 				'geot-settings',
