@@ -76,7 +76,7 @@ class GeoTarget_Ajax {
 				}
 			}
 		}
-		$opts = geot_pro_settings();
+		$opts = geot_settings();
 		$debug = isset($opts['debug_mode']) && '1' == $opts['debug_mode'] ? $this->getDebugInfo() : 'Debug mode disabled' ;
 		echo json_encode( array( 'success' => 1, 'data' => $geots, 'posts' => $posts, 'debug' => $debug ) );
 		die();
