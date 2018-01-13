@@ -247,11 +247,8 @@ class GeoTarget {
 
 
    		// Add html for shortcodes popup
-   		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
 
-			$this->loader->add_action( 'in_admin_footer', $this->admin, 'add_editor' );
-
-   		}
+		$this->loader->add_action( 'wp_ajax_geot_get_popup', $this->admin, 'add_editor' );
 
 		// register dropdown widget
 		$this->loader->add_action( 'widgets_init', $this->admin, 'register_widgets');

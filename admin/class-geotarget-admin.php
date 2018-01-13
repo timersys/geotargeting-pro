@@ -171,8 +171,8 @@ class GeoTarget_Admin {
 	 */
 	function add_editor() {
 
-		include 'partials/tinymce-editor.php';
-
+		include 'partials/tinymce-popup.php';
+		wp_die();
 	}
 
 	/**
