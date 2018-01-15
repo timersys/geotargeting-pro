@@ -4,7 +4,7 @@ $regions 	= geot_country_regions();
 $city_regions 	= geot_city_regions();
 ?>
 <form name="form" autocomplete="off">
-<div id="geot_editor" class="shortcode_editor" title="Country Geo Target Text"  style="display:none;height:500px">
+<div id="geot_editor" class="shortcode_editor" title="Country Geo Target Text"  style="">
 	<div style="display: none;"><!--hack for chrome-->
 		<input type="text" id="PreventChromeAutocomplete" name="PreventChromeAutocomplete" autocomplete="address-level4" />
 	</div>
@@ -62,7 +62,7 @@ $city_regions 	= geot_city_regions();
 		<tr valign="top">
 			<th><label for="geot_position"><?php _e( 'Or type cities:', 'geot' ); ?></label></th>
 			<td>
-				<input type="text" name="geot[city]" id="geot_city"data-placeholder="<?php _e( 'Type cities separated by comma', 'geot' );?>" style="width: 100%;"/>
+				<input type="text" name="geot[city]" id="geot_city"data-placeholder="<?php _e( 'Type cities separated by comma', 'geot' );?>"/>
 			</td>
 			<td colspan="2"></td>
 		</tr>
@@ -86,7 +86,7 @@ $city_regions 	= geot_city_regions();
 		<tr valign="top">
 			<th><label for="geot_position"><?php _e( 'Or type states:', 'geot' ); ?></label></th>
 			<td>
-				<input type="text" name="geot[state]" id="geot_state" data-placeholder="<?php _e( 'Type states separated by comma', 'geot' );?>" style="width: 100%;"/>
+				<input type="text" name="geot[state]" id="geot_state" data-placeholder="<?php _e( 'Type states separated by comma', 'geot' );?>" />
 			</td>
 			<td colspan="2"></td>
 		</tr>

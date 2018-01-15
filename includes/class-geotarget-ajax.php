@@ -76,7 +76,8 @@ class GeoTarget_Ajax {
 				}
 			}
 		}
-		$debug = $this->getDebugInfo();
+		$opts = geot_settings();
+		$debug = isset($opts['debug_mode']) && '1' == $opts['debug_mode'] ? $this->getDebugInfo() : 'Debug mode disabled' ;
 		echo json_encode( array( 'success' => 1, 'data' => $geots, 'posts' => $posts, 'debug' => $debug ) );
 		die();
 	}
@@ -355,7 +356,7 @@ class GeoTarget_Ajax {
 
 		$squared = $geot['default'] ?:'';
 		$size = $geot['region'] ?:'30px';
-		$html = esc_attr($geot['html_tag']) ?: 'span';
+		$html = isset($geot['html_tag']) ? esc_attr($geot['html_tag']) : 'span';
 		return '<'.$html.' style="font-size:'.esc_attr($size).'" class="flag-icon flag-icon-'.strtolower(esc_attr($country_code)).' '.$squared.'"></'.$html.'>';
 
 	}
