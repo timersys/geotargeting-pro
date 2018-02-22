@@ -3,6 +3,7 @@
 class Geot_Helpers {
 
 	private static $_user_is_targeted = array();
+	private static $_geotarget_posts = array();
 
 	/**
 	 * Return geotarget posts
@@ -10,6 +11,9 @@ class Geot_Helpers {
 	 */
 	public static function get_geotarget_posts() {
 		global $wpdb;
+
+		if( !empty(self::$_geotarget_posts) )
+			return self::$_geotarget_posts;
 
 		$sql = "SELECT ID, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
 LEFT JOIN $wpdb->postmeta pm ON p.ID = pm.post_id
@@ -19,7 +23,7 @@ AND pm.meta_key = '_geot_post'
 AND pm2.meta_key = 'geot_options'
 AND pm.meta_value != ''";
 
-		return $wpdb->get_results( $sql );
+		return self::$_geotarget_posts = $wpdb->get_results( $sql );
 
 	}
 
