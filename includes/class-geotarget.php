@@ -307,7 +307,7 @@ class GeoTarget {
 
 		$this->loader->add_action( 'wp_footer', $this->public, 'print_debug_info', 999 );
 
-		$this->loader->add_filter( 'posts_where', $this->public, 'handle_geotargeted_posts' );
+		$this->loader->add_filter( 'posts_where', $this->public, 'handle_geotargeted_posts' , PHP_INT_MAX);
 		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
 		$this->loader->add_filter( 'wp', $this->public, 'disable_woo_product' );
 		// Popups rules

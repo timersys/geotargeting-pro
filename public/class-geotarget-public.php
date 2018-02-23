@@ -257,7 +257,7 @@ class GeoTarget_Public {
 
 		// let users cancel the removal of posts
 		// for example they can check if is_search() and show the post in search results
-		if( apply_filters( 'geot/posts_where', false, $where ) )
+		if( apply_filters( 'geot/cancel_posts_where', false, $where ) )
 			return $where;
 
 		if( ( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' ) ||  defined('GEOT_GRABBING_POST_ID') )
@@ -280,6 +280,7 @@ class GeoTarget_Public {
 				});
 			}
 		}
+
 		return $where;
 	}
 	/**
