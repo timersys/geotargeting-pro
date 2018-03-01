@@ -134,6 +134,23 @@ class GeoTarget_Ajax {
 	}
 
 	/**
+	 * Get user continent name
+	 * @param $geot
+	 *
+	 * @return string
+	 */
+	private function continent_name( $geot ) {
+
+		$name = geot_continent();
+
+		if ( !empty( $name ) )
+			return apply_filters( 'geot/shortcodes/continent_name', $name );
+
+		return  apply_filters( 'geot/shortcodes/continent_name_default', $geot['default'] );
+
+	}
+
+	/**
 	 * Get user state code
 	 * @param $geot
 	 *

@@ -74,6 +74,7 @@ class GeoTarget_Shortcodes {
 		add_shortcode('geot_city_name', array( $this, 'geot_show_city_name') );
 		add_shortcode('geot_state_name', array( $this, 'geot_show_state_name') );
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
+		add_shortcode('geot_continent', array( $this, 'geot_show_continent') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 		add_shortcode('geot_debug', 'geot_debug_data' );
@@ -195,6 +196,21 @@ class GeoTarget_Shortcodes {
 		$code = geot_country_code();
 
 		return !empty($code) ? $code : $default;
+	}
+
+	/**
+	 * Displays the continent name for the current user
+	 * [geot_continent] ]
+	 * @return  string country CODE
+	 **/
+	function geot_show_continent($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+		), $atts ) );
+
+		$continent = geot_continent();
+
+		return !empty($continent) ? $continent : $default;
 	}
 
 
