@@ -260,10 +260,10 @@ class GeoTarget_Public {
 		if( apply_filters( 'geot/cancel_posts_where', false, $where ) )
 			return $where;
 
-		if( ( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' ) ||  defined('GEOT_GRABBING_POST_ID') )
+		if( ( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' ) )
 			return $where;
 
-		if ( ! is_admin()  ) {
+		if ( ! is_admin() ) {
 			// Get all posts that are being geotargeted
 			$post_to_exclude = $this->get_geotargeted_posts( );
 			if( !empty( $post_to_exclude ) ) {
@@ -280,7 +280,6 @@ class GeoTarget_Public {
 				});
 			}
 		}
-
 		return $where;
 	}
 	/**
@@ -296,14 +295,12 @@ class GeoTarget_Public {
 		// get all posts with geo options set ( ideally would be to retrieve just for the post type queried but I can't get post_type
 		$geot_posts = Geot_Helpers::get_geotarget_posts();
 
-		$current_post_id = \GeotFunctions\grab_post_id();
 		if( $geot_posts ) {
 			foreach( $geot_posts as $p ) {
 				$options = unserialize( $p->geot_options );
 				// if remove for loop is off continue
 				if( ! isset( $options['geot_remove_post'])
 				    || '1' != $options['geot_remove_post']
-				    || ( $current_post_id && $p->ID != $current_post_id )
 				)
 					continue;
 
