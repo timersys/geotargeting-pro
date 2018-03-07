@@ -90,7 +90,7 @@ class GeoTarget_Ajax {
 	 */
 	private function country_name( $geot ) {
 
-		$name = geot_country_name();
+		$name = geot_country_name($geot['locale']);
 
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/country_name', $name );
@@ -107,7 +107,7 @@ class GeoTarget_Ajax {
 	 */
 	private function city_name( $geot ) {
 
-		$name = geot_city_name();
+		$name = geot_city_name($geot['locale']);
 
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/city_name', $name );
@@ -124,7 +124,7 @@ class GeoTarget_Ajax {
 	 */
 	private function state_name( $geot ) {
 
-		$name = geot_state_name();
+		$name = geot_state_name($geot['locale']);
 
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/state_name', $name );
@@ -141,7 +141,7 @@ class GeoTarget_Ajax {
 	 */
 	private function continent_name( $geot ) {
 
-		$name = geot_continent();
+		$name = geot_continent($geot['locale']);
 
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/continent_name', $name );

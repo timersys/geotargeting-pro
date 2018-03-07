@@ -201,10 +201,11 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_country_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en',
 			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<'. $html_tag .' class="geot-ajax" data-action="country_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="country_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 
 	}
 
@@ -216,10 +217,11 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_city_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en',
 			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<'. $html_tag .' class="geot-ajax" data-action="city_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="city_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 
 	}
 
@@ -231,10 +233,11 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_state_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en',
 			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<'. $html_tag .' class="geot-ajax" data-action="state_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="state_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	/**
@@ -260,10 +263,11 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_continent($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en',
 			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<'. $html_tag .' class="geot-ajax" data-action="continent_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="continent_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	/**

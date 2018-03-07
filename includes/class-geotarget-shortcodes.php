@@ -206,9 +206,10 @@ class GeoTarget_Shortcodes {
 	function geot_show_continent($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en'
 		), $atts ) );
 
-		$continent = geot_continent();
+		$continent = geot_continent($locale);
 
 		return !empty($continent) ? $continent : $default;
 	}
@@ -222,9 +223,10 @@ class GeoTarget_Shortcodes {
 	function geot_show_country_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en'
 		), $atts ) );
 
-		$name = geot_country_name();
+		$name = geot_country_name($locale);
 
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/country_name', $name );
@@ -240,9 +242,10 @@ class GeoTarget_Shortcodes {
 	function geot_show_city_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en'
 		), $atts ) );
 
-		$name = geot_city_name();
+		$name = geot_city_name($locale);
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/city_name', $name );
 
@@ -258,9 +261,10 @@ class GeoTarget_Shortcodes {
 	function geot_show_state_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en'
 		), $atts ) );
 
-		$state = geot_state_name();
+		$state = geot_state_name($locale);
 
 		if ( !empty( $state ) )
 			return apply_filters( 'geot/shortcodes/state_name', $state );
