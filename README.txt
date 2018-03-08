@@ -4,7 +4,7 @@ Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.9.4
-Stable tag: 2.2.1
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,13 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+
+= 2.3 =
+* Added locale option for shortcodes
+* Also results locale now it's changed automatically with wordpress language
+* Fixed bug where geotargeted posts not working with custom queries inside a post
+* Improved debug page
+* Core updates
 
 = 2.2.1 =
 * Core updates
