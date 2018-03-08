@@ -129,6 +129,7 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
             'ex_filter' : _this.data('ex_filter') || '',
             'ex_region' : _this.data('ex_region') || '',
             'default'   : _this.data('default') || '',
+            'locale'   : _this.data('locale') || 'en',
         }
     });
     var onSuccess = function( response ) {

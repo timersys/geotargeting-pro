@@ -74,6 +74,7 @@ class GeoTarget_Shortcodes {
 		add_shortcode('geot_city_name', array( $this, 'geot_show_city_name') );
 		add_shortcode('geot_state_name', array( $this, 'geot_show_state_name') );
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
+		add_shortcode('geot_continent', array( $this, 'geot_show_continent') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 		add_shortcode('geot_debug', 'geot_debug_data' );
@@ -197,6 +198,22 @@ class GeoTarget_Shortcodes {
 		return !empty($code) ? $code : $default;
 	}
 
+	/**
+	 * Displays the continent name for the current user
+	 * [geot_continent] ]
+	 * @return  string country CODE
+	 **/
+	function geot_show_continent($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+            'locale'            => 'en'
+		), $atts ) );
+
+		$continent = geot_continent($locale);
+
+		return !empty($continent) ? $continent : $default;
+	}
+
 
 	/**
 	 * Displays the country name for the current user
@@ -206,9 +223,10 @@ class GeoTarget_Shortcodes {
 	function geot_show_country_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en'
 		), $atts ) );
 
-		$name = geot_country_name();
+		$name = geot_country_name($locale);
 
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/country_name', $name );
@@ -224,9 +242,10 @@ class GeoTarget_Shortcodes {
 	function geot_show_city_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en'
 		), $atts ) );
 
-		$name = geot_city_name();
+		$name = geot_city_name($locale);
 		if ( !empty( $name ) )
 			return apply_filters( 'geot/shortcodes/city_name', $name );
 
@@ -242,9 +261,10 @@ class GeoTarget_Shortcodes {
 	function geot_show_state_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en'
 		), $atts ) );
 
-		$state = geot_state_name();
+		$state = geot_state_name($locale);
 
 		if ( !empty( $state ) )
 			return apply_filters( 'geot/shortcodes/state_name', $state );

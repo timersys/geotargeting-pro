@@ -74,6 +74,7 @@ class GeoTarget_Ajax_Shortcodes {
 		add_shortcode('geot_city_name', array( $this, 'geot_show_city_name') );
 		add_shortcode('geot_state_name', array( $this, 'geot_show_state_name') );
 		add_shortcode('geot_state_code', array( $this, 'geot_show_state_code') );
+		add_shortcode('geot_continent', array( $this, 'geot_show_continent') );
 		add_shortcode('geot_zip', array( $this, 'geot_show_zip_code') );
 		add_shortcode('geot_region', array( $this, 'geot_show_regions') );
 		add_shortcode('geot_debug', array( $this, 'geot_debug_data' ) );
@@ -200,10 +201,11 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_country_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en',
 			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<'. $html_tag .' class="geot-ajax" data-action="country_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="country_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 
 	}
 
@@ -215,10 +217,11 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_city_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en',
 			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<'. $html_tag .' class="geot-ajax" data-action="city_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="city_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 
 	}
 
@@ -230,10 +233,11 @@ class GeoTarget_Ajax_Shortcodes {
 	function geot_show_state_name($atts) {
 		extract( shortcode_atts( array(
 			'default' 			=> '',
+            'locale'            => 'en',
 			'html_tag'          => 'span'
 		), $atts ) );
 
-		return '<'. $html_tag .' class="geot-ajax" data-action="state_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="state_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	/**
@@ -248,6 +252,22 @@ class GeoTarget_Ajax_Shortcodes {
 		), $atts ) );
 
 		return '<'. $html_tag .' class="geot-ajax" data-action="state_code" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
+	}
+
+
+	/**
+	 * Display the Continent of current user
+	 * [geot_continent]
+	 * @return string continent name
+	 */
+	function geot_show_continent($atts) {
+		extract( shortcode_atts( array(
+			'default' 			=> '',
+            'locale'            => 'en',
+			'html_tag'          => 'span'
+		), $atts ) );
+
+		return '<'. $html_tag .' class="geot-ajax" data-locale="'.$locale.'" data-action="continent_name" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 	}
 
 	/**
