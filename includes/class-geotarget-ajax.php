@@ -89,7 +89,8 @@ class GeoTarget_Ajax {
 	 * @return string
 	 */
 	private function country_name( $geot ) {
-
+        if(!isset($geot['locale']))
+            $geot['locale'] = 'en';
 		$name = geot_country_name($geot['locale']);
 
 		if ( !empty( $name ) )
@@ -106,7 +107,8 @@ class GeoTarget_Ajax {
 	 * @return string
 	 */
 	private function city_name( $geot ) {
-
+        if(!isset($geot['locale']))
+            $geot['locale'] = 'en';
 		$name = geot_city_name($geot['locale']);
 
 		if ( !empty( $name ) )
@@ -123,7 +125,8 @@ class GeoTarget_Ajax {
 	 * @return string
 	 */
 	private function state_name( $geot ) {
-
+        if(!isset($geot['locale']))
+            $geot['locale'] = 'en';
 		$name = geot_state_name($geot['locale']);
 
 		if ( !empty( $name ) )
@@ -140,7 +143,8 @@ class GeoTarget_Ajax {
 	 * @return string
 	 */
 	private function continent_name( $geot ) {
-
+        if(!isset($geot['locale']))
+            $geot['locale'] = 'en';
 		$name = geot_continent($geot['locale']);
 
 		if ( !empty( $name ) )
