@@ -3,8 +3,8 @@ Contributors: timersys
 Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
-Tested up to: 4.9.4
-Stable tag: 2.3.2
+Tested up to: 4.9.5
+Stable tag: 2.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,10 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+= 2.3.3 =
+* Fixed minor errors
+* Update core sessions library
+
 = 2.3.2 =
 * Moved all js to footer
 * Fixed bug with locales and cache mode that could lead into fatal error
