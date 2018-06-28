@@ -189,7 +189,7 @@ class GeoTarget_Ajax {
 	 */
 	private function time_zone( $geot ) {
 
-		$code = geot_timezone();
+		$code = geot_time_zone();
 
 		return !empty( $code ) ? $code : $geot['default'];
 	}

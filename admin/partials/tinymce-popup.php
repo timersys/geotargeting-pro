@@ -683,7 +683,7 @@
 
     ( function( $ ) {
         $.ready( function() {
-            $.find(".geot-chosen-select").chosen({width: "100%", no_results_text: "Oops, nothing found!"});
+            $.find(".geot-chosen-select-multiple").selectize({ plugins: ['remove_button'],});
         });
         $.find('.geot-insert').on('click', function () {
 

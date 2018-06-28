@@ -58,6 +58,8 @@ class GeoTarget_Shortcodes {
 	 */
 	public function register_shortcodes() {
 
+	    add_filter('geot/shortcodes/country_name', array( $this, 'the_english_country_names'));
+
 		if( isset( $this->geot_opts['ajax_mode'] ) && $this->geot_opts['ajax_mode'] == '1' )
 			return;
 		// leave for backward compatibility
@@ -330,7 +332,7 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$timezone = geot_timezone();
+		$timezone = geot_time_zone();
 
 		return !empty($timezone) ? $timezone : $default;
 	}
@@ -365,4 +367,43 @@ class GeoTarget_Shortcodes {
 		return !empty($lng) ? $lng : $default;
 	}
 
+    public function the_english_country_names( $country_name = '' ) {
+
+        if ( empty( $country_name ) ) {
+            return;
+        }
+
+        $countries = array(
+            'Aland Islands',
+            'Bahamas',
+            'British Indian Ocean Territory',
+            'Cayman Islands',
+            'Central African Republic',
+            'Christmas Island',
+            'Cocos (Keeling) Islands',
+            'Cook Islands',
+            'Czech Republic',
+            'Dominican Republic',
+            'Falkland Islands (Malvinas)',
+            'Faroe Islands',
+            'Holy See',
+            'Isle of Man',
+            'Maldives',
+            'Marshall Islands',
+            'Northern Mariana Islands',
+            'Philippines',
+            'Russian Federation',
+            'United Arab Emirates',
+            'United Kingdom of Great Britain and Northern Ireland',
+            'United States of America',
+            'Virgin Islands (British)',
+            'Virgin Islands (U.S.)'
+        );
+
+        if ( in_array( $country_name, $countries ) ) {
+            $country_name = 'the ' . $country_name;
+        }
+
+        return $country_name;
+    }
 }

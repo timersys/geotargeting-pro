@@ -21,7 +21,7 @@ $city_regions 	= geot_city_regions();
 			<td>
 				<?php
 				if( is_array( $regions ) ) { ?>
-					<select name="geot[region][]" id="geot_region" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
+					<select name="geot[region][]" id="geot_region" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
 						<?php
 							if( is_array( $regions ) ) {
 								foreach ($regions as $r) {
@@ -45,7 +45,7 @@ $city_regions 	= geot_city_regions();
 		<tr valign="top">
 			<th><label for="geot_position"><?php _e( 'Or choose countries:', 'geot' ); ?></label></th>
 			<td>
-				<select name="geot[country_code][]" id="geot_country" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose country name...', 'geot' );?>" >
+				<select name="geot[country_code][]" id="geot_country" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose country name...', 'geot' );?>" >
 					<?php
 					if( is_array( $countries ) ) {
 						foreach ($countries as $c) {
@@ -69,7 +69,7 @@ $city_regions 	= geot_city_regions();
 		<tr valign="top">
 			<th><label for="geot_position"><?php _e( 'Or choose city Regions:', 'geot' ); ?></label></th>
 			<td>
-				<select name="geot[city_region][]" id="geot_city_region" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose cities region name...', 'geot' );?>" >
+				<select name="geot[city_region][]" id="geot_city_region" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose cities region name...', 'geot' );?>" >
 					<?php
 					if( is_array( $city_regions ) ) {
 						foreach ($city_regions as $cr) {
