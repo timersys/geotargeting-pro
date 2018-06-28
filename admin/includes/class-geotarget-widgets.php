@@ -83,7 +83,7 @@ class Geot_Widgets  {
 		    	<label><?php _e( 'Choose regions( country regions ):', 'geot' ); ?></label>
 				<?php
 				if( is_array( $regions ) ) { ?>
-					<select name="<?php echo $t->get_field_name('geot');?>[region][]" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
+					<select name="<?php echo $t->get_field_name('geot');?>[region][]" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
 						<?php
 							if( is_array( $regions ) ) {
 								foreach ($regions as $r) {
@@ -106,7 +106,7 @@ class Geot_Widgets  {
 			<p>
 				<label for="geot_position"><?php _e( 'Or choose countries:', 'geot' ); ?></label>
 
-				<select name="<?php echo $t->get_field_name('geot');?>[country_code][]" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose country name...', 'geot' );?>" >
+				<select name="<?php echo $t->get_field_name('geot');?>[country_code][]" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose country name...', 'geot' );?>" >
 					<?php
 					if( is_array( $countries ) ) {
 						foreach ($countries as $c) {

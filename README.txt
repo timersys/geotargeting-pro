@@ -37,6 +37,9 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+= 2.3.4 =
+* Updated Settings page to improve performance
+
 = 2.3.3 =
 * Fixed minor errors
 * Update core sessions library

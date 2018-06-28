@@ -31,7 +31,7 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 		<td>
 			<?php
 			if( is_array( $regions ) ) { ?>
-				<select name="geot[region][]" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
+				<select name="geot[region][]" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
 					<?php
 						if( is_array( $regions ) ) {
 							foreach ($regions as $r) {
@@ -60,7 +60,7 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 	<tr valign="top">
 		<th><label for="geot_position"><?php _e( 'Countries:', 'geot' ); ?></label></th>
 		<td>
-			<select name="geot[country_code][]" multiple class="geot-chosen-select" data-placeholder="<?php _e( 'Type or choose country name...', 'geot' );?>" >
+			<select name="geot[country_code][]" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose country name...', 'geot' );?>" >
 				<?php
 				if( is_array( $countries ) ) {
 					foreach ($countries as $c) {

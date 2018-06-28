@@ -332,7 +332,7 @@ class GeoTarget_Shortcodes {
 			'default' 			=> '',
 		), $atts ) );
 
-		$timezone = geot_timezone();
+		$timezone = geot_time_zone();
 
 		return !empty($timezone) ? $timezone : $default;
 	}

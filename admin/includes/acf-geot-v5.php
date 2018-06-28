@@ -155,7 +155,7 @@ class acf_field_geot_field extends acf_field {
 					create_field( array(
 						'type'		=>	'select',
 						'multiple'	=>	true,
-						'class'		=>  "geot-chosen-select",
+						'class'		=>  "geot-chosen-select-multiple",
 						'name'		=>	$field['name'].'[geot_regions]',
 						'value'		=>	$field['value']['geot_regions'],
 						'choices'	=>	$choices
@@ -182,7 +182,7 @@ class acf_field_geot_field extends acf_field {
 					create_field( array(
 						'type'		=>	'select',
 						'multiple'	=>	true,
-						'class'		=>  "geot-chosen-select",
+						'class'		=>  "geot-chosen-select-multiple",
 						'name'		=>	$field['name'].'[geot_city_regions]',
 						'value'		=>	isset($field['value']['geot_city_regions']) ? $field['value']['geot_city_regions'] :'',
 						'choices'	=>	$choices
@@ -210,7 +210,7 @@ class acf_field_geot_field extends acf_field {
 					echo '<div class="geot-select2">';
 					create_field( array(
 						'type'		=>	'select',
-						'class'		=>  "geot-chosen-select",
+						'class'		=>  "geot-chosen-select-multiple",
 						'multiple'	=>	true,
 						'name'		=>	$field['name'].'[geot_countries]',
 						'value'		=>	isset($field['value']['geot_countries'])? $field['value']['geot_countries'] : '',
