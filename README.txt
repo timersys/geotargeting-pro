@@ -37,6 +37,9 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+= 2.3.4.1 =
+* Fixed issue with ACF free version that was breaking javascript
+
 = 2.3.4 =
 * Updated Settings page to improve performance
 * Fixed error with timezone function
