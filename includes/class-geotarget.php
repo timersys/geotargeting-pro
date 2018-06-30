@@ -245,7 +245,7 @@ class GeoTarget {
 
 		$this->loader->add_action( 'admin_init', $this->admin, 'register_tiny_buttons' );
 
-
+		add_filter('geot/plugin_version', function (){ return GEOT_VERSION;});
    		// Add html for shortcodes popup
 
 		$this->loader->add_action( 'wp_ajax_geot_get_popup', $this->admin, 'add_editor' );
