@@ -4,7 +4,7 @@ Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 4.9.6
-Stable tag: 2.3.4.2
+Stable tag: 2.3.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,9 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+= 2.3.4.3 =
+* Core update that fix headers sent error and exclude geolocation feature not working
+
 = 2.3.4.2 =
 * Fixed core bug that on certain php version geo target function won't return results
 * Added cache bust for admin assets
