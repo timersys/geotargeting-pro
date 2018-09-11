@@ -54,6 +54,9 @@ class GeoTarget_Menus {
 	public function add_custom_fields( $menu_item ) {
 
         $menu_item->geot = get_post_meta( $menu_item->ID, '_menu_item_geot', true );
+		if(empty($menu_item->geot)){
+			$menu_item->geot = [];
+		}
 		return $menu_item;
 		
 	}
