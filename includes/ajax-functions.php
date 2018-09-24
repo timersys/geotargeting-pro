@@ -1,8 +1,4 @@
 <?php
-$geot_opts = geot_pro_settings();
-if( ! isset( $geot_opts['ajax_mode'] ) || $geot_opts['ajax_mode'] != '1' )
-	return;
-
 /**
  * Shows provided content only if the location
  * criteria are met.
@@ -188,5 +184,3 @@ function ajax_geot_lat($default = '', $html_tag = 'span') {
 function ajax_geot_lng($default = '', $html_tag = 'span') {
 	return '<'. $html_tag .' class="geot-ajax" data-action="longitude" data-default="' . do_shortcode( $default ). '"></'. $html_tag .'>';
 }
-
-?>
