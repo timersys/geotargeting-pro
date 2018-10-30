@@ -255,7 +255,6 @@ class GeoTarget {
 		$this->loader->add_action( 'widgets_init', $this->admin, 'register_widgets');
 
 		// settings page
-		$this->loader->add_action( 'admin_menu', $this->admin, 'add_plugin_menu' );
 		$this->loader->add_action( 'admin_init', $this->admin, 'save_settings' );
 
 

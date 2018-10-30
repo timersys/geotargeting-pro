@@ -54,6 +54,9 @@ class GeoTarget_Admin {
 
 		$this->GeoTarget = $GeoTarget;
 		$this->version = $version;
+
+		add_filter('geot/settings_tabs', [$this, 'add_tab']);
+		add_action('geot/settings_geotargeting-pro_panel', [ $this, 'settings_page'] );
 	}
 
 
@@ -219,11 +222,22 @@ class GeoTarget_Admin {
 		);
 	}
 
-	function add_plugin_menu() {
-		add_submenu_page( 'geot-settings', 'Geotargeting Pro', 'Geotargeting Pro', apply_filters( 'geot/settings_page_role', 'manage_options'), 'geot-pro-settings',array($this, 'render_settings') );
+
+	/**
+	 * Register tab for settings page
+	 * @param $tabs
+	 *
+	 * @return mixed
+	 */
+	function add_tab( $tabs ){
+		$tabs['geotargeting-pro'] = ['name' => 'Geotargeting Pro'];
+		return $tabs;
 	}
 
-	function render_settings(){
+	/**
+	 * Render settings page
+	 */
+	function settings_page(){
 		$defaults = [
 			'ajax_mode'                 => '0',
 			'disable_menu_integration'  => '0',

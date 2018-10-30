@@ -1,9 +1,8 @@
 <div class="wrap geot-settings">
-	<h2>Geotargeting PRO v <?= GEOT_VERSION;?></h2>
 	<form name="geot-settings" method="post" enctype="multipart/form-data">
 		<table class="form-table">
 			<tr valign="top" class="">
-				<th colspan="2"><h3><?php _e( 'GeotargetingPRO settings:', 'geot' ); ?></h3></th>
+				<th colspan="2"><h3><?php _e( 'Geotargeting Pro settings:', 'geot' ); ?></h3></th>
 				<td colspan="2">
 				</td>
 			</tr>
