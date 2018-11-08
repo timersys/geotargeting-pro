@@ -194,6 +194,7 @@ class GeoTarget {
 
 		require plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/autoload.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/functions.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/ajax-functions.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-loader.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-i18n.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-geotarget-admin.php';
@@ -254,7 +255,6 @@ class GeoTarget {
 		$this->loader->add_action( 'widgets_init', $this->admin, 'register_widgets');
 
 		// settings page
-		$this->loader->add_action( 'admin_menu', $this->admin, 'add_plugin_menu' );
 		$this->loader->add_action( 'admin_init', $this->admin, 'save_settings' );
 
 
