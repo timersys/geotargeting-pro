@@ -248,11 +248,14 @@ class GeoTarget_Public {
 
 	/**
 	 * Filter where argument of main query to exclude geotargeted posts
+	 *
 	 * @param $where
+	 *
+	 * @param bool $woocommerce_related . Related posts from woocommerce add alias to table, so regular key won't work
 	 *
 	 * @return string
 	 */
-	public function handle_geotargeted_posts( $where ){
+	public function handle_geotargeted_posts( $where, $woocommerce_related = false ){
 		global $wpdb;
 
 		// let users cancel the removal of posts
@@ -266,8 +269,12 @@ class GeoTarget_Public {
 		if ( ! is_admin() ) {
 			// Get all posts that are being geotargeted
 			$post_to_exclude = $this->get_geotargeted_posts( );
+			$key = "{$wpdb->posts}.ID";
+			if( $woocommerce_related ) {
+				$key = "p.ID";
+			}
 			if( !empty( $post_to_exclude ) ) {
-				$where .= " AND {$wpdb->posts}.ID NOT IN ('". implode( "','", $post_to_exclude )."')";
+				$where .= " AND {$key} NOT IN ('". implode( "','", $post_to_exclude )."')";
 				// Sticky posts needs to be filtered differently
 				add_filter('option_sticky_posts', function( $posts ) use( $post_to_exclude ) {
 					if( !empty($posts) ){
@@ -281,6 +288,18 @@ class GeoTarget_Public {
 			}
 		}
 		return $where;
+	}
+
+	/**
+	 * Modify query for woocommerce related products
+	 * @param $query
+	 *
+	 * @return mixed
+	 */
+	public function woocommerce_related_products( $query ) {
+		$query['where'] = $this->handle_geotargeted_posts($query['where'], true);
+
+		return $query;
 	}
 	/**
 	 * Then we get all the posts with geotarget options and

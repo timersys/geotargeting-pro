@@ -309,6 +309,9 @@ class GeoTarget {
 
 		$this->loader->add_filter( 'posts_where', $this->public, 'handle_geotargeted_posts' , PHP_INT_MAX);
 		$this->loader->add_filter( 'the_content', $this->public, 'check_if_geotargeted_content', 99 );
+		//woocommerce
+		$this->loader->add_filter( 'woocommerce_product_related_posts_query', $this->public, 'woocommerce_related_products',99 );
+
 		$this->loader->add_filter( 'wp', $this->public, 'disable_woo_product' );
 		// Popups rules
 
