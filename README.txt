@@ -38,6 +38,10 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 == Changelog ==
 
+= 2.3.6.1 =
+* Core update to try reduce bots consumption
+* WooCommerce related products widget fix
+
 = 2.3.6 =
 * Core updates
 * Added php functions for ajax mode
