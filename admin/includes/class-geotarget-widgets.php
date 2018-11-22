@@ -160,6 +160,48 @@ class Geot_Widgets  {
 
 		if( ! empty( $this->geot_opts['ajax_mode'] ) )
 			return $widget_data;
+
+		if ( ! $this->target($widget_data) )
+			return false;
+
+		return $widget_data;
+	}
+
+	/**
+	 * Check if widgets is being targeted and show it if needed
+	 *
+	 * @param $the_widget
+	 * @param $widget_class
+	 * @param $widget_data
+	 *
+	 * @return bool [type] [description]
+	 */
+	public function target_widgets_site_origin( $the_widget, $widget_class, $widget_data = null) {
+
+
+		// don't work in ajax mode
+		if( ! empty( $this->geot_opts['ajax_mode'] ) )
+			return $the_widget;
+
+		if( ! $this->target($widget_data) ) {
+			add_filter( 'siteorigin_panels_missing_widget', '__return_false');
+			return false;
+		}
+
+		return $the_widget;
+
+
+		return $the_widget;
+	}
+
+	/**
+	 * Wrapper target function to avoid repeating code
+	 *
+	 * @param $widget_data
+	 *
+	 * @return bool
+	 */
+	private function target( $widget_data ) {
 		if ( !empty( $widget_data['geot']['region'] ) || !empty( $widget_data['geot']['country_code'] ) || !empty( $widget_data['geot_cities'] ) || !empty( $widget_data['geot_states'] ) ) {
 
 			if ( 'include' == @$widget_data['geot_include_mode'] ) {
@@ -192,8 +234,7 @@ class Geot_Widgets  {
 				}
 			}
 		}
-
-		return $widget_data;
+		return true;
 	}
 
 } // class Geot_Widgets

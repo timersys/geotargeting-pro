@@ -273,6 +273,7 @@ class GeoTarget {
 			// add geot to all widgets
 			$this->loader->add_action( 'in_widget_form', $geot_widgets, 'add_geot_to_widgets', 5, 3 );
 			$this->loader->add_action( 'widget_display_callback', $geot_widgets, 'target_widgets' );
+			$this->loader->add_action( 'siteorigin_panels_widget_object', $geot_widgets, 'target_widgets_site_origin', 10, 3 );
 			$this->loader->add_action( 'widget_update_callback', $geot_widgets, 'save_widgets_data', 5, 3 );
 		}
 		// License and Updates
