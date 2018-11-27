@@ -1,10 +1,8 @@
 <div class="wrap geot-settings">
 	<form name="geot-settings" method="post" enctype="multipart/form-data">
 		<table class="form-table">
-			<tr valign="top" class="">
-				<th colspan="2"><h3><?php _e( 'Geotargeting Pro settings:', 'geot' ); ?></h3></th>
-				<td colspan="2">
-				</td>
+			<tr valign="top" class="geot-settings-title">
+				<th colspan="3"><h3><?php _e( 'Geotargeting Pro settings:', 'geot' ); ?></h3></th>
 			</tr>
 			<tr valign="top" class="">
 				<th><label for="ajax_mode"><?php _e( 'Ajax Mode', 'geot'); ?></label></th>
