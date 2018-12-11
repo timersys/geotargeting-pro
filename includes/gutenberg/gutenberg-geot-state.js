@@ -1,10 +1,3 @@
-var el = wp.element.createElement;
-var Fragment = wp.element.Fragment;
-var { __ } = wp.i18n; // Import __() from wp.i18n
-var { registerBlockType, getBlockTypes } = wp.blocks; // Import registerBlockType() from wp.blocks
-var { InspectorControls, InnerBlocks } = wp.editor;
-var { PanelRow, PanelBody, TextControl } = wp.components;
-
 /**
  * Register: Geotargenting Gutenberg Block.
  *
@@ -22,7 +15,7 @@ var { PanelRow, PanelBody, TextControl } = wp.components;
 registerBlockType( 'geotargeting-pro/gutenberg-state', {
 	title: __( 'Target States' , 'geot' ),
 	description: __( 'Place elements inside this geot container', 'geot' ),
-	icon: el('img', { width: 20, height: 20, src: geotstate.icon }),
+	icon: el('img', { width: 20, height: 20, src: gutgeot.icon_state }),
 	category: 'geot-block',
 	keywords: [ __( 'inner-blocks' ), ],
 
@@ -42,14 +35,9 @@ registerBlockType( 'geotargeting-pro/gutenberg-state', {
 		const { in_states, ex_states } = attributes;
 
 		const ALLOWED_BLOCKS = [];
-		const NOT_ALLOWED_BLOCKS = [
-										'geotargeting-pro/gutenberg-country',
-										'geotargeting-pro/gutenberg-city',
-										'geotargeting-pro/gutenberg-state'
-									];
 
 		getBlockTypes().forEach( function( blockType ) {
-			if( NOT_ALLOWED_BLOCKS.indexOf(blockType.name) == -1 )
+			if( gutgeot.modules.indexOf(blockType.name) == -1 )
 				ALLOWED_BLOCKS.push(blockType.name);
 		} );
 

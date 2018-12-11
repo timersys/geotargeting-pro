@@ -49,7 +49,6 @@ class GeoTarget_Gutenberg {
 		$this->opts = geot_settings();
 	}
 
-
 	public function register_category($categories, $post) {
 
 		return array_merge(
@@ -64,12 +63,16 @@ class GeoTarget_Gutenberg {
 		);
 	}
 
+	/**
+	* Get Regions
+	* @var	string 	$slug_region
+	*/
 	protected function get_regions($slug_region = 'country') {
 
 		$dropdown_values = array();
 
 		switch($slug_region) {
-			case 'city': $regions = geot_city_regions(); break;
+			case 'cities': $regions = geot_city_regions(); break;
 			default: $regions = geot_country_regions();
 		}
 		
@@ -85,20 +88,33 @@ class GeoTarget_Gutenberg {
 	}
 
 
+	/**
+	* Register Blocks
+	* @var
+	*/
 	public function register_init() {
-		register_block_type('geotargeting-pro/gutenberg-country',
-							[ 'render_callback' => [$this, 'save_gutenberg_country'] ]
-		);
 
-		register_block_type('geotargeting-pro/gutenberg-city',
-							[ 'render_callback' => [$this, 'save_gutenberg_city'] ]
-		);
+		if( function_exists('register_block_type') ) {
+			
+			register_block_type('geotargeting-pro/gutenberg-country',
+								[ 'render_callback' => [$this, 'save_gutenberg_country'] ]
+			);
 
-		register_block_type('geotargeting-pro/gutenberg-state',
-							[ 'render_callback' => [$this, 'save_gutenberg_state'] ]
-		);		
+			register_block_type('geotargeting-pro/gutenberg-city',
+								[ 'render_callback' => [$this, 'save_gutenberg_city'] ]
+			);
+
+			register_block_type('geotargeting-pro/gutenberg-state',
+								[ 'render_callback' => [$this, 'save_gutenberg_state'] ]
+			);
+		}
 	}
 
+	/**
+	* Save Country Block
+	* @var	string 	$attributes
+	* @var	string 	$content
+	*/
 	public function save_gutenberg_country($attributes, $content) {
 
 		$in_countries = $ex_countries = $in_regions = $ex_regions = $in_regions_i = $ex_regions_i = '';
@@ -124,6 +140,11 @@ class GeoTarget_Gutenberg {
 		return '';
 	}
 
+	/**
+	* Save City Block
+	* @var	string 	$attributes
+	* @var	string 	$content
+	*/
 	public function save_gutenberg_city($attributes, $content) {
 		$in_cities = $ex_cities = $in_regions = $ex_regions = $in_regions_i = $ex_regions_i = '';
 		
@@ -149,6 +170,11 @@ class GeoTarget_Gutenberg {
 	}
 
 
+	/**
+	* Save State Block
+	* @var	string 	$attributes
+	* @var	string 	$content
+	*/
 	public function save_gutenberg_state($attributes, $content) {
 		$in_states = $ex_states = '';
 		
@@ -168,53 +194,75 @@ class GeoTarget_Gutenberg {
 	}
 
 
+	/**
+	* Register JS Blocks
+	* @var	string 	$attributes
+	* @var	string 	$content
+	*/
 	public function register_block() {
+
+		/********************
+			JS to Geot
+		*********************/
+		$modules_geot = array(
+								'geotargeting-pro/gutenberg-country',
+								'geotargeting-pro/gutenberg-city',
+								'geotargeting-pro/gutenberg-state'
+							);
+
+		$localize_geot = array(
+								'icon_country'		=> GEOT_PLUGIN_URL . '/admin/img/world.png',
+								'icon_city'			=> GEOT_PLUGIN_URL . '/admin/img/cities.png',
+								'icon_state'		=> GEOT_PLUGIN_URL . '/admin/img/states.png',
+								'regions_country'	=> $this->get_regions('countries'),
+								'regions_city'		=> $this->get_regions('cities'),
+								'modules'			=> $modules_geot,
+							);
+
+		wp_enqueue_script(
+			'gutenberg-geo',
+			GEOT_PLUGIN_URL . '/includes/gutenberg/gutenberg-geot.js',
+			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor' ),
+			$this->version,
+			true
+		);
+		wp_localize_script('gutenberg-geo', 'gutgeot', $localize_geot );
+
 
 		/**********************
 			JS to Country
 		***********************/
-		$localize_country = array(
-								'icon'		=> GEOT_PLUGIN_URL . '/admin/img/world.png',
-								'regions'	=> $this->get_regions('countries'),
-							);
-		
 		wp_enqueue_script(
 			'gutenberg-geo-country',
-			GEOT_PLUGIN_URL . '/includes/gutenberg/gutenberg-geot.js',
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor' )
+			GEOT_PLUGIN_URL . '/includes/gutenberg/gutenberg-geot-country.js',
+			array( 'gutenberg-geo' ),
+			$this->version,
+			true
 		);
-
-		wp_localize_script('gutenberg-geo-country', 'geotcountry', $localize_country );
 
 
 		/**********************
 			JS to City
 		***********************/
-		$localize_city = array(
-							'icon'		=> GEOT_PLUGIN_URL . '/admin/img/cities.png',
-							'regions'	=> $this->get_regions('cities'),
-						);
-
 		wp_enqueue_script(
 			'gutenberg-geo-city',
 			GEOT_PLUGIN_URL . '/includes/gutenberg/gutenberg-geot-city.js',
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor' )
+			array( 'gutenberg-geo' ),
+			$this->version,
+			true
+
 		);
-		wp_localize_script('gutenberg-geo-city', 'geotcity', $localize_city );
 
 
 		/**********************
 			JS to State
 		***********************/
-		$localize_state = array(
-							'icon'	=> GEOT_PLUGIN_URL . '/admin/img/states.png',
-						);
-
 		wp_enqueue_script(
 			'gutenberg-geo-state',
 			GEOT_PLUGIN_URL . '/includes/gutenberg/gutenberg-geot-state.js',
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor' )
+			array( 'gutenberg-geo' ),
+			$this->version,
+			true
 		);
-		wp_localize_script('gutenberg-geo-state', 'geotstate', $localize_state );
 	}
 }

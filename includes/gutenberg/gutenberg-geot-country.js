@@ -12,27 +12,35 @@
  *                             registered; otherwise `undefined`.
  */
 
-registerBlockType( 'geotargeting-pro/gutenberg-city', {
-	title: __( 'Target Cities' , 'geot' ),
-	description: __( 'Place elements inside this geot container', 'geot' ),
-	icon: el('img', { width: 20, height: 20, src: gutgeot.icon_city }),
+registerBlockType( 'geotargeting-pro/gutenberg-country', {
+	title: __( 'Target Countries' , 'geot' ),
+	description: __( 'Place elements inside this geot container' , 'geot'),
+	icon: el('img', { width: 20, height: 20, src: gutgeot.icon_country }),
 	category: 'geot-block',
 	keywords: [ __( 'inner-blocks' ), ],
 
 	attributes: {
-		in_cities: {
+		in_countries: {
+			//selector: 'p.include-countries',
+			//source: 'text',
 			type: 'string',
 			default: '',
 		},
 		in_regions: {
+			//selector: 'p.include-regions',
+			//source: 'text',
 			type: 'array',
 			default: [],
 		},
-		ex_cities: {
+		ex_countries: {
+			//selector: 'p.exclude-countries',
+			//source: 'text',
 			type: 'string',
 			default: '',
 		},
 		ex_regions: {
+			//selector: 'p.exclude-regions',
+			//source: 'text',
 			type: 'array',
 			default: [],
 		},
@@ -40,7 +48,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-city', {
 
 	edit: function(props) {
 		const { attributes, setAttributes, className, focus, setFocus } = props;
-		const { in_cities, in_regions, ex_cities, ex_regions } = attributes;
+		const { in_countries, in_regions, ex_countries, ex_regions } = attributes;
 
 		const ALLOWED_BLOCKS = [];
 
@@ -52,12 +60,12 @@ registerBlockType( 'geotargeting-pro/gutenberg-city', {
 		var block_top_msg = __( 'Please, custom this block in settings panel to right side', 'geot' );
 		var block_sign_msg = [];
 
-		function onChangeInCities( newContent ) {
-			setAttributes( { in_cities: newContent } );
+		function onChangeInCountries( newContent ) {
+			setAttributes( { in_countries: newContent } );
 		}
 
-		function onChangeExCities( newContent ) {
-			setAttributes( { ex_cities: newContent } );
+		function onChangeExCountries( newContent ) {
+			setAttributes( { ex_countries: newContent } );
 		}
 
 		function onChangeInRegions( newContent ) {
@@ -68,12 +76,12 @@ registerBlockType( 'geotargeting-pro/gutenberg-city', {
 			setAttributes( { ex_regions: newContent } );
 		}
 
-		if( in_cities ) {
-			block_sign_msg.push(__( 'Include Cities', 'geot' ) + ' : ' + in_cities);
+		if( in_countries ) {
+			block_sign_msg.push(__( 'Include Countries', 'geot' ) + ' : ' + in_countries);
 		}
 
-		if( ex_cities ) {
-			block_sign_msg.push(__( 'Exclude Cities', 'geot' ) + ' : ' + ex_cities);
+		if( ex_countries ) {
+			block_sign_msg.push(__( 'Exclude Countries', 'geot' ) + ' : ' + ex_countries);
 		}
 
 		if( in_regions.length ) {
@@ -90,40 +98,42 @@ registerBlockType( 'geotargeting-pro/gutenberg-city', {
 
 		return el(Fragment, {},
 			el(InspectorControls, {},
-				el(PanelBody, { title: __( 'Target Cities Settings' , 'geot' ) },
+				el(PanelBody, { title: __( 'Target Countries Settings' , 'geot' ) },
 					el(PanelRow, {},
 						el(TextControl, {
-							label : __( 'Include Cities', 'geot' ),
-							value: in_cities,
-							onChange: onChangeInCities,
-							help : __('Type city name. Also you can write a comma separated list of cities', 'geot')
+							label : __( 'Include Countries', 'geot' ),
+							value: in_countries,
+							onChange: onChangeInCountries,
+							help : __('Type country name or ISO code. Also you can write a comma separated list of countries', 'geot')
 						}),
 					),
 					el(PanelRow, {},
 						el(SelectControl, {
-								label: __('Include City Regions', 'geot'),
+								label: __('Include Regions', 'geot'),
 								multiple : true,
-								options : gutgeot.regions_city,
+								options : gutgeot.regions_country,
 								onChange: onChangeInRegions,
+								value: in_regions,
 								help: __('Choose region name to show content to', 'geot'),
 							},
 						),
 					),
 					el(PanelRow, {},
 						el(TextControl, {
-							label : __( 'Exclude Cities', 'geot' ),
-							value: ex_cities,
-							onChange: onChangeExCities,
-							help : __('Type city name. Also you could write a comma separated list of cities', 'geot'),
+							label : __( 'Exclude Countries', 'geot' ),
+							value: ex_countries,
+							onChange: onChangeExCountries,
+							help : __('Type country name or ISO code. Also you could write a comma separated list of countries', 'geot')
 						}),
 					),
 					el(PanelRow, {},
 						el(SelectControl, {
 								label: __('Exclude Regions', 'geot'),
 								multiple : true,
-								options : gutgeot.regions_city,
+								options : gutgeot.regions_country,
 								onChange: onChangeExRegions,
-								help: __('Choose region name to exclude content.', 'geot'),
+								value: ex_regions,
+								help: __('Choose region name to exclude content', 'geot'),
 							},
 						),
 					),
