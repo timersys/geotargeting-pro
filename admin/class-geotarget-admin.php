@@ -78,6 +78,7 @@ class GeoTarget_Admin {
 				$cpt,
 				'normal',
 				'core'
+				//array( '__back_compat_meta_box' => true )
 			);
 
 		}
