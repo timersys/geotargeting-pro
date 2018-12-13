@@ -83,6 +83,8 @@ class GeoTarget_Shortcodes {
 		add_shortcode('geot_time_zone', array( $this, 'geot_show_time_zone') );
 		add_shortcode('geot_lat', array( $this, 'geot_show_lat') );
 		add_shortcode('geot_lng', array( $this, 'geot_show_lng') );
+
+		add_shortcode('geot_dropdown', array( $this, 'geot_dropdown') );
 	}
 
 	/**
@@ -405,5 +407,58 @@ class GeoTarget_Shortcodes {
         }
 
         return $country_name;
+    }
+
+    /**
+	 * Display Widget with flags
+	 * @return string
+	 */
+    public function geot_dropdown($atts) {
+
+    	extract( shortcode_atts( array(
+			'regions'	=> '',
+			'flags'		=> 1,
+		), $atts ) );
+
+    	$region_ids		= array();
+    	$flags_id		= 1;
+    	$saved_regions	= geot_country_regions();
+		$regions 		= !empty($regions) ? explode(',', $regions) : array();
+
+
+		if( !empty($flags) ) {
+			switch($flags) {
+				case 'yes' : $flags_id = 1; break;
+				case 'no' : $flags_id = 2; break;
+				default: $flags_id = 1;
+			}
+		}
+
+		if( !empty($regions) && !empty($saved_regions) ) {
+
+			$all_regions = wp_list_pluck( $saved_regions, 'name' );
+
+			foreach($regions as $nregion) {
+
+				if( is_numeric($nregion) )
+					$region_ids[] = (int)$nregion;
+				else
+					$region_ids[] = (int)array_search($nregion,$all_regions);
+			}
+		}
+
+		$instance = array(
+						'flags'		=> $flags_id,
+						'regions'	=> $region_ids,
+					);
+
+		$args = array('before_widget' => '', 'after_widget' => '');
+
+
+		ob_start();
+     	the_widget( 'Geot_Widget', $instance, $args );
+     	$output = ob_get_clean();
+
+     	return $output;
     }
 }
