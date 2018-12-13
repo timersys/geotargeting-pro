@@ -14,7 +14,7 @@
 
 registerBlockType( 'geotargeting-pro/gutenberg-city', {
 	title: __( 'Target Cities' , 'geot' ),
-	description: __( 'Place elements inside this geot container', 'geot' ),
+	description: __( 'You can place other blocks inside this container', 'geot' ),
 	icon: el('img', { width: 20, height: 20, src: gutgeot.icon_city }),
 	category: 'geot-block',
 	keywords: [ __( 'inner-blocks' ), ],
@@ -49,7 +49,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-city', {
 				ALLOWED_BLOCKS.push(blockType.name);
 		} );
 
-		var block_top_msg = __( 'Please, custom this block in settings panel to right side', 'geot' );
+		var block_top_msg = __( 'You can modify the settings of the block in the sidebar.', 'geot' );
 		var block_sign_msg = [];
 
 		function onChangeInCities( newContent ) {
@@ -90,13 +90,13 @@ registerBlockType( 'geotargeting-pro/gutenberg-city', {
 
 		return el(Fragment, {},
 			el(InspectorControls, {},
-				el(PanelBody, { title: __( 'Target Cities Settings' , 'geot' ) },
+				el(PanelBody, { title: __( 'Target Cities Block' , 'geot' ) },
 					el(PanelRow, {},
 						el(TextControl, {
 							label : __( 'Include Cities', 'geot' ),
 							value: in_cities,
 							onChange: onChangeInCities,
-							help : __('Type city name. Also you can write a comma separated list of cities', 'geot')
+							help : __('Type city names separated by comma.', 'geot')
 						}),
 					),
 					el(PanelRow, {},
@@ -114,7 +114,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-city', {
 							label : __( 'Exclude Cities', 'geot' ),
 							value: ex_cities,
 							onChange: onChangeExCities,
-							help : __('Type city name. Also you could write a comma separated list of cities', 'geot'),
+							help : __('Type city names separated by comma.', 'geot'),
 						}),
 					),
 					el(PanelRow, {},

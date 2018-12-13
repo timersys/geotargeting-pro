@@ -14,33 +14,25 @@
 
 registerBlockType( 'geotargeting-pro/gutenberg-country', {
 	title: __( 'Target Countries' , 'geot' ),
-	description: __( 'Place elements inside this geot container' , 'geot'),
+	description: __( 'You can place other blocks inside this container' , 'geot'),
 	icon: el('img', { width: 20, height: 20, src: gutgeot.icon_country }),
 	category: 'geot-block',
 	keywords: [ __( 'inner-blocks' ), ],
 
 	attributes: {
 		in_countries: {
-			//selector: 'p.include-countries',
-			//source: 'text',
 			type: 'string',
 			default: '',
 		},
 		in_regions: {
-			//selector: 'p.include-regions',
-			//source: 'text',
 			type: 'array',
 			default: [],
 		},
 		ex_countries: {
-			//selector: 'p.exclude-countries',
-			//source: 'text',
 			type: 'string',
 			default: '',
 		},
 		ex_regions: {
-			//selector: 'p.exclude-regions',
-			//source: 'text',
 			type: 'array',
 			default: [],
 		},
@@ -57,7 +49,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-country', {
 				ALLOWED_BLOCKS.push(blockType.name);
 		} );
 
-		var block_top_msg = __( 'Please, custom this block in settings panel to right side', 'geot' );
+		var block_top_msg = __( 'You can modify the settings of the block in the sidebar.', 'geot' );
 		var block_sign_msg = [];
 
 		function onChangeInCountries( newContent ) {
@@ -104,7 +96,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-country', {
 							label : __( 'Include Countries', 'geot' ),
 							value: in_countries,
 							onChange: onChangeInCountries,
-							help : __('Type country name or ISO code. Also you can write a comma separated list of countries', 'geot')
+							help : __('Type country names or ISO codes separated by comma.', 'geot')
 						}),
 					),
 					el(PanelRow, {},
@@ -123,7 +115,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-country', {
 							label : __( 'Exclude Countries', 'geot' ),
 							value: ex_countries,
 							onChange: onChangeExCountries,
-							help : __('Type country name or ISO code. Also you could write a comma separated list of countries', 'geot')
+							help : __('Type country names or ISO codes separated by comma.', 'geot')
 						}),
 					),
 					el(PanelRow, {},

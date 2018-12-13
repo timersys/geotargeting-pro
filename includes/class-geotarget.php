@@ -98,6 +98,10 @@ class GeoTarget {
 	 * @var The Geot plugin instance
 	 */
 	protected static $_instance = null;
+	/**
+	 * @var GeoTarget_Gutenberg
+	 */
+	public $gutenberg;
 
 	/**
 	 * Main Geot Instance

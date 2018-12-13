@@ -14,7 +14,7 @@
 
 registerBlockType( 'geotargeting-pro/gutenberg-state', {
 	title: __( 'Target States' , 'geot' ),
-	description: __( 'Place elements inside this geot container', 'geot' ),
+	description: __( 'You can place other blocks inside this container', 'geot' ),
 	icon: el('img', { width: 20, height: 20, src: gutgeot.icon_state }),
 	category: 'geot-block',
 	keywords: [ __( 'inner-blocks' ), ],
@@ -41,7 +41,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-state', {
 				ALLOWED_BLOCKS.push(blockType.name);
 		} );
 
-		var block_top_msg = __( 'Please, custom this block in settings panel to right side', 'geot' );
+		var block_top_msg = __( 'You can modify the settings of the block in the sidebar.', 'geot' );
 		var block_sign_msg = [];
 
 		function onChangeInStates( newContent ) {
@@ -73,7 +73,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-state', {
 							label : __( 'Include States', 'geot' ),
 							value: in_states,
 							onChange: onChangeInStates,
-							help : __('Type state name or ISO code. Also you can write a comma separated list of states', 'geot')
+							help : __('Type state names or ISO codes separated by comma.', 'geot')
 						}),
 					),
 					el(PanelRow, {},
@@ -81,7 +81,7 @@ registerBlockType( 'geotargeting-pro/gutenberg-state', {
 							label : __( 'Exclude States', 'geot' ),
 							value: ex_states,
 							onChange: onChangeExStates,
-							help : __('Type state name or ISO code. Also you can write a comma separated list of states', 'geot'),
+							help : __('Type state names or ISO codes separated by comma.', 'geot'),
 						}),
 					),
 				),
