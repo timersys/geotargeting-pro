@@ -65,6 +65,7 @@ class Geot_Widget extends WP_Widget {
      	?>
      	<div class="geot_dropdown_container">
      		<select class="geot_dropdown geot-ddslick" name="geot_dropdown" id="geot_dropdown" data-flags="<?php echo $flags;?>">
+		        <option value=""><?= __( 'Change your location', 'geot');?></option>
      			<?php
      				$user_country_in_dropdown = false;
      				foreach ($countries as $c) {
