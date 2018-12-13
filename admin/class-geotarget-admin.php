@@ -73,7 +73,7 @@ class GeoTarget_Admin {
 				continue;
 			add_meta_box(
 				'geot-settings',
-				__( 'GeoTargeting Options', 'geot' ),
+				__( 'GeoTargeting page settings', 'geot' ),
 				array( $this, 'geot_options_view' ),
 				$cpt,
 				'normal',
