@@ -98,10 +98,16 @@ class GeoTarget {
 	 * @var The Geot plugin instance
 	 */
 	protected static $_instance = null;
+	
 	/**
 	 * @var GeoTarget_Gutenberg
 	 */
 	public $gutenberg;
+
+	/**
+	 * @var GeoTarget_Gutenberg
+	 */
+	public $divi;
 
 	/**
 	 * Main Geot Instance
@@ -207,6 +213,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax-shortcodes.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-vc.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-divi.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-gutenberg.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-helpers.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
@@ -304,6 +311,7 @@ class GeoTarget {
 		$this->public   = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version() );
 		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version() );
 		$this->gutenberg = new GeoTarget_Gutenberg( $this->get_GeoTarget(), $this->get_version() );
+		$this->divi = new GeoTarget_Divi( $this->get_GeoTarget(), $this->get_version() );
 		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 		// if we have cache mode, load geotarget now to set session before content
 		if( isset( $this->opts['cache_mode'] ) && $this->opts['cache_mode'] )
@@ -345,6 +353,12 @@ class GeoTarget {
 		$this->loader->add_action( 'init', $this->gutenberg, 'register_init' );
 		$this->loader->add_filter( 'block_categories', $this->gutenberg, 'register_category', 10, 2 );
 		$this->loader->add_action( 'enqueue_block_editor_assets', $this->gutenberg, 'register_block' );
+
+		// Divi
+		//$this->loader->add_action( 'init', $this->divi, 'register_init' );
+		//$this->loader->add_filter('et_pb_section_data_attributes', $this->divi, 'section_attributes', 20, 3 );
+		$this->loader->add_filter('et_builder_ready', $this->divi, 'call_module' );
+
 
 		// Menus
 		if (  empty( $this->geot_opts['disable_menu_integration'] ) )
