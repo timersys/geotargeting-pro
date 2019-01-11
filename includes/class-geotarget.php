@@ -355,10 +355,9 @@ class GeoTarget {
 		$this->loader->add_action( 'enqueue_block_editor_assets', $this->gutenberg, 'register_block' );
 
 		// Divi
-		//$this->loader->add_action( 'init', $this->divi, 'register_init' );
-		//$this->loader->add_filter('et_pb_section_data_attributes', $this->divi, 'section_attributes', 20, 3 );
-		$this->loader->add_filter('et_builder_ready', $this->divi, 'call_module' );
-
+		$this->loader->add_filter('et_builder_main_tabs', $this->divi, 'add_tabs_to_section', 10, 1 );
+		$this->loader->add_filter('et_pb_all_fields_unprocessed_et_pb_section', $this->divi, 'add_field_to_section', 10, 1 );
+		$this->loader->add_filter('et_module_shortcode_output', $this->divi, 'render_section', 10, 3 );
 
 		// Menus
 		if (  empty( $this->geot_opts['disable_menu_integration'] ) )
