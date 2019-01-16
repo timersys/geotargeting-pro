@@ -84,7 +84,7 @@ class GeoTarget_Menus {
 	 *
 	 * @return string
 	 */
-	public function admin_menu_walker( $walker,$menu_id ) {
+	public function admin_menu_walker( $walker = "",$menu_id = "" ) {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geot-admin-menu-walker.php';
 		return 'Geot_Admin_Menu_Walker';
 
