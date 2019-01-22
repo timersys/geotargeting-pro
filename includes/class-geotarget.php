@@ -311,7 +311,7 @@ class GeoTarget {
 		$this->public   = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version() );
 		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version() );
 		$this->gutenberg = new GeoTarget_Gutenberg( $this->get_GeoTarget(), $this->get_version() );
-		$this->divi = new GeoTarget_Divi( $this->get_GeoTarget(), $this->get_version() );
+		$this->divi = new GeoTarget_Divi();
 		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 		// if we have cache mode, load geotarget now to set session before content
 		if( isset( $this->opts['cache_mode'] ) && $this->opts['cache_mode'] )

@@ -11,52 +11,15 @@
 */
 class GeoTarget_Divi {
 
+
 	/**
-	 * @since   1.0.0
-	 * @access  private
-	 * @var     Array of plugin settings
+	 * Get Regions
+	 * @var    string $slug_region
+	 * @return array
 	 */
-	private $opts;
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $GeoTarget    The ID of this plugin.
-	 */
-	private $GeoTarget;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
-
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @var      string    $GeoTarget       The name of this plugin.
-	 * @var      string    $version    The version of this plugin.
-	 */
-	public function __construct( $GeoTarget, $version ) {
-
-		$this->GeoTarget = $GeoTarget;
-		$this->version = $version;
-		$this->opts = geot_settings();
-	}
-
-
-	/**
-	* Get Regions
-	* @var	string 	$slug_region
-	*/
 	protected function get_regions($slug_region = 'country') {
 
-		$dropdown_values = array();
+		$dropdown_values = [];
 
 		switch($slug_region) {
 			case 'city': $regions = geot_city_regions(); break;
@@ -76,9 +39,10 @@ class GeoTarget_Divi {
 
 
 	/**
-	* Register Blocks
-	* @var
-	*/
+	 * Register Tabs
+	 * @var
+	 * @return array
+	 */
 	public function add_tabs_to_section($tabs) {
 
 		$new_tab = [];
@@ -87,6 +51,12 @@ class GeoTarget_Divi {
 		return array_merge($tabs, $new_tab);
 	}
 
+	/**
+	 * Add the actual fields
+	 * @param $fields_unprocessed
+	 *
+	 * @return array
+	 */
 	public function add_field_to_section($fields_unprocessed) {
 
 		$fields = [];
@@ -95,7 +65,6 @@ class GeoTarget_Divi {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type country names or ISO codes separated by comma.', 'geot' ),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -107,7 +76,6 @@ class GeoTarget_Divi {
 						'options'			=> $this->get_regions('country'),
 						//'additional_att'  => 'disable_on',
 						'option_category' => 'configuration',
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -116,7 +84,6 @@ class GeoTarget_Divi {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type country names or ISO codes separated by comma.', 'geot' ),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -126,7 +93,6 @@ class GeoTarget_Divi {
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
 						'options'			=> $this->get_regions('country'),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -136,7 +102,6 @@ class GeoTarget_Divi {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type city names separated by comma.', 'geot' ),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -146,7 +111,6 @@ class GeoTarget_Divi {
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
 						'options'			=> $this->get_regions('city'),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot',
 					];
 
@@ -155,7 +119,6 @@ class GeoTarget_Divi {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type city names separated by comma.', 'geot' ),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -165,7 +128,6 @@ class GeoTarget_Divi {
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
 						'options'			=> $this->get_regions('city'),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -175,7 +137,6 @@ class GeoTarget_Divi {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type state names or ISO codes separated by comma.', 'geot' ),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -184,7 +145,6 @@ class GeoTarget_Divi {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type state names or ISO codes separated by comma.', 'geot' ),
-						//'toggle_slug'		=> 'layout',
 						'tab_slug'			=> 'geot'
 					];
 
@@ -192,25 +152,33 @@ class GeoTarget_Divi {
 	}
 
 
+	/**
+	 * @param $output
+	 * @param $render_slug
+	 * @param $module
+	 *
+	 * @return string
+	 */
 	public function render_section($output, $render_slug, $module) {
-		if( 'et_pb_section' !== $render_slug ) return $output;
+		if( 'et_pb_section' !== $render_slug )
+			return $output;
 
 		$have_countries = $have_cities = $have_states = 0;
-		//$in_reg_countries = $ex_reg_countries = $in_reg_cities = $ex_reg_cities = array();
+		//$in_reg_countries = $ex_reg_countries = $in_reg_cities = $ex_reg_cities = [];
 
 		$geot_opts = geot_pro_settings();
 
-		$in_countries 	= esc_html($module->props['in_country']);
-		$ex_countries 	= esc_html($module->props['ex_country']);
-		$in_cities 		= esc_html($module->props['in_city']);
-		$ex_cities 		= esc_html($module->props['ex_city']);
-		$in_states 		= esc_html($module->props['in_state']);
-		$ex_states 		= esc_html($module->props['ex_state']);
+		$in_countries 	= esc_attr($module->props['in_country']);
+		$ex_countries 	= esc_attr($module->props['ex_country']);
+		$in_cities 		= esc_attr($module->props['in_city']);
+		$ex_cities 		= esc_attr($module->props['ex_city']);
+		$in_states 		= esc_attr($module->props['in_state']);
+		$ex_states 		= esc_attr($module->props['ex_state']);
 
-		$in_reg_countries 	= esc_html($module->props['in_region_country']);
-		$ex_reg_countries 	= esc_html($module->props['ex_region_country']);
-		$in_reg_cities 		= esc_html($module->props['in_region_city']);
-		$ex_reg_cities 		= esc_html($module->props['ex_region_city']);
+		$in_reg_countries 	= esc_attr($module->props['in_region_country']);
+		$ex_reg_countries 	= esc_attr($module->props['ex_region_country']);
+		$in_reg_cities 		= esc_attr($module->props['in_region_city']);
+		$ex_reg_cities 		= esc_attr($module->props['ex_region_city']);
 
 
 		// Countries
@@ -235,7 +203,7 @@ class GeoTarget_Divi {
 		$in_reg_cities 		= $this->format_regions($in_reg_cities,'|', $reg_cities);
 		$ex_reg_cities 		= $this->format_regions($ex_reg_cities,'|', $reg_cities);
 
-
+		// AJAX MODE only allow one geotargeting at a time
 		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
 
 			$commas_in_reg_countries 	= implode(',', $in_reg_countries);
@@ -282,16 +250,23 @@ class GeoTarget_Divi {
 	}
 
 
-
+	/**
+	 * Fromat regions and normalize
+	 * @param $check_multi
+	 * @param string $separator
+	 * @param $regions
+	 *
+	 * @return array
+	 */
 	protected function format_regions($check_multi, $separator = '|', $regions) {
 
 		if( strpos($check_multi, $separator) === false )
-			return array();
+			return [];
 
-		$output_regions = array();
+		$output_regions = [];
 		
 		foreach(explode($separator, $check_multi) as $key => $onoff ) {
-			if( ($onoff == 'on' || $onoff == 'On') && isset($regions[$key]) )
+			if( strtolower($onoff) == 'on'  && isset($regions[$key]) )
 				$output_regions[] = $regions[$key];
 		}
 
