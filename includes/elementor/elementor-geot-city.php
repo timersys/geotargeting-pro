@@ -10,22 +10,22 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 * @subpackage GeoTarget/includes
 * @author     Damian Logghe
 */
-class Elementor_GeoCountry {
+class Elementor_GeoCity {
 
 
 	static function get_fields($control) {
 		
 		$control->start_controls_section(
-			'countries_section',
+			'cities_section',
 			[
-				'label' => __( 'Countries Settings', 'geot' ),
-				'tab' => 'geot',
+				'label' => __( 'Cities Settings', 'geot' ),
+				'tab' => 'geo',
 			]
 		);
 
 
 		$control->add_control(
-			'in_header_countries',
+			'in_header_cities',
 			[
 				'label' => __( 'Include', 'geot' ),
 				'type' => \Elementor\Controls_Manager::HEADING,
@@ -34,20 +34,20 @@ class Elementor_GeoCountry {
 		);
 
 		$control->add_control(
-			'in_help_countries',
+			'in_help_cities',
 			[
 				//'label' => __( 'Important Note', 'geot' ),
 				'type' => \Elementor\Controls_Manager::RAW_HTML,
-				'raw' => __('Type country names or ISO codes separated by commas.', 'geot'),
+				'raw' => __('Type city names separated by commas.', 'geot'),
 				'content_classes' => 'elementor-descriptor',
 			]
 		);
 
 
 		$control->add_control(
-			'in_countries',
+			'in_cities',
 			[
-				'label' => __( 'Countries', 'geot' ),
+				'label' => __( 'Cities', 'geot' ),
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'input_type' => 'text',
 				//'placeholder' => __( 'Choose region name to show content to', 'geot' ),
@@ -56,18 +56,18 @@ class Elementor_GeoCountry {
 
 
 		$control->add_control(
-			'in_regions',
+			'in_regions_cities',
 			[
 				'label' => __( 'Regions', 'geot' ),
 				'type' => \Elementor\Controls_Manager::SELECT2,
 				'multiple' => true,
 				'default' => '',
-				'options' => GeoTarget_Elementor::get_regions('countries'),
+				'options' => GeoTarget_Elementor::get_regions('cities'),
 			]
 		);
 
 		$control->add_control(
-			'ex_header_countries',
+			'ex_header_cities',
 			[
 				'label' => __( 'Exclude', 'geot' ),
 				'type' => \Elementor\Controls_Manager::HEADING,
@@ -76,35 +76,36 @@ class Elementor_GeoCountry {
 		);
 
 		$control->add_control(
-			'ex_help_countries',
+			'ex_help_cities',
 			[
 				'type' => \Elementor\Controls_Manager::RAW_HTML,
-				'raw' => __('Type country names or ISO codes separated by commas.', 'geot'),
+				'raw' => __('Type city names separated by commas.', 'geot'),
 				'content_classes' => 'elementor-descriptor',
 			]
 		);
 
 		$control->add_control(
-			'ex_countries',
+			'ex_cities',
 			[
-				'label' => __( 'Countries', 'geot' ),
+				'label' => __( 'Cities', 'geot' ),
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'input_type' => 'text',
 			]
 		);
 
 		$control->add_control(
-			'ex_regions',
+			'ex_regions_cities',
 			[
 				'label' => __( 'Regions', 'geot' ),
 				'type' => \Elementor\Controls_Manager::SELECT2,
 				'multiple' => true,
 				'default' => '',
-				'options' => GeoTarget_Elementor::get_regions('countries'),
+				'options' => GeoTarget_Elementor::get_regions('cities'),
 			]
 		);
 
 		$control->end_controls_section();
+		
 	}
 
 
@@ -115,18 +116,18 @@ class Elementor_GeoCountry {
 		$in_regions_i = $ex_regions_i = '';
 
 		if( empty($in_countries) && empty($ex_countries) &&
-			empty($in_regions) && empty($ex_regions)
+			empty($in_regions_cities) && empty($ex_regions_cities)
 		) return true;
 
 
-		/*if( is_array($in_regions) && count($in_regions) > 0 )
-			$in_regions_i = implode(',',$in_regions);
+		/*if( is_array($in_regions_cities) && count($in_regions_cities) > 0 )
+			$in_regions_i = implode(',',$in_regions_cities);
 
-		if( is_array($ex_regions) && count($ex_regions) > 0 )
-			$ex_regions_i = implode(',',$ex_regions);*/
+		if( is_array($ex_regions_cities) && count($ex_regions_cities) > 0 )
+			$ex_regions_i = implode(',',$ex_regions_cities);*/
 
 
-		if ( geot_target( $in_countries, $in_regions, $ex_countries, $ex_regions ) )
+		if ( geot_target_city( $in_countries, $in_regions_cities, $ex_countries, $ex_regions_cities ) )
 			return true;
 		
 		return false;

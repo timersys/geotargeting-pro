@@ -357,6 +357,8 @@ class GeoTarget {
 		$this->loader->add_action( 'plugins_loaded', $this->elementor, 'register_init' );
 		$this->loader->add_action( 'elementor/editor/before_enqueue_styles', $this->elementor, 'enqueue_styles' );
 		$this->loader->add_action( 'elementor/element/after_section_end', $this->elementor, 'register_controls', 10, 3 );
+		$this->loader->add_action( 'elementor/frontend/section/should_render', $this->elementor, 'is_render', 10, 2 );
+
 
 
 		// Menus

@@ -10,22 +10,22 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 * @subpackage GeoTarget/includes
 * @author     Damian Logghe
 */
-class Elementor_GeoCountry {
+class Elementor_GeoState {
 
 
 	static function get_fields($control) {
 		
 		$control->start_controls_section(
-			'countries_section',
+			'states_section',
 			[
-				'label' => __( 'Countries Settings', 'geot' ),
-				'tab' => 'geot',
+				'label' => __( 'States Settings', 'geot' ),
+				'tab' => 'geo',
 			]
 		);
 
 
 		$control->add_control(
-			'in_header_countries',
+			'in_header_states',
 			[
 				'label' => __( 'Include', 'geot' ),
 				'type' => \Elementor\Controls_Manager::HEADING,
@@ -34,40 +34,27 @@ class Elementor_GeoCountry {
 		);
 
 		$control->add_control(
-			'in_help_countries',
+			'in_help_states',
 			[
 				//'label' => __( 'Important Note', 'geot' ),
 				'type' => \Elementor\Controls_Manager::RAW_HTML,
-				'raw' => __('Type country names or ISO codes separated by commas.', 'geot'),
+				'raw' => __('Type state names or ISO codes separated by commas.', 'geot'),
 				'content_classes' => 'elementor-descriptor',
 			]
 		);
 
-
 		$control->add_control(
-			'in_countries',
+			'in_states',
 			[
-				'label' => __( 'Countries', 'geot' ),
+				'label' => __( 'States', 'geot' ),
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'input_type' => 'text',
 				//'placeholder' => __( 'Choose region name to show content to', 'geot' ),
 			]
 		);
 
-
 		$control->add_control(
-			'in_regions',
-			[
-				'label' => __( 'Regions', 'geot' ),
-				'type' => \Elementor\Controls_Manager::SELECT2,
-				'multiple' => true,
-				'default' => '',
-				'options' => GeoTarget_Elementor::get_regions('countries'),
-			]
-		);
-
-		$control->add_control(
-			'ex_header_countries',
+			'ex_header_states',
 			[
 				'label' => __( 'Exclude', 'geot' ),
 				'type' => \Elementor\Controls_Manager::HEADING,
@@ -76,35 +63,25 @@ class Elementor_GeoCountry {
 		);
 
 		$control->add_control(
-			'ex_help_countries',
+			'ex_help_states',
 			[
 				'type' => \Elementor\Controls_Manager::RAW_HTML,
-				'raw' => __('Type country names or ISO codes separated by commas.', 'geot'),
+				'raw' => __('Type state names or ISO codes separated by commas.', 'geot'),
 				'content_classes' => 'elementor-descriptor',
 			]
 		);
 
 		$control->add_control(
-			'ex_countries',
+			'ex_states',
 			[
-				'label' => __( 'Countries', 'geot' ),
+				'label' => __( 'States', 'geot' ),
 				'type' => \Elementor\Controls_Manager::TEXT,
 				'input_type' => 'text',
 			]
 		);
 
-		$control->add_control(
-			'ex_regions',
-			[
-				'label' => __( 'Regions', 'geot' ),
-				'type' => \Elementor\Controls_Manager::SELECT2,
-				'multiple' => true,
-				'default' => '',
-				'options' => GeoTarget_Elementor::get_regions('countries'),
-			]
-		);
-
 		$control->end_controls_section();
+
 	}
 
 
@@ -112,21 +89,10 @@ class Elementor_GeoCountry {
 
 		extract( $settings );
 
-		$in_regions_i = $ex_regions_i = '';
-
-		if( empty($in_countries) && empty($ex_countries) &&
-			empty($in_regions) && empty($ex_regions)
+		if( empty($in_states) && empty($ex_states) 
 		) return true;
 
-
-		/*if( is_array($in_regions) && count($in_regions) > 0 )
-			$in_regions_i = implode(',',$in_regions);
-
-		if( is_array($ex_regions) && count($ex_regions) > 0 )
-			$ex_regions_i = implode(',',$ex_regions);*/
-
-
-		if ( geot_target( $in_countries, $in_regions, $ex_countries, $ex_regions ) )
+		if ( geot_target_state( $in_states,  $ex_states ) )
 			return true;
 		
 		return false;
