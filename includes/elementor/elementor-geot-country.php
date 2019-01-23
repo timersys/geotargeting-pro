@@ -12,7 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 */
 class Elementor_GeoCountry {
 
-
+	/**
+	*
+	* Get Fields in the Elementor Admin
+	* @param  Class  $control
+	*
+	*/
 	static function get_fields($control) {
 		
 		$control->start_controls_section(
@@ -108,28 +113,69 @@ class Elementor_GeoCountry {
 	}
 
 
+	/**
+	*
+	* Conditional if it apply a render
+	* @param  Array  $settings
+	*
+	*/
 	static function is_render($settings) {
 
 		extract( $settings );
-
-		$in_regions_i = $ex_regions_i = '';
 
 		if( empty($in_countries) && empty($ex_countries) &&
 			empty($in_regions) && empty($ex_regions)
 		) return true;
 
 
-		/*if( is_array($in_regions) && count($in_regions) > 0 )
-			$in_regions_i = implode(',',$in_regions);
-
-		if( is_array($ex_regions) && count($ex_regions) > 0 )
-			$ex_regions_i = implode(',',$ex_regions);*/
-
-
 		if ( geot_target( $in_countries, $in_regions, $ex_countries, $ex_regions ) )
 			return true;
 		
 		return false;
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML before
+	* @param  Array  $settings
+	*
+	*/
+	static function ajax_before_render($settings) {
+
+		$in_regions_i = $ex_regions_i = '';
+		extract( $settings );
+
+		if( empty($in_countries) && empty($ex_countries) &&
+			empty($in_regions) && empty($ex_regions)
+		) return;
+
+		if( is_array($in_regions) && count($in_regions) > 0 )
+			$in_regions_i = implode(',',$in_regions);
+
+		if( is_array($ex_regions) && count($ex_regions) > 0 )
+			$ex_regions_i = implode(',',$ex_regions);
+
+
+		echo '<div class="geot-ajax geot-filter" data-action="country_filter" data-filter="' . $in_countries . '" data-region="' . $in_regions_i . '" data-ex_filter="' . $ex_countries . '" data-ex_region="' . $ex_regions_i . '">';
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML after
+	* @param  Array  $settings
+	*
+	*/
+	static function ajax_after_render($settings) {
+
+		extract( $settings );
+
+		if( empty($in_countries) && empty($ex_countries) &&
+			empty($in_regions) && empty($ex_regions)
+		) return;
+
+		echo '</div>';
 	}
 	
 }

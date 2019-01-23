@@ -358,6 +358,9 @@ class GeoTarget {
 		$this->loader->add_action( 'elementor/editor/before_enqueue_styles', $this->elementor, 'enqueue_styles' );
 		$this->loader->add_action( 'elementor/element/after_section_end', $this->elementor, 'register_controls', 10, 3 );
 		$this->loader->add_action( 'elementor/frontend/section/should_render', $this->elementor, 'is_render', 10, 2 );
+		$this->loader->add_action( 'elementor/frontend/widget/should_render', $this->elementor, 'is_render', 10, 2 );
+		$this->loader->add_action( 'elementor/frontend/before_render', $this->elementor, 'ajax_before_render', 10, 1);
+		$this->loader->add_action( 'elementor/frontend/after_render', $this->elementor, 'ajax_after_render', 10, 1);
 
 
 

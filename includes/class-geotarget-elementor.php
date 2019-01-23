@@ -48,15 +48,24 @@ class GeoTarget_Elementor {
 
 		//Register Tab
 		\Elementor\Controls_Manager::add_tab(
-			'geo',
+			'geot',
 			__( 'Geotargeting', 'geot' )
 		);
+
+		global $geot_widgets;
+		$GLOBALS['geot_widgets'] = array();
+
+		require_once GEOT_PLUGIN_DIR . 'includes/elementor/elementor-geot-country.php';
+		require_once GEOT_PLUGIN_DIR . 'includes/elementor/elementor-geot-city.php';
+		require_once GEOT_PLUGIN_DIR . 'includes/elementor/elementor-geot-state.php';
 	}
 
 
 	/**
+	*
 	* Get Regions
 	* @param	string 	$slug_region
+	*
 	*/
 	static function get_regions($slug_region = 'countries') {
 
@@ -86,8 +95,17 @@ class GeoTarget_Elementor {
 	* @param	array 	$args
 	*/
 	public function register_controls($control, $section_id, $args) {
+		global $geot_register, $geot_widgets;
 
-		if( $control->get_name() == 'section' && $section_id == 'section_custom_css_pro' ) {
+		if( !in_array($control->get_name(), $GLOBALS['geot_widgets']) )
+			$GLOBALS['geot_register'] = true;
+
+
+		if( $GLOBALS['geot_register'] ) {
+		
+			$GLOBALS['geot_register'] = false;
+			$GLOBALS['geot_widgets'][] = $control->get_name();
+
 			Elementor_GeoCountry::get_fields($control);
 			Elementor_GeoCity::get_fields($control);
 			Elementor_GeoState::get_fields($control);
@@ -97,18 +115,66 @@ class GeoTarget_Elementor {
 
 	/**
 	* Is Render in the front
-	* @param	string 	$should_render
-	* @element	class 	$element
+	* @param	String 	$should_render
+	* @param	Class 	$element
 	*/
 	public function is_render($should_render, $element) {
 
+		$geot_opts = geot_pro_settings();
 		$settings = $element->get_settings_for_display();
 
-		if( !Elementor_GeoCountry::is_render($settings) ||
-			!Elementor_GeoCity::is_render($settings) ||
-			!Elementor_GeoState::is_render($settings)
-		) return false;
+		if( !isset( $geot_opts['ajax_mode'] ) || $geot_opts['ajax_mode'] != '1' ) {
+
+			if( !Elementor_GeoCountry::is_render($settings) ||
+				!Elementor_GeoCity::is_render($settings) ||
+				!Elementor_GeoState::is_render($settings)
+			) return false;
+		}
 
 		return $should_render;
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML before
+	* @param 	Class 	$element
+	*
+	*/
+	public function ajax_before_render($element) {
+
+		$geot_opts = geot_pro_settings();
+		$settings = $element->get_active_settings();
+
+		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
+
+			Elementor_GeoCountry::ajax_before_render($settings);
+			Elementor_GeoCity::ajax_before_render($settings);
+			Elementor_GeoState::ajax_before_render($settings);
+
+		}
+
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML after
+	* @param 	Class 	$element
+	*
+	*/
+	public function ajax_after_render($element) {
+
+		$geot_opts = geot_pro_settings();
+		$settings = $element->get_active_settings();
+
+		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
+			
+			Elementor_GeoCountry::ajax_after_render($settings);
+			Elementor_GeoCity::ajax_after_render($settings);
+			Elementor_GeoState::ajax_after_render($settings);
+
+		}
+
 	}
 }

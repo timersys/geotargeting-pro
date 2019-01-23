@@ -12,14 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 */
 class Elementor_GeoCity {
 
-
+	/**
+	*
+	* Get Fields in the Elementor Admin
+	* @param  Class  $control
+	*
+	*/
 	static function get_fields($control) {
 		
 		$control->start_controls_section(
 			'cities_section',
 			[
 				'label' => __( 'Cities Settings', 'geot' ),
-				'tab' => 'geo',
+				'tab' => 'geot',
 			]
 		);
 
@@ -109,28 +114,72 @@ class Elementor_GeoCity {
 	}
 
 
+	/**
+	*
+	* Conditional if it apply a render
+	* @param  Array  $settings
+	*
+	*/
 	static function is_render($settings) {
 
 		extract( $settings );
 
-		$in_regions_i = $ex_regions_i = '';
+		//$in_regions_i = $ex_regions_i = '';
 
-		if( empty($in_countries) && empty($ex_countries) &&
+		if( empty($in_cities) && empty($ex_cities) &&
 			empty($in_regions_cities) && empty($ex_regions_cities)
 		) return true;
 
 
-		/*if( is_array($in_regions_cities) && count($in_regions_cities) > 0 )
-			$in_regions_i = implode(',',$in_regions_cities);
-
-		if( is_array($ex_regions_cities) && count($ex_regions_cities) > 0 )
-			$ex_regions_i = implode(',',$ex_regions_cities);*/
-
-
-		if ( geot_target_city( $in_countries, $in_regions_cities, $ex_countries, $ex_regions_cities ) )
+		if ( geot_target_city( $in_cities, $in_regions_cities, $ex_cities, $ex_regions_cities ) )
 			return true;
 		
 		return false;
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML before
+	* @param  Array  $settings
+	*
+	*/
+	static function ajax_before_render($settings) {
+
+		$in_regions_i = $ex_regions_i = '';
+		extract( $settings );
+
+		if( empty($in_cities) && empty($ex_cities) &&
+			empty($in_regions_cities) && empty($ex_regions_cities)
+		) return;
+
+		
+		if( is_array($in_regions_cities) && count($in_regions_cities) > 0 )
+			$in_regions_i = implode( ',', $in_regions_cities );
+
+		if( is_array($ex_regions_cities) && count($ex_regions_cities) > 0 )
+			$ex_regions_i = implode( ',', $ex_regions_cities );
+
+
+		echo '<div class="geot-ajax geot-filter" data-action="city_filter" data-filter="' . $in_cities . '" data-region="' . $in_regions_i . '" data-ex_filter="' . $ex_cities . '" data-ex_region="' . $ex_regions_i . '">';
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML after
+	* @param  Array  $settings
+	*
+	*/
+	static function ajax_after_render($settings) {
+		
+		extract( $settings );
+
+		if( empty($in_cities) && empty($ex_cities) &&
+			empty($in_regions_cities) && empty($ex_regions_cities)
+		) return;
+
+		echo '</div>';
 	}
 	
 }

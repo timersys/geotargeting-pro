@@ -13,13 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class Elementor_GeoState {
 
 
+	/**
+	*
+	* Get Fields in the Elementor Admin
+	* @param  Class  $control
+	*
+	*/
 	static function get_fields($control) {
 		
 		$control->start_controls_section(
 			'states_section',
 			[
 				'label' => __( 'States Settings', 'geot' ),
-				'tab' => 'geo',
+				'tab' => 'geot',
 			]
 		);
 
@@ -85,6 +91,12 @@ class Elementor_GeoState {
 	}
 
 
+	/**
+	*
+	* Conditional if it apply a render
+	* @param  Array  $settings
+	*
+	*/
 	static function is_render($settings) {
 
 		extract( $settings );
@@ -96,6 +108,40 @@ class Elementor_GeoState {
 			return true;
 		
 		return false;
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML before
+	* @param  Array  $settings
+	*
+	*/
+	static function ajax_before_render($settings) {
+
+		extract( $settings );
+
+		if( empty($in_states) && empty($ex_states) )
+			return;
+
+		echo '<div class="geot-ajax geot-filter" data-action="state_filter" data-filter="' . $in_states . '" data-ex_filter="' . $ex_states . '">';
+	}
+
+
+	/**
+	*
+	* To Ajax mode, print HTML after
+	* @param  Array  $settings
+	*
+	*/
+	static function ajax_after_render($settings) {
+		
+		extract( $settings );
+
+		if( empty($in_states) && empty($ex_states) )
+			return;
+
+		echo '</div>';
 	}
 	
 }
