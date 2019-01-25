@@ -68,18 +68,48 @@ class Divi_GeoCity {
 
 		extract( $settings );
 
+		$in_regions = GeoTarget_Divi::format_regions($in_region_cities,'|', $regions);
+		$ex_regions = GeoTarget_Divi::format_regions($ex_region_cities,'|', $regions);
+
 		if( empty($in_cities) && empty($ex_cities) &&
-			empty($in_region_cities) && empty($ex_region_cities)
+			count($in_regions) == 0 && count($ex_regions) == 0
 		) return true;
 
 
-		$in_reg_countries = GeoTarget_Divi::format_regions($in_region_cities,'|', $regions);
-		$ex_reg_countries = GeoTarget_Divi::format_regions($ex_region_cities,'|', $regions);
-
-		if ( geot_target_city( $in_cities, $in_reg_countries, $ex_cities, $ex_reg_countries ) )
+		if ( geot_target_city( $in_cities, $in_regions, $ex_cities, $ex_regions ) )
 			return true;
 		
 		return false;
+	}
+
+
+	/**
+	 * if is ajax, apply render
+	 *
+	 * @return array
+	 */
+	static function ajax_render($settings, $regions, $output) {
+
+		$in_regions_commas = $ex_regions_commas = '';
+		
+		extract( $settings );
+
+		$in_regions = GeoTarget_Divi::format_regions($in_region_cities,'|', $regions);
+		$ex_regions = GeoTarget_Divi::format_regions($ex_region_cities,'|', $regions);
+
+		if( empty($in_cities) && empty($ex_cities) &&
+			count($in_regions) == 0 && count($ex_regions) == 0
+		) return $output;
+
+
+		if( count($in_regions) > 0 )
+			$in_regions_commas = implode(',',$in_regions);
+
+		if( count($ex_regions) > 0 )
+			$ex_regions_commas = implode(',',$ex_regions);
+
+
+		return '<div class="geot-ajax geot-filter" data-action="city_filter" data-filter="' . $in_cities . '" data-region="' . $in_regions_commas . '" data-ex_filter="' . $ex_cities . '" data-ex_region="' . $ex_regions_commas . '">' . $output . '</div>';
 	}
 
 }

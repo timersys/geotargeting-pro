@@ -60,4 +60,21 @@ class Divi_GeoState {
 		return false;
 	}
 
+
+	/**
+	 * if is ajax, apply render
+	 *
+	 * @return array
+	 */
+	static function ajax_render($settings, $output) {
+		
+		extract( $settings );
+
+		if( empty($in_states) && empty($ex_states) )
+			return $output;
+
+
+		return '<div class="geot-ajax geot-filter" data-action="state_filter" data-filter="' . $in_states . '" data-ex_filter="' . $ex_states . '">' . $output . '</div>';
+	}
+
 }

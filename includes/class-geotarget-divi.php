@@ -163,119 +163,34 @@ class GeoTarget_Divi {
 	 */
 	public function render($output, $render_slug, $module) {
 
-		$reg_countries 	= array_values($this->get_regions('country'));
-		$reg_cities 	= array_values($this->get_regions('city'));
+		/*if( 'et_pb_section' !== $render_slug )
+			return $output;*/
 
 		$geot_opts = geot_pro_settings();
+		$reg_countries 	= array_values(self::get_regions('country'));
+		$reg_cities 	= array_values(self::get_regions('city'));
+
 
 		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
 
+			$output = Divi_GeoState::ajax_render($module->props, $output);
+			$output = Divi_GeoCity::ajax_render($module->props, $reg_countries, $output);
+			$output = Divi_GeoCountry::ajax_render($module->props, $reg_countries, $output);
+
 		} else {
 
-			if( !Elementor_GeoCountry::is_render($module->props, $reg_countries) ||
-				!Elementor_GeoCity::is_render($module->props, $reg_cities) ||
-				!Elementor_GeoState::is_render($module->props)
+			if( !Divi_GeoCountry::is_render($module->props, $reg_countries) ||
+				!Divi_GeoCity::is_render($module->props, $reg_cities) ||
+				!Divi_GeoState::is_render($module->props)
 			) return '';
-
-
-			return $output;
 		}
 
-
-
-
-		if( 'et_pb_section' !== $render_slug )
-			return $output;
-
-		$have_countries = $have_cities = $have_states = 0;
-		//$in_reg_countries = $ex_reg_countries = $in_reg_cities = $ex_reg_cities = [];
-
-		$geot_opts = geot_pro_settings();
-
-		$in_countries 	= esc_attr($module->props['in_country']);
-		$ex_countries 	= esc_attr($module->props['ex_country']);
-		$in_cities 		= esc_attr($module->props['in_city']);
-		$ex_cities 		= esc_attr($module->props['ex_city']);
-		$in_states 		= esc_attr($module->props['in_state']);
-		$ex_states 		= esc_attr($module->props['ex_state']);
-
-		$in_reg_countries 	= esc_attr($module->props['in_region_country']);
-		$ex_reg_countries 	= esc_attr($module->props['ex_region_country']);
-		$in_reg_cities 		= esc_attr($module->props['in_region_city']);
-		$ex_reg_cities 		= esc_attr($module->props['ex_region_city']);
-
-
-		// Countries
-		if( !empty($in_countries) || !empty($ex_countries) ||
-			!empty($in_reg_countries) || !empty($ex_reg_countries)
-		) $have_countries = 1;
-
-		// Cities
-		if( !empty($in_cities) || !empty($ex_cities) ||
-			!empty($in_reg_cities) || !empty($ex_reg_cities)
-		) $have_cities = 1;
-	
-		// States
-		if( !empty($in_states) || !empty($ex_states) )
-			$have_states = 1;
-
-		$reg_countries = array_values($this->get_regions('country'));
-		$reg_cities = array_values($this->get_regions('city'));
-
-		$in_reg_countries 	= $this->format_regions($in_reg_countries,'|', $reg_countries);
-		$ex_reg_countries 	= $this->format_regions($ex_reg_countries,'|', $reg_countries);
-		$in_reg_cities 		= $this->format_regions($in_reg_cities,'|', $reg_cities);
-		$ex_reg_cities 		= $this->format_regions($ex_reg_cities,'|', $reg_cities);
-
-		// AJAX MODE only allow one geotargeting at a time
-		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
-
-			$commas_in_reg_countries 	= implode(',', $in_reg_countries);
-			$commas_ex_reg_countries 	= implode(',', $ex_reg_countries);
-			$commas_in_reg_cities 		= implode(',', $in_reg_cities);
-			$commas_ex_reg_cities 		= implode(',', $ex_reg_cities);
-
-			// States
-			if( $have_states == 1 )
-				$output = '<div class="geot-ajax geot-filter" data-action="state_filter" data-filter="' . $in_states . '" data-ex_filter="' . $ex_states . '">' . $output . '</div>';
-
-			// Cities
-			if( $have_cities == 1 )
-				$output = '<div class="geot-ajax geot-filter" data-action="city_filter" data-filter="' . $in_cities . '" data-region="' . $commas_in_reg_cities . '" data-ex_filter="' . $ex_cities . '" data-ex_region="' . $commas_ex_reg_cities . '">' .  $output . '</div>';
-
-			// Countries
-			if( $have_countries == 1 )
-				$output = '<div class="geot-ajax geot-filter" data-action="country_filter" data-filter="' . $in_countries . '" data-region="' . $commas_in_reg_countries . '" data-ex_filter="' . $ex_countries . '" data-ex_region="' . $commas_ex_reg_countries . '">' .  $output  . '</div>';
-
-			return $output;
-
-		} else {
-
-			$have_total = $have_countries + $have_cities + $have_states;
-			$inside = 0;
-
-			if( $have_countries == 1 &&
-				geot_target( $in_countries, $in_reg_countries, $ex_countries, $ex_reg_countries ) )
-				$inside++;
-
-			if( $have_cities == 1 &&
-				geot_target_city( $in_cities, $in_reg_cities, $ex_cities, $ex_reg_cities ) )
-				$inside++;
-
-			if( $have_states == 1 &&
-				geot_target_state( $in_states, $ex_states ) )
-				$inside++;
-
-			if( $inside == $have_total )
-				return $output;
-		}
-
-		return '';
+		return $output;
 	}
 
 
 	/**
-	 * Fromat regions and normalize
+	 * Format regions and normalize
 	 * @param $check_multi
 	 * @param string $separator
 	 * @param $regions
@@ -284,13 +199,13 @@ class GeoTarget_Divi {
 	 */
 	static function format_regions($check_multi, $separator = '|', $regions) {
 
-		if( strpos($check_multi, $separator) === false )
+		if( empty($check_multi) || empty($regions) || strpos($check_multi, $separator) === false )
 			return [];
 
 		$output_regions = [];
 		
 		foreach(explode($separator, $check_multi) as $key => $onoff ) {
-			if( strtolower($onoff) == 'on'  && isset($regions[$key]) )
+			if( strtolower($onoff) == 'on' && isset($regions[$key]) )
 				$output_regions[] = $regions[$key];
 		}
 
