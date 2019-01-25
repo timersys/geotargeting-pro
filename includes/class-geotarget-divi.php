@@ -13,11 +13,82 @@ class GeoTarget_Divi {
 
 
 	/**
-	 * Get Regions
-	 * @var    string $slug_region
+	 * Get Modules
 	 * @return array
 	 */
-	protected function get_regions($slug_region = 'country') {
+	public function get_modules() {
+
+		$array_modules = array(
+							'et_pb_section',
+							'et_pb_row',
+							'et_pb_row_inner',
+							'et_pb_column',
+							'et_pb_accordion',
+							'et_pb_audio',
+							'et_pb_counters',
+							'et_pb_blog',
+							'et_pb_blurb',
+							'et_pb_button',
+							'et_pb_circle_counter',
+							'et_pb_code',
+							'et_pb_comments',
+							'et_pb_contact_form',
+							'et_pb_countdown_timer',
+							'et_pb_cta',
+							'et_pb_divider',
+							'et_pb_filterable_portfolio',
+							'et_pb_fullwidth_code',
+							'et_pb_fullwidth_header',
+							'et_pb_fullwidth_image',
+							'et_pb_fullwidth_map',
+							'et_pb_fullwidth_menu',
+							'et_pb_fullwidth_portfolio',
+							'et_pb_fullwidth_post_slider',
+							'et_pb_fullwidth_post_title',
+							'et_pb_fullwidth_slider',
+							'et_pb_gallery',
+							'et_pb_image',
+							'et_pb_login',
+							'et_pb_map',
+							'et_pb_number_counter',
+							'et_pb_portfolio',
+							'et_pb_post_slider',
+							'et_pb_post_title',
+							'et_pb_post_nav',
+							'et_pb_pricing_tables',
+							'et_pb_search',
+							'et_pb_shop',
+							'et_pb_sidebar',
+							'et_pb_signup',
+							'et_pb_slider',
+							'et_pb_social_media_follow',
+							'et_pb_tabs',
+							'et_pb_team_member',
+							'et_pb_testimonial',
+							'et_pb_text',
+							'et_pb_toggle',
+							'et_pb_video',
+							'et_pb_video_slider',
+							'et_pb_accordion_item',
+							'et_pb_counter',
+							'et_pb_contact_field',
+							'et_pb_map_pin',
+							'et_pb_pricing_table',
+							'et_pb_signup_custom_field',
+							'et_pb_slide',
+							'et_pb_social_media_follow_network',
+							'et_pb_tab',
+						);
+
+		return apply_filters('geot/divi/get_modules', $array_modules);
+	}
+
+	/**
+	 * Get Regions
+	 * @param  string $slug_region
+	 * @return array
+	 */
+	static function get_regions($slug_region = 'country') {
 
 		$dropdown_values = [];
 
@@ -39,16 +110,28 @@ class GeoTarget_Divi {
 
 
 	/**
+	 * Module Init
+	 *
+	 * @return array
+	 */
+	public function module_init() {
+		require_once GEOT_PLUGIN_DIR . 'includes/divi/divi-geot-country.php';
+		require_once GEOT_PLUGIN_DIR . 'includes/divi/divi-geot-city.php';
+		require_once GEOT_PLUGIN_DIR . 'includes/divi/divi-geot-state.php';
+	}
+
+
+	/**
 	 * Register Tabs
 	 * @var
 	 * @return array
 	 */
-	public function add_tabs_to_section($tabs) {
+	public function add_tabs($tabs) {
 
 		$new_tab = [];
 		$new_tab['geot'] = esc_html__( 'Geotargeting', 'geot' );
 
-		return array_merge($tabs, $new_tab);
+		return apply_filters( 'geot/divi/add_tabs', array_merge($tabs, $new_tab) );
 	}
 
 	/**
@@ -57,98 +140,17 @@ class GeoTarget_Divi {
 	 *
 	 * @return array
 	 */
-	public function add_field_to_section($fields_unprocessed) {
+	public function get_fields($fields_unprocessed) {
 
-		$fields = [];
-		$fields['in_country'] = [
-						'label'				=> esc_html__('Include Countries','geot'),
-						'type'				=> 'text',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type country names or ISO codes separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
-					];
+		$fields_geot = [];
 
-		$fields['in_region_country'] = [
-						'label'				=> esc_html__('Include Country Regions','geot'),
-						'type'				=> 'multiple_checkboxes',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
-						'options'			=> $this->get_regions('country'),
-						//'additional_att'  => 'disable_on',
-						'option_category' => 'configuration',
-						'tab_slug'			=> 'geot'
-					];
+		$fields_country = Divi_GeoCountry::get_fields();
+		$fields_city 	= Divi_GeoCity::get_fields();
+		$fields_states 	= Divi_GeoState::get_fields();
 
-		$fields['ex_country'] = [
-						'label'				=> esc_html__('Exclude Countries','geot'),
-						'type'				=> 'text',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type country names or ISO codes separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
-					];
+		$fields_geot = array_merge($fields_unprocessed, $fields_country, $fields_city, $fields_states);
 
-		$fields['ex_region_country'] = [
-						'label'				=> esc_html__('Exclude Country Regions','geot'),
-						'type'				=> 'multiple_checkboxes',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
-						'options'			=> $this->get_regions('country'),
-						'tab_slug'			=> 'geot'
-					];
-
-
-		$fields['in_city'] = [
-						'label'				=> esc_html__('Include Cities','geot'),
-						'type'				=> 'text',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type city names separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
-					];
-
-		$fields['in_region_city'] = [
-						'label'				=> esc_html__('Include City Regions','geot'),
-						'type'				=> 'multiple_checkboxes',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
-						'options'			=> $this->get_regions('city'),
-						'tab_slug'			=> 'geot',
-					];
-
-		$fields['ex_city'] = [
-						'label'				=> esc_html__('Exclude Cities','geot'),
-						'type'				=> 'text',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type city names separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
-					];
-
-		$fields['ex_region_city'] = [
-						'label'				=> esc_html__('Exclude City Regions','geot'),
-						'type'				=> 'multiple_checkboxes',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
-						'options'			=> $this->get_regions('city'),
-						'tab_slug'			=> 'geot'
-					];
-
-
-		$fields['in_state'] = [
-						'label'				=> esc_html__('Include States','geot'),
-						'type'				=> 'text',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type state names or ISO codes separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
-					];
-
-		$fields['ex_state'] = [
-						'label'				=> esc_html__('Exclude States','geot'),
-						'type'				=> 'text',
-						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type state names or ISO codes separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
-					];
-
-		return array_merge($fields_unprocessed,$fields);
+		return apply_filters( 'geot/divi/get_fields', $fields_geot );
 	}
 
 
@@ -159,7 +161,13 @@ class GeoTarget_Divi {
 	 *
 	 * @return string
 	 */
-	public function render_section($output, $render_slug, $module) {
+	public function render($output, $render_slug, $module) {
+
+
+
+
+
+
 		if( 'et_pb_section' !== $render_slug )
 			return $output;
 
@@ -272,6 +280,5 @@ class GeoTarget_Divi {
 
 		return $output_regions;
 	}
-
 
 }
