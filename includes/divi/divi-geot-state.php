@@ -21,7 +21,7 @@ class Divi_GeoState {
 	 */
 	static function get_fields() {
 
-		$fields['in_state'] = [
+		$fields['in_states'] = [
 						'label'				=> esc_html__('Include States','geot'),
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
@@ -29,7 +29,7 @@ class Divi_GeoState {
 						'tab_slug'			=> 'geot'
 					];
 
-		$fields['ex_state'] = [
+		$fields['ex_states'] = [
 						'label'				=> esc_html__('Exclude States','geot'),
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
@@ -40,5 +40,24 @@ class Divi_GeoState {
 		return $fields;
 	}
 
+
+	/**
+	 * Add the actual fields
+	 *
+	 * @return array
+	 */
+	static function is_render($settings) {
+
+		extract( $settings );
+
+		if( empty($in_states) && empty($ex_states) )
+			return true;
+
+
+		if ( geot_target_state( $in_states, $ex_states ) )
+			return true;
+		
+		return false;
+	}
 
 }

@@ -163,7 +163,23 @@ class GeoTarget_Divi {
 	 */
 	public function render($output, $render_slug, $module) {
 
+		$reg_countries 	= array_values($this->get_regions('country'));
+		$reg_cities 	= array_values($this->get_regions('city'));
 
+		$geot_opts = geot_pro_settings();
+
+		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
+
+		} else {
+
+			if( !Elementor_GeoCountry::is_render($module->props, $reg_countries) ||
+				!Elementor_GeoCity::is_render($module->props, $reg_cities) ||
+				!Elementor_GeoState::is_render($module->props)
+			) return '';
+
+
+			return $output;
+		}
 
 
 
@@ -266,7 +282,7 @@ class GeoTarget_Divi {
 	 *
 	 * @return array
 	 */
-	protected function format_regions($check_multi, $separator = '|', $regions) {
+	static function format_regions($check_multi, $separator = '|', $regions) {
 
 		if( strpos($check_multi, $separator) === false )
 			return [];

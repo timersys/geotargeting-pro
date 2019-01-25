@@ -21,7 +21,7 @@ class Divi_GeoCountry {
 	 */
 	static function get_fields() {
 
-		$fields['in_country'] = [
+		$fields['in_countries'] = [
 						'label'             => esc_html__('Include Countries','geot'),
 						'type'              => 'text',
 						'option_category'   => 'configuration',
@@ -29,7 +29,7 @@ class Divi_GeoCountry {
 						'tab_slug'          => 'geot'
 					];
 
-		$fields['in_region_country'] = [
+		$fields['in_region_countries'] = [
 						'label'             => esc_html__('Include Country Regions','geot'),
 						'type'              => 'multiple_checkboxes',
 						'option_category'   => 'configuration',
@@ -39,7 +39,7 @@ class Divi_GeoCountry {
 						'tab_slug'          => 'geot'
 					];
 
-		$fields['ex_country'] = [
+		$fields['ex_countries'] = [
 						'label'             => esc_html__('Exclude Countries','geot'),
 						'type'              => 'text',
 						'option_category'   => 'configuration',
@@ -47,7 +47,7 @@ class Divi_GeoCountry {
 						'tab_slug'          => 'geot'
 					];
 
-		$fields['ex_region_country'] = [
+		$fields['ex_region_countries'] = [
 						'label'             => esc_html__('Exclude Country Regions','geot'),
 						'type'              => 'multiple_checkboxes',
 						'option_category'   => 'configuration',
@@ -59,5 +59,28 @@ class Divi_GeoCountry {
 		return $fields;
 	}
 
+
+	/**
+	 * Add the actual fields
+	 *
+	 * @return array
+	 */
+	static function is_render($settings, $regions) {
+
+		extract( $settings );
+
+		if( empty($in_countries) && empty($ex_countries) &&
+			empty($in_region_countries) && empty($ex_region_countries)
+		) return true;
+
+
+		$in_reg_countries = GeoTarget_Divi::format_regions($in_region_countries,'|', $regions);
+		$ex_reg_countries = GeoTarget_Divi::format_regions($ex_region_countries,'|', $regions);
+
+		if ( geot_target( $in_countries, $in_reg_countries, $ex_countries, $ex_reg_countries ) )
+			return true;
+		
+		return false;
+	}
 
 }
