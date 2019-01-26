@@ -26,7 +26,7 @@ class Divi_GeoCity {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type city names separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
+						'tab_slug'			=> 'geot',
 					];
 
 		$fields['in_region_cities'] = [
@@ -43,7 +43,7 @@ class Divi_GeoCity {
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Type city names separated by comma.', 'geot' ),
-						'tab_slug'			=> 'geot'
+						'tab_slug'			=> 'geot',
 					];
 
 		$fields['ex_region_cities'] = [
@@ -52,7 +52,7 @@ class Divi_GeoCity {
 						'option_category'	=> 'configuration',
 						'description'		=> esc_html__( 'Choose region name to show content to.', 'geot' ),
 						'options'			=> GeoTarget_Divi::get_regions('city'),
-						'tab_slug'			=> 'geot'
+						'tab_slug'			=> 'geot',
 					];
 
 		return $fields;

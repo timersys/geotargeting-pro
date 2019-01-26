@@ -118,6 +118,7 @@ class GeoTarget_Divi {
 		require_once GEOT_PLUGIN_DIR . 'includes/divi/divi-geot-country.php';
 		require_once GEOT_PLUGIN_DIR . 'includes/divi/divi-geot-city.php';
 		require_once GEOT_PLUGIN_DIR . 'includes/divi/divi-geot-state.php';
+		require_once GEOT_PLUGIN_DIR . 'includes/divi/divi-geot-zipcode.php';
 	}
 
 
@@ -144,11 +145,18 @@ class GeoTarget_Divi {
 
 		$fields_geot = [];
 
-		$fields_country = Divi_GeoCountry::get_fields();
-		$fields_city 	= Divi_GeoCity::get_fields();
-		$fields_states 	= Divi_GeoState::get_fields();
+		$fields_country 	= Divi_GeoCountry::get_fields();
+		$fields_city 		= Divi_GeoCity::get_fields();
+		$fields_states 		= Divi_GeoState::get_fields();
+		$fields_zipcodes	= Divi_GeoZipcode::get_fields();
 
-		$fields_geot = array_merge($fields_unprocessed, $fields_country, $fields_city, $fields_states);
+		$fields_geot = array_merge(
+								$fields_unprocessed,
+								$fields_country,
+								$fields_city,
+								$fields_states,
+								$fields_zipcodes
+							);
 
 		return apply_filters( 'geot/divi/get_fields', $fields_geot );
 	}
@@ -173,6 +181,7 @@ class GeoTarget_Divi {
 
 		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
 
+			$output = Divi_GeoZipcode::ajax_render($module->props, $output);
 			$output = Divi_GeoState::ajax_render($module->props, $output);
 			$output = Divi_GeoCity::ajax_render($module->props, $reg_countries, $output);
 			$output = Divi_GeoCountry::ajax_render($module->props, $reg_countries, $output);
@@ -181,7 +190,8 @@ class GeoTarget_Divi {
 
 			if( !Divi_GeoCountry::is_render($module->props, $reg_countries) ||
 				!Divi_GeoCity::is_render($module->props, $reg_cities) ||
-				!Divi_GeoState::is_render($module->props)
+				!Divi_GeoState::is_render($module->props) ||
+				!Divi_GeoZipcode::is_render($module->props)
 			) return '';
 		}
 

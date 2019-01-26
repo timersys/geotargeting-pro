@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 * @author     Damian Logghe
 */
 
-class Divi_GeoState {
+class Divi_GeoZipcode {
 
 	/**
 	 * Add the actual fields
@@ -21,19 +21,19 @@ class Divi_GeoState {
 	 */
 	static function get_fields() {
 
-		$fields['in_states'] = [
-						'label'				=> esc_html__('Include States','geot'),
+		$fields['in_zipcodes'] = [
+						'label'				=> esc_html__('Include ZipCodes','geot'),
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type state names or ISO codes separated by comma.', 'geot' ),
+						'description'		=> esc_html__( 'Type zip codes separated by comma.', 'geot' ),
 						'tab_slug'			=> 'geot',
 					];
 
-		$fields['ex_states'] = [
-						'label'				=> esc_html__('Exclude States','geot'),
+		$fields['ex_zipcodes'] = [
+						'label'				=> esc_html__('Exclude ZipCodes','geot'),
 						'type'				=> 'text',
 						'option_category'	=> 'configuration',
-						'description'		=> esc_html__( 'Type state names or ISO codes separated by comma.', 'geot' ),
+						'description'		=> esc_html__( 'Type zip codes separated by comma.', 'geot' ),
 						'tab_slug'			=> 'geot',
 					];
 
@@ -50,11 +50,11 @@ class Divi_GeoState {
 
 		extract( $settings );
 
-		if( empty($in_states) && empty($ex_states) )
+		if( empty($in_zipcodes) && empty($ex_zipcodes) )
 			return true;
 
 
-		if ( geot_target_state( $in_states, $ex_states ) )
+		if ( geot_target_zip( $in_zipcodes, $ex_zipcodes ) )
 			return true;
 		
 		return false;
@@ -70,11 +70,11 @@ class Divi_GeoState {
 		
 		extract( $settings );
 
-		if( empty($in_states) && empty($ex_states) )
+		if( empty($in_zipcodes) && empty($ex_zipcodes) )
 			return $output;
 
 
-		return '<div class="geot-ajax geot-filter" data-action="state_filter" data-filter="' . $in_states . '" data-ex_filter="' . $ex_states . '">' . $output . '</div>';
+		return '<div class="geot-ajax geot-filter" data-action="zip_filter" data-filter="' . $in_zipcodes . '" data-ex_filter="' . $ex_zipcodes . '">' . $output . '</div>';
 	}
 
 }

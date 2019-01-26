@@ -26,7 +26,7 @@ class Divi_GeoCountry {
 						'type'              => 'text',
 						'option_category'   => 'configuration',
 						'description'       => esc_html__( 'Type country names or ISO codes separated by comma.', 'geot' ),
-						'tab_slug'          => 'geot'
+						'tab_slug'          => 'geot',
 					];
 
 		$fields['in_region_countries'] = [
@@ -36,7 +36,7 @@ class Divi_GeoCountry {
 						'description'       => esc_html__( 'Choose region name to show content to.', 'geot' ),
 						'options'           => GeoTarget_Divi::get_regions('country'),
 						'option_category' => 'configuration',
-						'tab_slug'          => 'geot'
+						'tab_slug'          => 'geot',
 					];
 
 		$fields['ex_countries'] = [
@@ -44,7 +44,7 @@ class Divi_GeoCountry {
 						'type'              => 'text',
 						'option_category'   => 'configuration',
 						'description'       => esc_html__( 'Type country names or ISO codes separated by comma.', 'geot' ),
-						'tab_slug'          => 'geot'
+						'tab_slug'          => 'geot',
 					];
 
 		$fields['ex_region_countries'] = [
@@ -53,7 +53,7 @@ class Divi_GeoCountry {
 						'option_category'   => 'configuration',
 						'description'       => esc_html__( 'Choose region name to show content to.', 'geot' ),
 						'options'           => GeoTarget_Divi::get_regions('country'),
-						'tab_slug'          => 'geot'
+						'tab_slug'          => 'geot',
 					];
 
 		return $fields;
