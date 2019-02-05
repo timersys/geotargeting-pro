@@ -98,6 +98,7 @@ class GeoTarget {
 	 * @var The Geot plugin instance
 	 */
 	protected static $_instance = null;
+	
 	/**
 	 * @var GeoTarget_Gutenberg
 	 */
@@ -107,6 +108,12 @@ class GeoTarget {
 	 * @var GeoTarget_Elementor
 	 */
 	public $elementor;
+
+	/*
+	 * @var GeoTarget_Gutenberg
+	 */
+	public $divi;
+
 
 	/**
 	 * Main Geot Instance
@@ -212,6 +219,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax-shortcodes.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-ajax.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-vc.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-divi.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-gutenberg.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-elementor.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-helpers.php';
@@ -310,7 +318,10 @@ class GeoTarget {
 		$this->public   = new GeoTarget_Public( $this->get_GeoTarget(), $this->get_version() );
 		$this->vc       = new GeoTarget_VC( $this->get_GeoTarget(), $this->get_version() );
 		$this->gutenberg = new GeoTarget_Gutenberg( $this->get_GeoTarget(), $this->get_version() );
+
 		$this->elementor = new GeoTarget_Elementor( $this->get_GeoTarget(), $this->get_version() );
+		$this->divi = new GeoTarget_Divi();
+
 		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
 		// if we have cache mode, load geotarget now to set session before content
 		if( isset( $this->opts['cache_mode'] ) && $this->opts['cache_mode'] )
@@ -353,6 +364,7 @@ class GeoTarget {
 		$this->loader->add_filter( 'block_categories', $this->gutenberg, 'register_category', 10, 2 );
 		$this->loader->add_action( 'enqueue_block_editor_assets', $this->gutenberg, 'register_block' );
 
+
 		// Elementor
 		$this->loader->add_action( 'plugins_loaded', $this->elementor, 'register_init' );
 		$this->loader->add_action( 'elementor/editor/before_enqueue_styles', $this->elementor, 'enqueue_styles' );
@@ -362,7 +374,14 @@ class GeoTarget {
 		$this->loader->add_action( 'elementor/frontend/before_render', $this->elementor, 'ajax_before_render', 10, 1);
 		$this->loader->add_action( 'elementor/frontend/after_render', $this->elementor, 'ajax_after_render', 10, 1);
 
+		// Divi
+		$this->loader->add_filter('et_pagebuilder_module_init', $this->divi, 'module_init', 10, 1 );
+		$this->loader->add_filter('et_builder_main_tabs', $this->divi, 'add_tabs', 10, 1 );
+		$this->loader->add_filter('et_module_shortcode_output', $this->divi, 'render', 10, 3 );
 
+		foreach( $this->divi->get_modules() as $module_slug ) {
+			$this->loader->add_filter('et_pb_all_fields_unprocessed_'.$module_slug, $this->divi, 'get_fields', 10, 1 );
+		}
 
 		// Menus
 		if (  empty( $this->geot_opts['disable_menu_integration'] ) )
