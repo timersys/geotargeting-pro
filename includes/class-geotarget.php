@@ -375,12 +375,12 @@ class GeoTarget {
 			$this->loader->add_filter( 'wp_nav_menu_objects', $this->menus, 'geotarget_menus', 10, 2 );
 
 		// Categories
-		$this->loader->add_action( 'edit_category_form_fields', $this->cats, 'edit_category_fields', 10, 1 );
-		$this->loader->add_action( 'edited_category', $this->cats, 'save_category_fields', 10, 1 );
-
-		$this->loader->add_action( 'pre_get_posts', $this->cats, 'pre_get_posts', 10, 1 );
-		$this->loader->add_action( 'get_terms', $this->cats, 'get_terms', 10, 4 );
-		
+		if( ! empty( $this->geot_opts['ajax_mode'] ) ) {
+			$this->loader->add_action( 'edit_category_form_fields', $this->cats, 'edit_category_fields', 10, 1 );
+			$this->loader->add_action( 'edited_category', $this->cats, 'save_category_fields', 10, 1 );
+			$this->loader->add_action( 'pre_get_posts', $this->cats, 'pre_get_posts', 10, 1 );
+			$this->loader->add_action( 'get_terms', $this->cats, 'get_terms', 10, 4 );
+		}
 		
 		
 	}
