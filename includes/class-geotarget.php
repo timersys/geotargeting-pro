@@ -52,6 +52,12 @@ class GeoTarget {
 	public $menus;
 
 	/**
+	 * @var GeoTarget_Categories $cats
+	 */
+	public $cats;
+
+
+	/**
 	 * @var mixed|void Geotarget settings
 	 */
 	public $opts;
@@ -226,6 +232,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-menus.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-categories.php';
 
 
 		$this->loader = new GeoTarget_Loader();
@@ -276,7 +283,6 @@ class GeoTarget {
 		// settings page
 		$this->loader->add_action( 'admin_init', $this->admin, 'save_settings' );
 
-
 		// Add geot to Advanced custom fields plugin
 		$this->loader->add_action( 'acf/include_field_types', $this->admin, 'add_geot_to_acfv5' );
 		$this->loader->add_action( 'acf/register_fields', $this->admin, 'add_geot_to_acfv4' );
@@ -323,6 +329,7 @@ class GeoTarget {
 		$this->divi = new GeoTarget_Divi();
 
 		$this->menus = new GeoTarget_Menus( $this->get_GeoTarget(), $this->get_version() );
+		$this->cats = new GeoTarget_Categories( $this->get_GeoTarget(), $this->get_version() );
 		// if we have cache mode, load geotarget now to set session before content
 		if( isset( $this->opts['cache_mode'] ) && $this->opts['cache_mode'] )
 			geot();
@@ -386,6 +393,16 @@ class GeoTarget {
 		// Menus
 		if (  empty( $this->geot_opts['disable_menu_integration'] ) )
 			$this->loader->add_filter( 'wp_nav_menu_objects', $this->menus, 'geotarget_menus', 10, 2 );
+
+		// Categories
+		if( ! empty( $this->geot_opts['ajax_mode'] ) ) {
+			$this->loader->add_action( 'edit_category_form_fields', $this->cats, 'edit_category_fields', 10, 1 );
+			$this->loader->add_action( 'edited_category', $this->cats, 'save_category_fields', 10, 1 );
+			$this->loader->add_action( 'pre_get_posts', $this->cats, 'pre_get_posts', 10, 1 );
+			$this->loader->add_action( 'get_terms', $this->cats, 'get_terms', 10, 4 );
+		}
+		
+		
 	}
 
 	/**

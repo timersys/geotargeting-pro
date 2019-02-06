@@ -130,4 +130,105 @@ AND pm.meta_value != ''";
 		return $post_types;
 
 	}
+
+
+
+
+	/**
+	 * Check if user is matched in country
+	 *
+	 * @param $opts From metabox
+	 *
+	 * @return bool
+	 */
+	public static function is_targeted_country( $opts ) {
+
+		extract($opts);
+
+		if ( empty( $in_countries ) && empty( $ex_countries ) &&
+		     count( $in_countries_regions ) == 0 && count( $ex_countries_regions ) == 0
+		) {
+			return true;
+		}
+
+		if ( geot_target( $in_countries, $in_countries_regions, $ex_countries, $ex_countries_regions ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Check if user is matched in city
+	 *
+	 * @param $opts From metabox
+	 *
+	 * @return bool
+	 */
+	public static function is_targeted_city( $opts ) {
+
+		extract($opts);
+
+		if ( empty( $in_cities ) && empty( $ex_cities ) &&
+		     count( $in_cities_regions ) == 0 && count( $ex_cities_regions ) == 0
+		) {
+			return true;
+		}
+
+
+		if ( geot_target_city( $in_cities, $in_cities_regions, $ex_cities, $ex_cities_regions ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Check if user is matched in state
+	 *
+	 * @param $opts From metabox
+	 *
+	 * @return bool
+	 */
+	public static function is_targeted_state( $opts ) {
+
+		extract($opts);
+
+		if ( empty( $in_states ) && empty( $ex_states ) ) {
+			return true;
+		}
+
+
+		if ( geot_target_state( $in_states, $ex_states ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Check if user is matched in zipcode
+	 *
+	 * @param $opts From metabox
+	 *
+	 * @return bool
+	 */
+	public static function is_targeted_zipcode( $opts ) {
+
+		extract($opts);
+
+		if ( empty( $in_zipcodes ) && empty( $ex_zipcodes ) ) {
+			return true;
+		}
+
+
+		if ( geot_target_zip( $in_zipcodes, $ex_zipcodes ) ) {
+			return true;
+		}
+
+		return false;
+	}
 }
