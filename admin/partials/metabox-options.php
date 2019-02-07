@@ -98,6 +98,15 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 		<td colspan="2"></td>
 	</tr>
 	<tr valign="top">
+		<th><label for="gstates"><?php _e( 'Zipcodes:', 'geot' ); ?></label></th>
+		<td>
+
+			<input type="text" id="gzipcodes" class="widefat" name="geot[zipcodes]" value="<?php echo ! empty( $opts['zipcodes'] ) ? $opts['zipcodes'] :'';?>" placeholder="<?php _e( 'Or type Zipcodes (comma separated):', 'geot' );?>" />
+
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr valign="top">
 		<th><label for="geot_position"><?php _e( 'Remove post from loop:', 'geot' ); ?></label></th>
 		<td>
 
