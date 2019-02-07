@@ -107,6 +107,10 @@ class GeoTarget_Gutenberg {
 			register_block_type('geotargeting-pro/gutenberg-state',
 								[ 'render_callback' => [$this, 'save_gutenberg_state'] ]
 			);
+
+			register_block_type('geotargeting-pro/gutenberg-zipcode',
+								[ 'render_callback' => [$this, 'save_gutenberg_zipcode'] ]
+			);
 		}
 	}
 
@@ -193,6 +197,29 @@ class GeoTarget_Gutenberg {
 		return '';
 	}
 
+	/**
+	* Save Zipcode Block
+	* @var	string 	$attributes
+	* @var	string 	$content
+	*/
+	public function save_gutenberg_zipcode($attributes, $content) {
+		$in_zipcodes = $ex_zipcodes = '';
+		
+		extract( $attributes );
+
+		$geot_opts = geot_pro_settings();
+
+		if( isset( $geot_opts['ajax_mode'] ) && $geot_opts['ajax_mode'] == '1' ) {
+			return '<div class="geot-ajax geot-filter" data-action="zip_filter" data-filter="' . $in_zipcodes . '" data-ex_filter="' . $ex_zipcodes . '">' . $content . '</div>';
+		} else {
+			if ( geot_target_zip( $in_zipcodes, $ex_zipcodes ) ) {
+				return $content;
+			}
+		}
+
+		return '';
+	}
+
 
 	/**
 	* Register JS Blocks
@@ -207,13 +234,15 @@ class GeoTarget_Gutenberg {
 		$modules_geot = array(
 								'geotargeting-pro/gutenberg-country',
 								'geotargeting-pro/gutenberg-city',
-								'geotargeting-pro/gutenberg-state'
+								'geotargeting-pro/gutenberg-state',
+								'geotargeting-pro/gutenberg-zipcode',
 							);
 
 		$localize_geot = array(
 								'icon_country'		=> GEOT_PLUGIN_URL . '/admin/img/world.png',
 								'icon_city'			=> GEOT_PLUGIN_URL . '/admin/img/cities.png',
 								'icon_state'		=> GEOT_PLUGIN_URL . '/admin/img/states.png',
+								'icon_zipcode'		=> GEOT_PLUGIN_URL . '/admin/img/states.png',
 								'regions_country'	=> $this->get_regions('countries'),
 								'regions_city'		=> $this->get_regions('cities'),
 								'modules'			=> $modules_geot,
@@ -260,6 +289,18 @@ class GeoTarget_Gutenberg {
 		wp_enqueue_script(
 			'gutenberg-geo-state',
 			GEOT_PLUGIN_URL . '/includes/gutenberg/gutenberg-geot-state.js',
+			array( 'gutenberg-geo' ),
+			$this->version,
+			true
+		);
+
+
+		/**********************
+			JS to Zipcode
+		***********************/
+		wp_enqueue_script(
+			'gutenberg-geo-zipcode',
+			GEOT_PLUGIN_URL . '/includes/gutenberg/gutenberg-geot-zipcode.js',
 			array( 'gutenberg-geo' ),
 			$this->version,
 			true

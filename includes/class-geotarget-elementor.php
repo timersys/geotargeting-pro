@@ -58,6 +58,7 @@ class GeoTarget_Elementor {
 		require_once GEOT_PLUGIN_DIR . 'includes/elementor/elementor-geot-country.php';
 		require_once GEOT_PLUGIN_DIR . 'includes/elementor/elementor-geot-city.php';
 		require_once GEOT_PLUGIN_DIR . 'includes/elementor/elementor-geot-state.php';
+		require_once GEOT_PLUGIN_DIR . 'includes/elementor/elementor-geot-zipcode.php';
 	}
 
 
@@ -109,6 +110,7 @@ class GeoTarget_Elementor {
 			Elementor_GeoCountry::get_fields($control);
 			Elementor_GeoCity::get_fields($control);
 			Elementor_GeoState::get_fields($control);
+			Elementor_GeoZipcode::get_fields($control);
 		}
 	}
 
@@ -127,7 +129,8 @@ class GeoTarget_Elementor {
 
 			if( !Elementor_GeoCountry::is_render($settings) ||
 				!Elementor_GeoCity::is_render($settings) ||
-				!Elementor_GeoState::is_render($settings)
+				!Elementor_GeoState::is_render($settings) ||
+				!Elementor_GeoZipcode::is_render($settings)
 			) return false;
 		}
 
@@ -151,6 +154,7 @@ class GeoTarget_Elementor {
 			Elementor_GeoCountry::ajax_before_render($settings);
 			Elementor_GeoCity::ajax_before_render($settings);
 			Elementor_GeoState::ajax_before_render($settings);
+			Elementor_GeoZipcode::ajax_before_render($settings);
 
 		}
 
@@ -173,6 +177,7 @@ class GeoTarget_Elementor {
 			Elementor_GeoCountry::ajax_after_render($settings);
 			Elementor_GeoCity::ajax_after_render($settings);
 			Elementor_GeoState::ajax_after_render($settings);
+			Elementor_GeoZipcode::ajax_after_render($settings);
 
 		}
 
