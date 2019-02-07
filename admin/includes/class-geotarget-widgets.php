@@ -54,6 +54,9 @@ class Geot_Widgets  {
 		if ( empty( $instance['geot_include_mode'] ) )  {
 			$instance['geot_include_mode'] = '';
 		}
+		if ( empty( $instance['geot_zipcodes'] ) )  {
+			$instance['geot_zipcodes'] = '';
+		}
 		if ( empty( $instance['geot_states'] ) )  {
 			$instance['geot_states'] = '';
 		}
@@ -126,7 +129,11 @@ class Geot_Widgets  {
 				<label for="geot_position"><?php _e( 'Or type states (comma separated):', 'geot' ); ?></label><br />
 				<input type="text" class="geot_text" name="<?php echo $t->get_field_name('geot_states');?>" value="<?php echo esc_attr($instance['geot_states']);?>" />
 			</p>
-				</table>
+			
+			<p>
+				<label for="geot_position"><?php _e( 'Or type zipcodes (comma separated):', 'geot' ); ?></label><br />
+				<input type="text" class="geot_text" name="<?php echo $t->get_field_name('geot_zipcodes');?>" value="<?php echo esc_attr($instance['geot_zipcodes']);?>" />
+			</p>
 		</div>
 
 		<?php
@@ -146,6 +153,7 @@ class Geot_Widgets  {
 		$instance['geot_include_mode'] 	= isset( $new_instance['geot_include_mode'] ) ? $new_instance['geot_include_mode'] : '';
 		$instance['geot_cities'] 	    = isset( $new_instance['geot_cities'] ) ? $new_instance['geot_cities'] : '';
 		$instance['geot_states'] 	    = isset( $new_instance['geot_states'] ) ? $new_instance['geot_states'] : '';
+		$instance['geot_zipcodes'] 	    = isset( $new_instance['geot_zipcodes'] ) ? $new_instance['geot_zipcodes'] : '';
 		return $instance;
 	}
 
@@ -189,9 +197,6 @@ class Geot_Widgets  {
 		}
 
 		return $the_widget;
-
-
-		return $the_widget;
 	}
 
 	/**
@@ -202,10 +207,20 @@ class Geot_Widgets  {
 	 * @return bool
 	 */
 	private function target( $widget_data ) {
-		if ( !empty( $widget_data['geot']['region'] ) || !empty( $widget_data['geot']['country_code'] ) || !empty( $widget_data['geot_cities'] ) || !empty( $widget_data['geot_states'] ) ) {
+		if ( !empty( $widget_data['geot']['region'] ) ||
+			 !empty( $widget_data['geot']['country_code'] ) ||
+			 !empty( $widget_data['geot_cities'] ) ||
+			 !empty( $widget_data['geot_states'] ) ||
+			 !empty( $widget_data['geot_zipcodes'] )
+			) {
 
 			if ( 'include' == @$widget_data['geot_include_mode'] ) {
-				if( !empty( $widget_data['geot_cities'] ) ) {
+
+				if( !empty( $widget_data['geot_zipcodes'] ) ) {
+					if ( ! geot_target_zip( @$widget_data['geot_zipcodes'] ) ) {
+						return false;
+					}
+				} elseif( !empty( $widget_data['geot_cities'] ) ) {
 					if ( ! geot_target_city( @$widget_data['geot_cities'], @$widget_data['geot_cities'] ) ) {
 						return false;
 					}
@@ -225,6 +240,10 @@ class Geot_Widgets  {
 					}
 				} elseif( !empty( $widget_data['geot_states'] ) ) {
 					if ( ! geot_target_state( array(), @$widget_data['geot_states'] ) ) {
+						return false;
+					}
+				} elseif( !empty( $widget_data['geot_zipcodes'] ) ) {
+					if ( ! geot_target_zip( array(), @$widget_data['geot_zipcodes'] ) ) {
 						return false;
 					}
 				} else {
