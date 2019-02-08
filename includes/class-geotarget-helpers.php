@@ -46,8 +46,8 @@ AND pm.meta_value != ''";
 		$_user_is_targeted = false;
 
 		$mode = ! empty( $opts['geot_include_mode'] ) ? $opts['geot_include_mode'] : 'include';
-		$country_remove = $state_remove = $city_remove = false;
-		$country_target = $state_target = $city_target = null;
+		$country_remove = $state_remove = $city_remove = $zipcode_remove = false;
+		$country_target = $state_target = $city_target = $zipcode_target = null;
 		if ( ! empty( $opts['country_code'] ) ||  ! empty( $opts['region'] ) ) {
 			$countries  = ! empty( $opts['country_code'] ) ? $opts['country_code'] : '';
 			$regions    = ! empty( $opts['region'] ) ? $opts['region'] : '';
@@ -71,13 +71,22 @@ AND pm.meta_value != ''";
 				$state_remove = true;
 
 		}
+		if ( ! empty( $opts['zipcodes'] ) ) {
+			$zipcodes = ! empty( $opts['zipcodes'] ) ? $opts['zipcodes'] : '';
+			$zipcode_target = geot_target_zip( $zipcodes );
+
+			if ( $mode == 'exclude' && $zipcode_target )
+				$zipcode_remove = true;
+
+		}
 		if( $mode == 'include' ) {
 			$_user_is_targeted = true;
-			if ( ( $country_target || $state_target || $city_target ) || ($country_target === null && $state_target === null && $city_target === null) )
-				$_user_is_targeted = false;
+			if ( ( $country_target || $state_target || $city_target || $zipcode_target ) ||
+				 ( $country_target === null && $state_target === null && $city_target === null && $zipcode_target === null )
+			) $_user_is_targeted = false;
 		}
 
-		if( $mode == 'exclude' && ( $country_remove || $state_remove || $city_remove ) )
+		if( $mode == 'exclude' && ( $country_remove || $state_remove || $city_remove || $zipcode_remove ) )
 			$_user_is_targeted = true;
 
 		return self::$_user_is_targeted[$post_id] = $_user_is_targeted;

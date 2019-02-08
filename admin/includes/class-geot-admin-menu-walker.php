@@ -178,6 +178,7 @@ if( class_exists( 'Walker_Nav_Menu_Edit' ) ) {
 						$item->geot['country_code']      = isset( $item->geot['country_code'] ) ? $item->geot['country_code'] : '';
 						$item->geot['cities']            = isset( $item->geot['cities'] ) ? $item->geot['cities'] : '';
 						$item->geot['states']            = isset( $item->geot['states'] ) ? $item->geot['states'] : '';
+						$item->geot['zipcodes']          = isset( $item->geot['zipcodes'] ) ? $item->geot['zipcodes'] : '';
 						?>
 						<label for="geot_what"><?php _e( 'Choose:', 'geot' ); ?></label><br/>
 						<input type="radio" class="geot_include_mode"
@@ -216,6 +217,14 @@ if( class_exists( 'Walker_Nav_Menu_Edit' ) ) {
 						<input type="text" class="geot_text widefat"
 						       name="menu-item-geot[<?php echo $item_id; ?>][states]"
 						       value="<?php echo esc_attr( $item->geot['states'] ); ?>"/>
+						
+						<br>
+
+						<label
+							for="geot_position"><?php _e( 'Or type zipcodes (comma separated):', 'geot' ); ?></label><br/>
+						<input type="text" class="geot_text widefat"
+						       name="menu-item-geot[<?php echo $item_id; ?>][zipcodes]"
+						       value="<?php echo esc_attr( $item->geot['zipcodes'] ); ?>"/>
 
 					</label>
 				</p>

@@ -26,7 +26,7 @@ class Divi_GeoZipcode {
 			'label'           => esc_html__( 'Include ZipCodes', 'geot' ),
 			'type'            => 'text',
 			'option_category' => 'configuration',
-			'description'     => esc_html__( 'Type zip codes separated by comma.', 'geot' ),
+			'description'     => esc_html__( 'Type zip codes separated by commas.', 'geot' ),
 			'tab_slug'        => 'geot',
 		];
 
