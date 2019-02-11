@@ -4,7 +4,7 @@ Donate link: https://geotargetingwp.com/
 Tags: geotargeting, wordpress geotargeting, geolocation, geo target, geo targeting, ip geo detect
 Requires at least: 3.6
 Tested up to: 5.0.2
-Stable tag: 2.4
+Stable tag: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,15 @@ More info and docs on ([https://geotargetingwp.com/docs/geotargeting-pro/](https
 
 
 == Changelog ==
+
+= 2.5 =
+* Added DIVI page builder support
+* Added Elementor page builder support
+* Added zip code fields
+* Added posts cateogories support
+* Added predefined continents regions
+* Fixed api for plugin updates
+* Fixed settings not saving unchecks
 
 = 2.4 =
 * Geotargeted Gutemberg blocks
