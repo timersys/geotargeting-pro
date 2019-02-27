@@ -115,6 +115,8 @@ class GeoTarget_Categories {
 			is_array($taxonomies) && in_array('category', $taxonomies)
 		) {
 			foreach( $terms as $id => $term ) {
+				if( !isset($term->term_id) ) continue;
+				
 				$geot = get_term_meta($term->term_id, 'geot', true);
 
 				if( !$geot ) continue;
