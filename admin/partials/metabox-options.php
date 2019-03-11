@@ -27,7 +27,7 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 	</tr>
 
 	<tr valign="top">
-		<th><label for="geot_position"><?php _e( 'Regions:', 'geot' ); ?></label></th>
+		<th><label for="geot_position"><?php _e( 'Country Regions:', 'geot' ); ?></label></th>
 		<td>
 			<?php
 			if( is_array( $regions ) ) { ?>
@@ -80,7 +80,7 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 		<td colspan="2"></td>
 	</tr>
 	<tr valign="top">
-		<th><label for="gcities"><?php _e( 'Cities / Regions:', 'geot' ); ?></label></th>
+		<th><label for="gcities"><?php _e( 'Cities / City Regions:', 'geot' ); ?></label></th>
 		<td>
 
 			<input id="gcities" type="text" class="widefat" name="geot[cities]" value="<?php echo ! empty( $opts['cities'] ) ? $opts['cities'] :'';?>" placeholder="<?php _e( 'Or type cities or city regions (comma separated):', 'geot' );?>" />
