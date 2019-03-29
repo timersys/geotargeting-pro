@@ -57,12 +57,15 @@ AND pm.meta_value != ''";
 
 		}
 
-		if ( ! empty( $opts['cities'] ) ) {
-			$cities = ! empty( $opts['cities'] ) ? $opts['cities'] : '';
-			$city_target = geot_target_city( $cities );
+		if ( ! empty( $opts['cities'] ) ||  ! empty( $opts['city_region'] ) ) {
+			$cities 	= ! empty( $opts['cities'] ) ? $opts['cities'] : '';
+			$regions 	= ! empty( $opts['city_region'] ) ? $opts['city_region'] : '';
+			$city_target     = geot_target_city( $cities, $regions );
 			if ( $mode == 'exclude' && $city_target )
 				$city_remove = true;
+
 		}
+		
 		if ( ! empty( $opts['states'] ) ) {
 			$states = ! empty( $opts['states'] ) ? $opts['states'] : '';
 			$state_target = geot_target_state( $states );
