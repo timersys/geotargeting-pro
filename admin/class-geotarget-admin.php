@@ -9,8 +9,6 @@
  * @package    GeoTarget
  * @subpackage GeoTarget/admin
  */
-use GeotWP\GeotargetingWP;
-use GeotFunctions\GeotUpdates;
 
 
 /**
@@ -212,20 +210,6 @@ class GeoTarget_Admin {
 
 		include 'includes/acf-geot-v4.php';
 
-	}
-
-	/**
-	 * Handle Licences and updates
-	 * @since 1.0.0
-	 */
-	public function handle_updates(){
-		$opts = geot_settings();
-		// Setup the updater
-		return new GeotUpdates( GEOT_PLUGIN_FILE, [
-				'version'   => $this->version,
-				'license'   => isset($opts['license']) ?$opts['license'] : ''
-			]
-		);
 	}
 
 

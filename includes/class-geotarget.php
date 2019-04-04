@@ -47,6 +47,11 @@ class GeoTarget {
 	public $admin;
 
 	/**
+	 * @var GeoTarget_Updater $updater
+	 */
+	public $updater;
+
+	/**
 	 * @var GeoTarget_Menus $menus
 	 */
 	public $menus;
@@ -229,6 +234,7 @@ class GeoTarget {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-gutenberg.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-elementor.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-helpers.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-geotarget-updater.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-dropdown-widget.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-widgets.php';
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/includes/class-geotarget-menus.php';
@@ -269,6 +275,7 @@ class GeoTarget {
 		global $pagenow;
 
 		$this->admin = new GeoTarget_Admin( $this->get_GeoTarget(), $this->get_version() );
+		$this->updater = new GeoTarget_Updater( $this->get_GeoTarget(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_init', $this->admin, 'register_tiny_buttons' );
 
@@ -302,7 +309,7 @@ class GeoTarget {
 			$this->loader->add_action( 'widget_update_callback', $geot_widgets, 'save_widgets_data', 5, 3 );
 		}
 		// License and Updates
-		$this->loader->add_action( 'admin_init' , $this->admin, 'handle_updates', 0 );
+		$this->loader->add_action( 'admin_init' , $this->updater, 'handle_updates', 0 );
 
 		//Menus
 		if (  empty( $this->geot_opts['disable_menu_integration'] ) ) {
