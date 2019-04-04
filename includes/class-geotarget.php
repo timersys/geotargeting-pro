@@ -394,8 +394,8 @@ class GeoTarget {
 		if (  empty( $this->geot_opts['disable_menu_integration'] ) )
 			$this->loader->add_filter( 'wp_nav_menu_objects', $this->menus, 'geotarget_menus', 10, 2 );
 
-		// Categories
-		if( ! empty( $this->geot_opts['ajax_mode'] ) ) {
+		// Categories only if ajax mode is disabled
+		if(  empty( $this->geot_opts['ajax_mode'] ) ) {
 			$this->loader->add_action( 'edit_category_form_fields', $this->cats, 'edit_category_fields', 10, 1 );
 			$this->loader->add_action( 'edited_category', $this->cats, 'save_category_fields', 10, 1 );
 			$this->loader->add_action( 'pre_get_posts', $this->cats, 'pre_get_posts', 10, 1 );
