@@ -370,6 +370,33 @@ class GeoTarget_Public {
 		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )
 			add_filter('woocommerce_is_purchasable', '__return_false');
 	}
+
+	/*
+	*/
+	public function remove_woo_product() {
+		if( ! class_exists( 'WooCommerce' ) )
+			return;
+
+		foreach( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+			$_product = $cart_item['data'];
+			$post_id = $_product->get_id();
+
+			$is_geot  = get_post_meta( $post_id, '_geot_post', true );
+
+			if( $is_geot != 1 )
+				return;
+
+			$opts  = get_post_meta( $post_id, 'geot_options', true );
+
+			if ( Geot_Helpers::user_is_targeted( $opts, $post_id ) )
+				return ;
+
+			WC()->cart->remove_cart_item( $cart_item_key );
+		}
+	}
+
+
+
 	/**
 	 * Print current user data in footer
 	 */
