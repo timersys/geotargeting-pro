@@ -94,6 +94,7 @@ class GeoTarget_Admin {
 		$opts 		= apply_filters('geot/metaboxes/get_cpt_options', Geot_Helpers::get_cpt_options( $post->ID ), $post->ID );
 		$countries 	= geot_countries();
 		$regions 	= geot_country_regions();
+		$city_regions 	= geot_city_regions();
 
 		if( !isset( $opts['forbidden_text'] ) )
 			$opts['forbidden_text'] = __( 'This content is restricted in your region', $this->GeoTarget);
@@ -138,6 +139,7 @@ class GeoTarget_Admin {
 		$geot_post = false;
 		if( !empty( $opts['country_code'] ) ||
 			!empty( $opts['region'] ) ||
+			!empty( $opts['city_region'] ) ||
 			!empty( $opts['cities'] ) ||
 			!empty( $opts['states'] ) ||
 			!empty( $opts['zipcodes'] )

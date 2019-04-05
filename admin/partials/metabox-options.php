@@ -31,7 +31,7 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 		<td>
 			<?php
 			if( is_array( $regions ) ) { ?>
-				<select name="geot[region][]" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose region name...', 'geot' );?>" >
+				<select name="geot[region][]" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose country region name...', 'geot' );?>" >
 					<?php
 						if( is_array( $regions ) ) {
 							foreach ($regions as $r) {
@@ -80,10 +80,41 @@ if ( !defined( 'ABSPATH' ) ) exit;?>
 		<td colspan="2"></td>
 	</tr>
 	<tr valign="top">
-		<th><label for="gcities"><?php _e( 'Cities / City Regions:', 'geot' ); ?></label></th>
+		<th><label for="geot_position"><?php _e( 'City Regions:', 'geot' ); ?></label></th>
+		<td>
+			<?php
+			if( is_array( $city_regions ) ) { ?>
+				<select name="geot[city_region][]" multiple class="geot-chosen-select-multiple" data-placeholder="<?php _e( 'Type or choose city region name...', 'geot' );?>" >
+					<?php
+						if( is_array( $city_regions ) ) {
+							foreach ($city_regions as $r) {
+								if( ! is_array( $opts ) || ! isset( $r['name'] ) )
+									continue;
+								?>
+								<option value="<?php echo $r['name'];?>" <?php
+								if( isset( $opts['city_region'] ) )
+									selected(true, @in_array($r['name'], $opts['city_region']) );
+								?>> <?php echo $r['name']; ?></option>
+								<?php
+							}
+						}
+					?>
+				</select>
+			<?php
+			} else { ?>
+
+				<p> Add some regions first.</p>
+
+			<?php
+			}	?>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr valign="top">
+		<th><label for="gcities"><?php _e( 'Cities:', 'geot' ); ?></label></th>
 		<td>
 
-			<input id="gcities" type="text" class="widefat" name="geot[cities]" value="<?php echo ! empty( $opts['cities'] ) ? $opts['cities'] :'';?>" placeholder="<?php _e( 'Or type cities or city regions (comma separated):', 'geot' );?>" />
+			<input id="gcities" type="text" class="widefat" name="geot[cities]" value="<?php echo ! empty( $opts['cities'] ) ? $opts['cities'] :'';?>" placeholder="<?php _e( 'Or type cities (comma separated):', 'geot' );?>" />
 
 		</td>
 		<td colspan="2"></td>
