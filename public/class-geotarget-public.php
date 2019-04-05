@@ -365,16 +365,25 @@ class GeoTarget_Public {
 		global $post;
 		if( ! class_exists( 'WooCommerce' ) || ! isset( $post->ID ) )
 			return;
+
+		$is_geot  = get_post_meta( $post->ID, '_geot_post', true );
+
+		if( $is_geot != 1 )
+			return;
+
 		$opts  = get_post_meta( $post->ID, 'geot_options', true );
 
 		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )
 			add_filter('woocommerce_is_purchasable', '__return_false');
 	}
 
-	/*
-	*/
+	/**
+	 * if user is targeted remove product from cart
+	 * 
+	 */
 	public function remove_woo_product() {
-		if( ! class_exists( 'WooCommerce' ) )
+
+		if( is_admin() || ! class_exists( 'WooCommerce' ) || WC()->cart->is_empty() )
 			return;
 
 		foreach( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
@@ -384,17 +393,14 @@ class GeoTarget_Public {
 			$is_geot  = get_post_meta( $post_id, '_geot_post', true );
 
 			if( $is_geot != 1 )
-				return;
+				continue;
 
 			$opts  = get_post_meta( $post_id, 'geot_options', true );
 
 			if ( Geot_Helpers::user_is_targeted( $opts, $post_id ) )
-				return ;
-
-			WC()->cart->remove_cart_item( $cart_item_key );
+				WC()->cart->remove_cart_item( $cart_item_key );
 		}
 	}
-
 
 
 	/**

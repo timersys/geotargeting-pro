@@ -344,7 +344,7 @@ class GeoTarget {
 		//woocommerce
 		$this->loader->add_filter( 'woocommerce_product_related_posts_query', $this->public, 'woocommerce_related_products',99 );
 
-		$this->loader->add_action( 'wp_loaded', $this->public, 'remove_woo_product' );
+		$this->loader->add_action( 'wp', $this->public, 'remove_woo_product' );
 		$this->loader->add_filter( 'wp', $this->public, 'disable_woo_product' );
 		// Popups rules
 
