@@ -44,3 +44,14 @@ function geot_pro_default() {
 
 	return apply_filters('geot_pro/global/default', $default);
 }
+
+
+
+function geot_version_compare($version1, $version2, $operator = null) {
+	$p = '#(\.0+)+($|-)#';
+	$version1 = preg_replace($p, '', $version1);
+	$version2 = preg_replace($p, '', $version2);
+	return isset($operator) ? 
+		version_compare($version1, $version2, $operator) : 
+		version_compare($version1, $version2);
+}

@@ -73,12 +73,12 @@ class GeoTarget_Updater {
 		$db_version = get_option( 'geot_version' );
 
 		//Verify if plugin has be upgraded
-		if($db_version != null && version_compare( $this->version, $db_version, '!=' ) ) {
+		if($db_version != null && geot_version_compare( $this->version, $db_version, '!=' ) ) {
 
-			if( version_compare( $this->version, '1.8.0', '>=' ) && !get_option('geot_upgrade_1_8_0') )
+			if( geot_version_compare( $this->version, '1.8.0', '>=' ) && !get_option('geot_upgrade_1_8_0') )
 				self::geot_upgrade_1_8_0();
 
-			if( version_compare( $this->version, '2.6.0', '>=' ) && !get_option('geot_upgrade_2_6_0') )
+			if( geot_version_compare( $this->version, '2.6.0', '>=' ) && !get_option('geot_upgrade_2_6_0') )
 				self::geot_upgrade_2_6_0();
 
 			do_action('geotWP/upgraded');
@@ -124,17 +124,18 @@ class GeoTarget_Updater {
 	protected function geot_upgrade_2_6_0() {
 		global $wpdb;
 
+		$array_insert = array();
 		$city_regions = wp_list_pluck( geot_city_regions(), 'name' );
 
-		$meta_posts = $wpdb->get_col('SELECT post_id FROM '.$wpdb->postmeta.' WHERE meta_key = "_geot_post" && meta_value=1');
+		$geot_posts = Geot_Helpers::get_geotarget_posts();
 
-		if( $meta_posts ) {
-			foreach( $meta_posts as $post_id ) {
+		if( $geot_posts ) {
+			foreach( $geot_posts as $p ) {
 
 				$to_city = $to_region_city = array();
-				$opts = get_post_meta($post_id, 'geot_options', true);
+				$opts = maybe_unserialize( $p->geot_options );
 
-				if( empty($opts['cities']) ) continue;
+				if( empty($opts['cities']) || isset($opts['city_region']) ) continue;
 
 				$list_cites = GeotFunctions\toArray($opts['cities']);
 
@@ -150,9 +151,18 @@ class GeoTarget_Updater {
 				$opts['cities'] = implode(',',$to_city);
 				$opts['city_region'] = $to_region_city;
 
-				update_post_meta($post_id, 'geot_options', $opts);
+				$options = maybe_serialize($opts);
+
+				$array_insert[] = '('.$p->geot_meta_id.', '.$p->ID.', \'geot_options\', \''.$options.'\')';
 			}
-		}
+
+
+			if( count($array_insert) > 0 ) {
+				$sql = 'INSERT INTO '.$wpdb->postmeta.' (meta_id, post_id, meta_key, meta_value) VALUES '.implode(',',$array_insert).' ON DUPLICATE KEY UPDATE meta_value=VALUES(meta_value)';
+				$wpdb->query($sql);
+			}
+
+		}		
 
 		update_option( 'geot_upgrade_2_6_0', 1 );
 	}
