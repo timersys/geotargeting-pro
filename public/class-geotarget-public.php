@@ -365,11 +365,46 @@ class GeoTarget_Public {
 		global $post;
 		if( ! class_exists( 'WooCommerce' ) || ! isset( $post->ID ) )
 			return;
+
+		if( !is_product() )
+			return;
+
 		$opts  = get_post_meta( $post->ID, 'geot_options', true );
+
+		if ( !isset($opts['geot_include_mode']) || empty($opts['geot_include_mode']) )
+			return;
 
 		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )
 			add_filter('woocommerce_is_purchasable', '__return_false');
 	}
+
+	/**
+	 * if user is targeted remove product from cart
+	 * 
+	 */
+	public function remove_woo_product() {
+
+		if( is_admin() || ! class_exists( 'WooCommerce' ) || WC()->cart->is_empty() )
+			return;
+
+		if( !is_cart() || !is_checkout() )
+			return;
+
+		foreach( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+			$_product = $cart_item['data'];
+			$post_id = $_product->get_id();
+
+			$opts  = get_post_meta( $post_id, 'geot_options', true );
+
+			if ( !isset($opts['geot_include_mode']) || empty($opts['geot_include_mode']) )
+				continue;
+
+			if ( Geot_Helpers::user_is_targeted( $opts, $post_id ) )
+				WC()->cart->remove_cart_item( $cart_item_key );
+		}
+	}
+
+
 	/**
 	 * Print current user data in footer
 	 */

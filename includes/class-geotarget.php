@@ -344,6 +344,7 @@ class GeoTarget {
 		//woocommerce
 		$this->loader->add_filter( 'woocommerce_product_related_posts_query', $this->public, 'woocommerce_related_products',99 );
 
+		$this->loader->add_action( 'wp', $this->public, 'remove_woo_product' );
 		$this->loader->add_filter( 'wp', $this->public, 'disable_woo_product' );
 		// Popups rules
 
@@ -362,6 +363,7 @@ class GeoTarget {
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_country_region', $this->public, 'popup_country_region_match', 10, 2 );
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_city_region', $this->public, 'popup_city_region_match', 10, 2 );
 		$this->loader->add_filter( 'spu/rules/rule_match/geot_state', $this->public, 'popup_state_match', 10, 2 );
+
 
 		// Visual composer
 		$this->loader->add_action( 'init', $this->vc, 'hook_to_visual' );
