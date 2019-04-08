@@ -41,7 +41,7 @@ class GeoTarget_Activator {
 		}
 
 		GeotFunctions\add_countries_to_db();
-		update_option( 'geot_version', GEOT_VERSION );
+
 
 		do_action('geotWP/activated');
 	}
