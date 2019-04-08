@@ -15,7 +15,7 @@ class Geot_Helpers {
 		if( !empty(self::$_geotarget_posts) )
 			return self::$_geotarget_posts;
 
-		$sql = "SELECT ID, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
+		$sql = "SELECT ID, pm2.meta_id as geot_meta_id, pm.meta_value as geot_countries, pm2.meta_value as geot_options FROM $wpdb->posts p
 LEFT JOIN $wpdb->postmeta pm ON p.ID = pm.post_id
 LEFT JOIN $wpdb->postmeta pm2 ON p.ID = pm2.post_id
 WHERE p.post_status = 'publish'
