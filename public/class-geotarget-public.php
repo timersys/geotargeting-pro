@@ -351,7 +351,7 @@ class GeoTarget_Public {
 		$opts  = get_post_meta( $post->ID, 'geot_options', true );
 
 		if ( Geot_Helpers::user_is_targeted( $opts, $post->ID ) )
-			return apply_filters( 'geot/forbidden_text', '<p>' . $opts['forbidden_text'] . '</p>' );
+			return apply_filters( 'geot/forbidden_text', '<p>' . $opts['forbidden_text'] . '</p>', $content, $post );
 
 		return $content;
 	}
