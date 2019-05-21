@@ -315,6 +315,8 @@ class GeoTarget {
 			$this->loader->add_filter( 'wp_edit_nav_menu_walker', $this->menus, 'admin_menu_walker', 150, 2 );
 			$this->loader->add_action( 'wp_update_nav_menu_item', $this->menus, 'save_custom_fields', 10, 3 );
 		}
+		//WPBakery support
+		add_filter('vc_basic_grid_filter_query_suppress_filters', '__return_false');
 	}
 
 	/**
