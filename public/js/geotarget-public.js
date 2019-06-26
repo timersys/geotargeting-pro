@@ -104,13 +104,18 @@ var GeotRequest = function ( data, success_cb, error_cb, dataType){
 
 }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const geot_debug = urlParams.get('geot_debug'),
-     geot_debug_iso  = urlParams.get('geot_debug_iso'),
-     geot_state  = urlParams.get('geot_state'),
-     geot_state_code  = urlParams.get('geot_state_code'),
-     geot_city  = urlParams.get('geot_city'),
-     geot_zip  = urlParams.get('geot_zip');
+    const getUrlParameter = function(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(window.location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+    const geot_debug = getUrlParameter('geot_debug'),
+     geot_debug_iso  = getUrlParameter('geot_debug_iso'),
+     geot_state  = getUrlParameter('geot_state'),
+     geot_state_code  = getUrlParameter('geot_state_code'),
+     geot_city  = getUrlParameter('geot_city'),
+     geot_zip  = getUrlParameter('geot_zip');
 
     var data = {
         'action' : 'geot_ajax',
